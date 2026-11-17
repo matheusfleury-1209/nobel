@@ -8,20 +8,17 @@ Tempo estimado: 1 a 2 horas na primeira vez. Não precisa saber programar, mas v
 Numa VPS **Ubuntu 24.04** nova, logado como root (pelo terminal do painel da VPS ou por SSH):
 
 ```bash
-apt-get update && apt-get install -y git gh
-gh auth login        # GitHub.com → HTTPS → "Login with a web browser": digite o código em github.com/login/device
-gh repo clone matheusfleury-1209/nobel time-ia -- -b claude/ai-team-business-management-1yfh0h
+apt-get update && apt-get install -y git
+git clone -b claude/ai-team-business-management-1yfh0h https://github.com/matheusfleury-1209/nobel.git time-ia
 cd time-ia && bash scripts/instalar-vps.sh
 ```
 
 O `scripts/instalar-vps.sh` faz tudo em sequência e para nos pontos em que você precisa agir:
 1. Atualiza o sistema e liga o firewall (só o SSH fica aberto).
 2. Instala o OpenClaw e abre a configuração inicial. Ali você escolhe a IA e cola a chave.
-3. Instala os 13 agentes e copia o perfil da empresa (pasta `privado/`, se o repositório for privado).
+3. Instala os 13 agentes e libera o perfil da empresa, que está no arquivo criptografado `privado.tar.gz.enc` (pede a senha).
 4. Instala o escritório 3D (Claw3D) como serviço.
 5. Liga o Tailscale. No final, ele mostra o endereço do escritório e a senha de acesso.
-
-Repositório público? Troque as 3 primeiras linhas por `git clone -b claude/ai-team-business-management-1yfh0h https://github.com/matheusfleury-1209/nobel.git time-ia`.
 
 Os passos abaixo explicam a mesma coisa, só que feita à mão.
 

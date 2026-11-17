@@ -27,7 +27,7 @@ fi
 titulo "1/5 Sistema e firewall"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
-apt-get install -y git curl ufw ca-certificates
+apt-get install -y git curl ufw ca-certificates openssl
 # Só SSH aberto para a internet. O painel do OpenClaw e o escritório 3D ficam fechados
 # e são acessados pelo Tailscale (rede privada).
 ufw allow OpenSSH >/dev/null
@@ -59,6 +59,18 @@ openclaw gateway status || true
 titulo "3/5 Time de 13 agentes + perfil da empresa"
 bash "$REPO_DIR/scripts/instalar-time.sh"
 EMPRESA_DIR="$OPENCLAW_HOME/empresa"
+# Perfil, FAQ, plano e roteiro vão criptografados no repositório (privado.tar.gz.enc).
+if [[ ! -d "$REPO_DIR/privado" && -f "$REPO_DIR/privado.tar.gz.enc" ]]; then
+  for tentativa in 1 2 3; do
+    read -rsp "→ Cole a senha dos arquivos da empresa (o Claude te passou no chat): " SENHA_PRIVADO; echo
+    if openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -pass "pass:$SENHA_PRIVADO" \
+         -in "$REPO_DIR/privado.tar.gz.enc" 2>/dev/null | tar xz -C "$REPO_DIR" 2>/dev/null; then
+      chmod -R go-rwx "$REPO_DIR/privado"; ok "arquivos da empresa liberados"; break
+    fi
+    aviso "senha incorreta, tente de novo"
+  done
+  unset SENHA_PRIVADO
+fi
 if [[ -f "$REPO_DIR/privado/PERFIL-DA-EMPRESA.md" ]]; then
   cp "$REPO_DIR/privado/PERFIL-DA-EMPRESA.md" "$EMPRESA_DIR/PERFIL-DA-EMPRESA.md"
   [[ -f "$REPO_DIR/privado/atendimento/faq.md" ]] && cp "$REPO_DIR/privado/atendimento/faq.md" "$EMPRESA_DIR/atendimento/faq.md"
