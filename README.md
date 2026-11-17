@@ -69,6 +69,8 @@ Passo a passo detalhado, com WhatsApp, Telegram e acesso à VPS: **[docs/02-inst
 4. [Integrações](docs/04-integracoes.md): Meta Ads, Google Ads, banco, Instagram, CRM
 5. [Custos e segurança](docs/05-custos-e-seguranca.md): como gastar pouco e não ter dor de cabeça
 
+Versão visual, com a planta do escritório, a agenda de rotinas e a instalação: [docs/escritorio-ia.html](docs/escritorio-ia.html)
+
 ## Estrutura do repositório
 
 ```

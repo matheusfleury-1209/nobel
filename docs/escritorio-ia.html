@@ -1,0 +1,1011 @@
+<title>Escritório de IA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: planta baixa de escritório (salas separadas por paredes) + fichas, fluxo e passo a passo abaixo */
+:root {
+  --paper: #EDF1F4;
+  --paper-2: #F8FAFB;
+  --ink: #17233B;
+  --ink-2: #4C5A74;
+  --line: #C9D2DD;
+  --wall: #17233B;
+  --grid: #17233B0D;
+  --accent: #2E5BDB;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #DCE5FB;
+  --busy: #B87503;
+  --busy-bg: #FBEBC8;
+  --live: #1C8A4C;
+  --live-bg: #D8F1E2;
+  --crit: #B83227;
+  --crit-bg: #F8DDD9;
+  --idle: #8E99AB;
+  --code-bg: #17233B;
+  --code-fg: #E6ECF5;
+  --code-dim: #9FB0CC;
+
+  --f-display: "Bricolage Grotesque", "Space Grotesk", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* avatares: tons médios com texto branco, legíveis nos dois temas */
+  --c-diretor: #3B4FA8;
+  --c-financeiro: #1F7A5A;
+  --c-trafego: #B9440F;
+  --c-social: #A8235B;
+  --c-criativos: #7340A8;
+  --c-vendedor: #0E6F8A;
+  --c-atendimento: #2560A3;
+  --c-prospector: #5E6A12;
+  --c-administrativo: #6E4D35;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E1626; --paper-2: #152039; --ink: #E4EAF4; --ink-2: #9DAAC0; --line: #2B3955;
+    --wall: #4A5C80; --grid: #E4EAF40B; --accent: #8AA9FF; --accent-ink: #0E1626; --accent-soft: #1E2D52;
+    --busy: #F2B544; --busy-bg: #3A2C0F; --live: #57CF8C; --live-bg: #12321F; --crit: #F2786C; --crit-bg: #3B1815;
+    --idle: #67748C; --code-bg: #08101E; --code-fg: #E4EAF4; --code-dim: #8796B3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0E1626; --paper-2: #152039; --ink: #E4EAF4; --ink-2: #9DAAC0; --line: #2B3955;
+  --wall: #4A5C80; --grid: #E4EAF40B; --accent: #8AA9FF; --accent-ink: #0E1626; --accent-soft: #1E2D52;
+  --busy: #F2B544; --busy-bg: #3A2C0F; --live: #57CF8C; --live-bg: #12321F; --crit: #F2786C; --crit-bg: #3B1815;
+  --idle: #67748C; --code-bg: #08101E; --code-fg: #E4EAF4; --code-dim: #8796B3;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+}
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2.5rem, 7vw, 4.25rem); font-weight: 800; line-height: 1; }
+h2 { font-size: clamp(1.55rem, 3.4vw, 2.1rem); font-weight: 800; line-height: 1.1; }
+h3 { font-size: 1.15rem; font-weight: 600; line-height: 1.25; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+code, .mono { font-family: var(--f-mono); font-size: 0.86em; }
+.eyebrow {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.lede { font-size: 1.1rem; color: var(--ink-2); max-width: 62ch; }
+.section-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+.section-head p { color: var(--ink-2); max-width: 65ch; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- cabeçalho ---------- */
+.top { display: flex; flex-direction: column; gap: 16px; }
+.nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.nav a {
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+.nav a:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---------- controles do relógio ---------- */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-bottom: 14px;
+}
+.days { display: flex; gap: 4px; flex-wrap: wrap; }
+.chip {
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.check { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; }
+.clock { display: flex; align-items: center; gap: 12px; flex: 1 1 300px; min-width: 0; }
+.clock input[type="range"] { flex: 1; min-width: 0; accent-color: var(--accent); }
+.clock output {
+  font-family: var(--f-mono);
+  font-size: 1.35rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  min-width: 4ch;
+}
+.btn-ghost {
+  border: 1px solid var(--line);
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); margin-bottom: 14px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sim-note { font-size: 13px; color: var(--ink-2); }
+
+/* ---------- planta ---------- */
+.office { display: grid; gap: 20px; }
+@media (min-width: 1120px) { .office { grid-template-columns: minmax(0, 1fr) 320px; align-items: start; } }
+
+.plan {
+  display: grid;
+  gap: 2px;
+  background: var(--wall);
+  border: 3px solid var(--wall);
+  border-radius: 4px;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 880px) {
+  .plan {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      "dir fin adm"
+      "mkt mkt arq"
+      "com com arq";
+  }
+  .room-dir { grid-area: dir; } .room-fin { grid-area: fin; } .room-adm { grid-area: adm; }
+  .room-mkt { grid-area: mkt; } .room-com { grid-area: com; } .room-arq { grid-area: arq; }
+}
+.room {
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 18px 18px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.room-label { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.room-label .eyebrow { font-size: 11px; }
+.desks { display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 640px) { .desks.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.desk {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 6px 10px;
+  align-items: center;
+  text-align: left;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: border-color .2s, background-color .2s;
+}
+.desk:hover { border-color: var(--accent); }
+.desk[data-st="busy"] { border-color: var(--busy); background: var(--busy-bg); }
+.desk[data-st="live"] { border-color: var(--live); }
+.desk .who { display: flex; flex-direction: column; min-width: 0; }
+.desk .who b { font-weight: 600; font-size: 15px; line-height: 1.2; }
+.desk .who small { color: var(--ink-2); font-size: 12.5px; line-height: 1.3; }
+.desk .st {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  min-height: 18px;
+}
+.desk[data-st="busy"] .st { color: var(--ink); font-weight: 500; }
+.desk .chan {
+  grid-column: 1 / -1;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  color: var(--ink-2);
+  border-top: 1px dashed var(--line);
+  padding-top: 6px;
+}
+.av {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  background: var(--c, var(--ink-2));
+  color: #FFFFFF;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 15px;
+  flex: none;
+  box-shadow: 0 0 0 2px var(--paper-2);
+}
+.av.sm { width: 24px; height: 24px; font-size: 11px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--idle); flex: none; }
+.dot.busy, [data-st="busy"] .dot { background: var(--busy); box-shadow: 0 0 0 3px var(--busy-bg); animation: pulse 1.6s ease-in-out infinite; }
+.dot.live, [data-st="live"] .dot { background: var(--live); box-shadow: 0 0 0 3px var(--live-bg); }
+@keyframes pulse { 50% { box-shadow: 0 0 0 6px var(--busy-bg); } }
+@media (prefers-reduced-motion: reduce) { .dot, [data-st="busy"] .dot { animation: none; } .desk { transition: none; } }
+
+.files { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.files li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  min-width: 0;
+}
+.files li span:first-child { overflow-wrap: anywhere; }
+.files .owners { display: flex; gap: 2px; flex: none; }
+.files li.inbox { border-style: dashed; border-color: var(--busy); }
+.room-arq p { font-size: 13px; color: var(--ink-2); }
+
+/* ---------- agenda ---------- */
+.agenda {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.agenda ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.agenda button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 46px 24px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 6px;
+  cursor: pointer;
+}
+.agenda button:hover { border-color: var(--line); }
+.agenda .t { font-family: var(--f-mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+.agenda .r { display: flex; flex-direction: column; min-width: 0; font-size: 13.5px; line-height: 1.3; }
+.agenda .r small { color: var(--ink-2); font-family: var(--f-mono); font-size: 11px; }
+.agenda li.past button { opacity: 0.5; }
+.agenda li.now button { background: var(--busy-bg); border-color: var(--busy); }
+.agenda .empty { font-size: 14px; color: var(--ink-2); }
+
+/* ---------- fichas ---------- */
+.cards { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 960px) { .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.card {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  scroll-margin-top: 20px;
+  transition: box-shadow .3s;
+}
+.card.flash { box-shadow: 0 0 0 3px var(--accent); }
+.card-top { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; align-items: center; }
+.card-top .av { width: 44px; height: 44px; font-size: 18px; grid-row: span 2; }
+.card-top h3 { line-height: 1.15; }
+.card-top .role { color: var(--ink-2); font-size: 14px; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.badge.strong { border-color: var(--accent); color: var(--accent); }
+.badge.client { border-color: var(--live); color: var(--live); }
+.card h4 {
+  margin: 0 0 4px;
+  font-family: var(--f-mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.card ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 3px; font-size: 14.5px; }
+.routines { list-style: none; padding: 0 !important; }
+.routines li { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; }
+.routines code { color: var(--ink-2); font-size: 12px; white-space: nowrap; }
+.ask {
+  margin: 0;
+  font-size: 14.5px;
+  padding: 10px 12px;
+  background: var(--accent-soft);
+  border-radius: 6px;
+}
+.path { font-family: var(--f-mono); font-size: 12px; overflow-wrap: anywhere; color: var(--ink); }
+.skills { display: flex; flex-wrap: wrap; gap: 6px; }
+.skills span {
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+/* ---------- fluxo ---------- */
+.story { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; max-width: 820px; }
+.story li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; position: relative; padding-bottom: 20px; }
+.story li::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 34px;
+  bottom: 0;
+  width: 2px;
+  background: var(--line);
+}
+.story li:last-child::before { display: none; }
+.story .num {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  display: grid;
+  place-items: center;
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 500;
+  position: relative;
+}
+.story .body { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; min-width: 0; }
+.story .actors { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 13px; color: var(--ink-2); }
+.story .msg { font-size: 15.5px; }
+.story .quote {
+  font-size: 14.5px;
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+.story li.approve .num { border-color: var(--busy); background: var(--busy-bg); }
+
+/* ---------- decisões ---------- */
+.decide { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 820px) { .decide { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.decide section {
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  border-radius: 8px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.decide .tag {
+  align-self: flex-start;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.decide .ok .tag { background: var(--live-bg); color: var(--live); }
+.decide .wait .tag { background: var(--busy-bg); color: var(--busy); }
+.decide .no .tag { background: var(--crit-bg); color: var(--crit); }
+.decide ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 5px; font-size: 15px; }
+.decide .foot { font-size: 13.5px; color: var(--ink-2); }
+
+/* ---------- instalação ---------- */
+.progress { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; font-size: 14px; color: var(--ink-2); flex-wrap: wrap; }
+.bar { flex: 1 1 200px; height: 8px; background: var(--line); border-radius: 999px; overflow: hidden; min-width: 120px; }
+.bar i { display: block; height: 100%; width: 0; background: var(--live); transition: width .3s; }
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.step {
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  border-radius: 8px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.step.done { border-color: var(--live); }
+.step-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.step-head .num {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--ink); color: var(--paper);
+  font-family: var(--f-mono); font-size: 13px; flex: none;
+}
+.step.done .step-head .num { background: var(--live); color: var(--paper); }
+.step-head h3 { flex: 1 1 200px; }
+.step p, .step .note { font-size: 15px; max-width: 70ch; }
+.step .note { color: var(--ink-2); font-size: 14px; }
+.cmd { border-radius: 6px; overflow: hidden; background: var(--code-bg); min-width: 0; }
+.cmd-head {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  padding: 6px 8px 6px 12px;
+  font-family: var(--f-mono); font-size: 11px; color: var(--code-dim);
+  border-bottom: 1px solid #FFFFFF14;
+}
+.cmd-head button {
+  font-family: var(--f-mono); font-size: 11.5px;
+  color: var(--code-fg);
+  background: transparent;
+  border: 1px solid #FFFFFF33;
+  border-radius: 4px;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+.cmd-head button:hover { border-color: var(--code-fg); }
+.cmd pre {
+  margin: 0;
+  padding: 12px 14px;
+  overflow-x: auto;
+  font-family: var(--f-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--code-fg);
+}
+
+/* ---------- custos e segurança ---------- */
+.two { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 820px) { .two { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.two section { border-top: 2px solid var(--ink); padding-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+.two dl { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.two dt { font-weight: 600; font-size: 15px; }
+.two dd { margin: 0; color: var(--ink-2); font-size: 14.5px; }
+
+footer { border-top: 1px solid var(--line); padding-top: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: var(--ink-2); }
+footer ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+</style>
+
+<div class="wrap">
+
+  <header class="top">
+    <span class="eyebrow">Kit · OpenClaw + Claw3D · 9 agentes</span>
+    <h1>Escritório de IA</h1>
+    <p class="lede">Nove funcionários de IA cuidando do financeiro, do tráfego pago, das redes sociais, das vendas e do atendimento. Cada um tem um cargo, uma mesa e uma rotina. A Diretora organiza o time e só te chama quando a decisão é sua.</p>
+    <nav class="nav" aria-label="Seções">
+      <a href="#escritorio">O escritório</a>
+      <a href="#fichas">Fichas do time</a>
+      <a href="#fluxo">Como um pedido anda</a>
+      <a href="#decisoes">Quem decide o quê</a>
+      <a href="#instalar">Instalação</a>
+      <a href="#custos">Custos e segurança</a>
+    </nav>
+  </header>
+
+  <section id="escritorio" aria-labelledby="h-escritorio">
+    <div class="section-head">
+      <span class="eyebrow">Planta do escritório</span>
+      <h2 id="h-escritorio">Quem está trabalhando agora</h2>
+      <p>Arraste o relógio para ver as rotinas automáticas de cada agente ao longo do dia (horário de Brasília). Toque em uma mesa para abrir a ficha do agente.</p>
+    </div>
+
+    <div class="controls">
+      <div class="days" role="group" aria-label="Dia da semana" id="days"></div>
+      <label class="check" for="dia1"><input type="checkbox" id="dia1"> Dia 1 do mês</label>
+      <div class="clock">
+        <label for="hora" class="eyebrow">Hora</label>
+        <input type="range" id="hora" min="420" max="1080" step="30" value="540">
+        <output id="hora-out" for="hora">09:00</output>
+        <button type="button" class="btn-ghost" id="agora">Agora</button>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i class="dot busy"></i>Rodando uma rotina</span>
+      <span><i class="dot live"></i>De plantão com clientes no WhatsApp</span>
+      <span><i class="dot"></i>Disponível quando chamado</span>
+      <span class="sim-note" id="sim-note"></span>
+    </div>
+
+    <div class="office">
+      <div class="plan" id="plan">
+        <div class="room room-dir" data-room="dir"></div>
+        <div class="room room-fin" data-room="fin"></div>
+        <div class="room room-adm" data-room="adm"></div>
+        <div class="room room-mkt" data-room="mkt"></div>
+        <div class="room room-com" data-room="com"></div>
+        <div class="room room-arq">
+          <div class="room-label"><span class="eyebrow">S-06 · Arquivo central</span></div>
+          <p>A pasta <code>empresa/</code> fica no servidor e todos os agentes trabalham nela. Cada área escreve só na sua gaveta.</p>
+          <ul class="files" id="files"></ul>
+        </div>
+      </div>
+
+      <aside class="agenda" aria-labelledby="h-agenda">
+        <h3 id="h-agenda">Agenda do dia</h3>
+        <ol id="agenda"></ol>
+      </aside>
+    </div>
+  </section>
+
+  <section id="fichas" aria-labelledby="h-fichas">
+    <div class="section-head">
+      <span class="eyebrow">Fichas do time</span>
+      <h2 id="h-fichas">Nove cargos, um time só</h2>
+      <p>Os nomes são sugestões e você pode trocá-los. O <code>id</code> é como o agente se chama dentro do OpenClaw. Os quatro cargos que mais pesam no negócio usam um modelo de IA mais forte, e o resto usa um modelo mais rápido e barato.</p>
+    </div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section id="fluxo" aria-labelledby="h-fluxo">
+    <div class="section-head">
+      <span class="eyebrow">Exemplo</span>
+      <h2 id="h-fluxo">Como um pedido anda pelo escritório</h2>
+      <p>Você manda uma frase no Telegram. O time divide o trabalho, e o que custa dinheiro volta para você aprovar.</p>
+    </div>
+    <ol class="story" id="story"></ol>
+  </section>
+
+  <section id="decisoes" aria-labelledby="h-decisoes">
+    <div class="section-head">
+      <span class="eyebrow">Regras de autonomia</span>
+      <h2 id="h-decisoes">Quem decide o quê</h2>
+      <p>Os pedidos de aprovação vão para <code>empresa/aprovacoes/pendentes.md</code>. A Diretora resume e te pergunta. Basta responder “aprovo o 1, recuso o 2”.</p>
+    </div>
+    <div class="decide">
+      <section class="ok">
+        <span class="tag">Fazem sozinhos</span>
+        <ul>
+          <li>Relatórios, resumos e análises de planilha</li>
+          <li>Legendas, roteiros, copies e propostas com preço de tabela</li>
+          <li>Responder leads e clientes com base no FAQ</li>
+          <li>Follow-up e atualização do CRM</li>
+          <li>Pesquisa de concorrentes e prospecção com dados públicos</li>
+        </ul>
+      </section>
+      <section class="wait">
+        <span class="tag">Com sua aprovação</span>
+        <ul>
+          <li>Criar campanha, mudar orçamento ou público de anúncio</li>
+          <li>Publicar posts (a menos que o PERFIL diga que estão pré-aprovados)</li>
+          <li>Dar desconto acima do limite</li>
+          <li>Enviar cobranças e contratos</li>
+          <li>Mandar mensagem para uma lista</li>
+        </ul>
+      </section>
+      <section class="no">
+        <span class="tag">Nunca</span>
+        <ul>
+          <li>Pagar contas ou fazer PIX</li>
+          <li>Assinar contratos</li>
+          <li>Contratar ou demitir</li>
+          <li>Decidir imposto sem o contador</li>
+          <li>Disparo em massa para quem não pediu</li>
+        </ul>
+        <p class="foot">Nenhum agente recebe acesso ao banco para movimentar dinheiro.</p>
+      </section>
+    </div>
+  </section>
+
+  <section id="instalar" aria-labelledby="h-instalar">
+    <div class="section-head">
+      <span class="eyebrow">Passo a passo</span>
+      <h2 id="h-instalar">Instalação em 8 passos</h2>
+      <p>Leva de 1 a 2 horas na primeira vez. Você só copia e cola comandos no terminal. Marque cada passo como feito para acompanhar o progresso neste navegador.</p>
+    </div>
+    <div class="progress"><span id="prog-txt">0 de 8 passos feitos</span><div class="bar" aria-hidden="true"><i id="prog-bar"></i></div></div>
+    <ol class="steps" id="steps"></ol>
+  </section>
+
+  <section id="custos" aria-labelledby="h-custos">
+    <div class="section-head">
+      <span class="eyebrow">Antes de ligar</span>
+      <h2 id="h-custos">Custos e segurança</h2>
+    </div>
+    <div class="two">
+      <section>
+        <h3>Quanto custa</h3>
+        <dl>
+          <div><dt>Onde roda</dt><dd>Uma VPS Linux pequena (2 vCPU, 4 GB de RAM), ligada 24 horas. Também roda no seu PC, mas os agentes param quando ele desliga.</dd></div>
+          <div><dt>Modelo de IA</dt><dd>É o maior custo e varia com o uso. Cada rotina e cada conversa é uma execução paga.</dd></div>
+          <div><dt>OpenClaw e Claw3D</dt><dd>Gratuitos e de código aberto.</dd></div>
+          <div><dt>Para gastar pouco</dt><dd>Ligue poucas rotinas no começo, defina um limite mensal de gasto no provedor de IA e arquive planilhas antigas. O vídeo fala em cerca de R$ 150 por mês, mas o valor depende de quanto o time trabalha.</dd></div>
+        </dl>
+      </section>
+      <section>
+        <h3>Para não ter dor de cabeça</h3>
+        <dl>
+          <div><dt>Painel fechado</dt><dd>Não abra a porta 18789 nem o Claw3D para a internet. Acesse pelo túnel SSH ou pelo Tailscale. O token do gateway funciona como senha.</dd></div>
+          <div><dt>Quem fala com clientes tem menos poder</dt><dd>Vendedor e Atendimento rodam sem terminal, navegador e automações. Se um cliente tentar “dar ordens” ao agente pela conversa, o estrago possível é pequeno.</dd></div>
+          <div><dt>WhatsApp por QR code</dt><dd>Serve para conversar com quem te chamou. Disparo em massa pode banir o número. Para volume alto, use a API oficial.</dd></div>
+          <div><dt>LGPD e backup</dt><dd>Colete só os dados necessários e não compre listas. Faça backup diário de <code>~/.openclaw/empresa</code>, que é o banco de dados do seu negócio.</dd></div>
+        </dl>
+      </section>
+    </div>
+  </section>
+
+  <footer>
+    <span class="eyebrow">Fontes e arquivos</span>
+    <ul>
+      <li>Kit com os agentes, as planilhas e os scripts: <a href="https://github.com/matheusfleury-1209/nobel" target="_blank" rel="noopener">github.com/matheusfleury-1209/nobel</a></li>
+      <li>OpenClaw, o motor dos agentes: <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener">github.com/openclaw/openclaw</a></li>
+      <li>Claw3D, o escritório 3D: <a href="https://github.com/iamlukethedev/Claw3D" target="_blank" rel="noopener">github.com/iamlukethedev/Claw3D</a></li>
+    </ul>
+    <p>OpenClaw e Claw3D são projetos independentes de código aberto, sem vínculo com este kit. Os dois mudam rápido: se algum comando mudar, siga a documentação oficial.</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var AG = {
+    diretor: { nome: "Helena", cargo: "Diretora de Operações", ini: "H", sala: "dir", forte: true,
+      fala: "Você, pelo Telegram",
+      faz: ["Recebe seus pedidos e distribui o trabalho", "Cobra prazos e junta tudo num resumo só", "Só te chama quando a decisão é sua", "Organiza a fila de aprovações"],
+      pede: "Quero vender 30 planos este mês. Monta o plano com o time.",
+      skills: ["briefing-diario", "revisao-semanal"], pasta: "empresa/relatorios/" },
+    financeiro: { nome: "Otávio", cargo: "Financeiro", ini: "O", sala: "fin", forte: true,
+      faz: ["Registra o que você pagou e recebeu", "Fluxo de caixa e projeção de 30, 60 e 90 dias", "Fechamento do mês (DRE simplificada)", "Rascunhos de cobrança, preço e margem"],
+      pede: "Vou ter caixa para investir R$ 5 mil em estoque dia 15?",
+      skills: ["fluxo-de-caixa", "fechamento-mensal", "cobranca", "precificacao"], pasta: "empresa/financeiro/lancamentos.csv" },
+    administrativo: { nome: "Marcos", cargo: "Administrativo e RH", ini: "M", sala: "adm",
+      faz: ["Agenda de impostos e vencimentos", "Rascunhos de contratos e recibos", "Vaga, triagem e roteiro de entrevista", "Organização de documentos"],
+      pede: "O que vence esta semana?",
+      skills: ["agenda-obrigacoes", "documentos", "recrutamento"], pasta: "empresa/admin/obrigacoes.csv" },
+    trafego: { nome: "Bia", cargo: "Gestora de tráfego", ini: "B", sala: "mkt", forte: true,
+      faz: ["Relatórios de Meta Ads e Google Ads", "CPL, CPA e ROAS cruzados com as vendas reais", "Propõe pausar, escalar ou testar", "Planeja campanhas novas com orçamento"],
+      pede: "Planeja uma campanha de Black Friday com R$ 1.500.",
+      skills: ["relatorio-campanhas", "otimizacao-campanhas", "planejamento-campanha"], pasta: "empresa/marketing/campanhas.csv" },
+    social: { nome: "Lua", cargo: "Social media", ini: "L", sala: "mkt",
+      faz: ["Calendário editorial da semana", "Legendas, roteiros de Reels e carrosséis", "Rascunhos de respostas a comentários", "Passa as DMs de compra para o vendedor"],
+      pede: "Escreve 3 roteiros de Reels sobre o nosso produto mais vendido.",
+      skills: ["calendario-editorial", "conteudo-redes"], pasta: "empresa/marketing/calendario-editorial.csv" },
+    criativos: { nome: "Duda", cargo: "Copy e criativos", ini: "D", sala: "mkt",
+      faz: ["Copies de anúncio em variações A, B e C", "Títulos e descrições para Google Ads", "Briefings de arte e de vídeo", "Prompts para gerar imagens"],
+      pede: "Faz 3 variações de anúncio para o Plano Básico.",
+      skills: ["copy-anuncio", "briefing-criativo"], pasta: "empresa/marketing/criativos/" },
+    vendedor: { nome: "Rafa", cargo: "Vendedor", ini: "R", sala: "com", forte: true, cliente: true,
+      fala: "Clientes, pelo WhatsApp comercial",
+      faz: ["Atende leads no WhatsApp em minutos", "Qualifica: necessidade, prazo, orçamento e quem decide", "Monta propostas e contorna objeções", "Faz follow-up até ganhar ou perder"],
+      pede: "Quais propostas estão abertas?",
+      skills: ["atendimento-lead", "proposta-comercial", "objecoes", "follow-up"], pasta: "empresa/vendas/leads.csv" },
+    atendimento: { nome: "Clara", cargo: "Atendimento e pós-venda", ini: "C", sala: "com", cliente: true,
+      fala: "Clientes, pelo WhatsApp de suporte",
+      faz: ["Responde clientes com base no FAQ", "Abre e acompanha tickets", "Faz o onboarding de quem comprou", "Pesquisa NPS e cuida de quem ficou insatisfeito"],
+      pede: "Quantos tickets estão abertos? Algum urgente?",
+      skills: ["atendimento-cliente", "pesquisa-nps"], pasta: "empresa/atendimento/tickets.csv" },
+    prospector: { nome: "Theo", cargo: "Prospecção e mercado", ini: "T", sala: "com",
+      faz: ["Lista de empresas com o perfil de cliente ideal", "Só dados públicos, sempre com a fonte", "Analisa concorrentes e anúncios ativos", "Sugere ideias de pauta para o social"],
+      pede: "Acha 20 clínicas em Campinas com Instagram ativo.",
+      skills: ["prospeccao-leads", "analise-concorrentes"], pasta: "empresa/prospeccao/lista-alvos.csv" }
+  };
+  var ORDEM = ["diretor", "financeiro", "administrativo", "trafego", "social", "criativos", "vendedor", "atendimento", "prospector"];
+  var SALAS = {
+    dir: { label: "S-01 · Diretoria", ids: ["diretor"] },
+    fin: { label: "S-02 · Financeiro", ids: ["financeiro"] },
+    adm: { label: "S-03 · Administrativo", ids: ["administrativo"] },
+    mkt: { label: "S-04 · Marketing", ids: ["trafego", "social", "criativos"] },
+    com: { label: "S-05 · Comercial", ids: ["vendedor", "atendimento", "prospector"] }
+  };
+  var CANAL = { diretor: "Telegram ↔ você", vendedor: "WhatsApp comercial ↔ clientes", atendimento: "WhatsApp suporte ↔ clientes" };
+  var UTEIS = [1, 2, 3, 4, 5];
+
+  // Rotinas iguais às de scripts/criar-rotinas.sh
+  var ROT = [
+    { a: "financeiro", m: 450, d: UTEIS, n: "Caixa do dia", c: "30 7 * * 1-5" },
+    { a: "diretor", m: 480, d: UTEIS, n: "Briefing diário no seu celular", c: "0 8 * * 1-5" },
+    { a: "administrativo", m: 480, d: [1], n: "Obrigações da semana", c: "0 8 * * 1" },
+    { a: "trafego", m: 540, d: UTEIS, n: "Relatório de anúncios de ontem", c: "0 9 * * 1-5" },
+    { a: "social", m: 540, d: [1], n: "Calendário da semana", c: "0 9 * * 1" },
+    { a: "vendedor", m: 540, d: UTEIS, n: "Follow-ups da manhã", c: "0 9,15 * * 1-5" },
+    { a: "financeiro", m: 540, dia1: true, n: "Fechamento do mês", c: "0 9 1 * *" },
+    { a: "financeiro", m: 600, d: UTEIS, n: "Rascunhos de cobrança", c: "0 10 * * 1-5" },
+    { a: "trafego", m: 600, d: [1], n: "Otimização semanal", c: "0 10 * * 1" },
+    { a: "prospector", m: 600, d: [2, 4], n: "Nova lista de 20 alvos", c: "0 10 * * 2,4" },
+    { a: "prospector", m: 600, dia1: true, n: "Concorrentes do mês", c: "0 10 1 * *" },
+    { a: "atendimento", m: 660, d: UTEIS, n: "Revisão de tickets", c: "0 11 * * 1-5" },
+    { a: "social", m: 840, d: UTEIS, n: "Posts de amanhã", c: "0 14 * * 1-5" },
+    { a: "vendedor", m: 900, d: UTEIS, n: "Follow-ups da tarde", c: "0 9,15 * * 1-5" },
+    { a: "criativos", m: 900, d: UTEIS, n: "Fila de pedidos de criativos", c: "0 15 * * 1-5" },
+    { a: "diretor", m: 1020, d: [5], n: "Revisão semanal no seu celular", c: "0 17 * * 5" }
+  ];
+  var ARQ = [
+    { p: "PERFIL-DA-EMPRESA.md", o: [], label: "você preenche" },
+    { p: "financeiro/", o: ["financeiro"] },
+    { p: "vendas/leads.csv", o: ["vendedor"] },
+    { p: "marketing/", o: ["trafego", "social", "criativos"] },
+    { p: "atendimento/", o: ["atendimento"] },
+    { p: "prospeccao/", o: ["prospector"] },
+    { p: "admin/", o: ["administrativo"] },
+    { p: "relatorios/", o: ["diretor"], label: "todos" },
+    { p: "aprovacoes/pendentes.md", o: ["diretor"], inbox: true, label: "espera você" }
+  ];
+  var DIAS = [["Seg", 1], ["Ter", 2], ["Qua", 3], ["Qui", 4], ["Sex", 5]];
+  var DIA_NOME = { 1: "segunda", 2: "terça", 3: "quarta", 4: "quinta", 5: "sexta" };
+
+  function el(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      if (k === "text") e.textContent = attrs[k];
+      else if (k === "cls") e.className = attrs[k];
+      else if (k === "style") e.setAttribute("style", attrs[k]);
+      else e.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(function (c) { if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function avatar(id, small) {
+    return el("span", { cls: "av" + (small ? " sm" : ""), style: "--c: var(--c-" + id + ")", "aria-hidden": "true", text: AG[id].ini });
+  }
+  function hhmm(m) { var h = Math.floor(m / 60), mm = m % 60; return (h < 10 ? "0" : "") + h + ":" + (mm < 10 ? "0" : "") + mm; }
+
+  // ---------- planta ----------
+  var deskEls = {};
+  Object.keys(SALAS).forEach(function (key) {
+    var room = document.querySelector('[data-room="' + key + '"]');
+    var sala = SALAS[key];
+    room.appendChild(el("div", { cls: "room-label" }, [el("span", { cls: "eyebrow", text: sala.label })]));
+    var desks = el("div", { cls: "desks" + (sala.ids.length === 3 ? " three" : "") });
+    sala.ids.forEach(function (id) {
+      var a = AG[id];
+      var stText = el("span", { cls: "st-t", text: "Disponível" });
+      var b = el("button", { type: "button", cls: "desk", "data-id": id, "aria-label": a.nome + ", " + a.cargo + ". Abrir ficha" }, [
+        avatar(id),
+        el("span", { cls: "who" }, [el("b", { text: a.nome }), el("small", { text: a.cargo })]),
+        el("span", { cls: "st" }, [el("i", { cls: "dot" }), stText]),
+        CANAL[id] ? el("span", { cls: "chan", text: CANAL[id] }) : null
+      ]);
+      b.addEventListener("click", function () { abrirFicha(id); });
+      deskEls[id] = { btn: b, txt: stText };
+      desks.appendChild(b);
+    });
+    room.appendChild(desks);
+  });
+  var files = document.getElementById("files");
+  ARQ.forEach(function (f) {
+    var owners = el("span", { cls: "owners" });
+    if (f.label) owners.appendChild(el("span", { text: f.label, style: "font-size:11px;color:var(--ink-2);margin-right:4px" }));
+    if (!f.label || f.inbox) f.o.forEach(function (id) { owners.appendChild(avatar(id, true)); });
+    files.appendChild(el("li", { cls: f.inbox ? "inbox" : "" }, [el("span", { text: f.p }), owners]));
+  });
+
+  // ---------- estado do relógio ----------
+  var state = { dia: 1, dia1: false, t: 540 };
+  var daysBox = document.getElementById("days");
+  var dayBtns = DIAS.map(function (d) {
+    var b = el("button", { type: "button", cls: "chip", "aria-pressed": "false", text: d[0] });
+    b.addEventListener("click", function () { state.dia = d[1]; setNote(""); render(); });
+    daysBox.appendChild(b);
+    return { b: b, v: d[1] };
+  });
+  var hora = document.getElementById("hora");
+  var horaOut = document.getElementById("hora-out");
+  var dia1 = document.getElementById("dia1");
+  var simNote = document.getElementById("sim-note");
+  function setNote(t) { simNote.textContent = t; }
+  hora.addEventListener("input", function () { state.t = +hora.value; setNote(""); render(); });
+  dia1.addEventListener("change", function () { state.dia1 = dia1.checked; render(); });
+  document.getElementById("agora").addEventListener("click", irParaAgora);
+
+  function rotinasDoDia() {
+    return ROT.filter(function (r) { return r.dia1 ? state.dia1 : r.d.indexOf(state.dia) !== -1; })
+      .sort(function (x, y) { return x.m - y.m; });
+  }
+  function render() {
+    dayBtns.forEach(function (d) { d.b.setAttribute("aria-pressed", String(d.v === state.dia)); });
+    hora.value = state.t;
+    horaOut.textContent = hhmm(state.t);
+    dia1.checked = state.dia1;
+    var hoje = rotinasDoDia();
+    ORDEM.forEach(function (id) {
+      var ativa = hoje.filter(function (r) { return r.a === id && state.t >= r.m && state.t < r.m + 60; })[0];
+      var st = "idle", txt = "Disponível quando chamado";
+      if (ativa) { st = "busy"; txt = "Rodando: " + ativa.n; }
+      else if (AG[id].cliente && state.t >= 480 && state.t < 1080) { st = "live"; txt = "Atendendo clientes"; }
+      deskEls[id].btn.setAttribute("data-st", st);
+      deskEls[id].txt.textContent = txt;
+    });
+    var ol = document.getElementById("agenda");
+    ol.textContent = "";
+    document.getElementById("h-agenda").textContent = "Agenda de " + DIA_NOME[state.dia] + (state.dia1 ? " (dia 1)" : "");
+    hoje.forEach(function (r) {
+      var cls = state.t >= r.m + 60 ? "past" : (state.t >= r.m ? "now" : "");
+      var b = el("button", { type: "button" }, [
+        el("span", { cls: "t", text: hhmm(r.m) }),
+        avatar(r.a, true),
+        el("span", { cls: "r" }, [el("span", { text: AG[r.a].nome + ": " + r.n }), el("small", { text: r.c })])
+      ]);
+      b.addEventListener("click", function () { state.t = r.m; setNote(""); render(); });
+      ol.appendChild(el("li", { cls: cls }, [b]));
+    });
+  }
+  function irParaAgora() {
+    var now = { dia: 1, t: 540, dom: 0 };
+    try {
+      var parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/Sao_Paulo", weekday: "short", hour: "2-digit", minute: "2-digit", day: "numeric", hourCycle: "h23" }).formatToParts(new Date());
+      var p = {}; parts.forEach(function (x) { p[x.type] = x.value; });
+      var wd = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }[p.weekday];
+      var mins = (+p.hour) * 60 + (+p.minute);
+      now = { dia: wd, t: mins, dom: +p.day };
+    } catch (e) { /* sem Intl: fica na simulação */ }
+    var fora = now.dia < 1 || now.dia > 5 || now.t < 420 || now.t > 1080;
+    if (fora) {
+      state.dia = 1; state.t = 540; state.dia1 = false;
+      setNote("Fora do expediente agora. Mostrando uma segunda-feira às 9h.");
+    } else {
+      state.dia = now.dia; state.t = Math.floor(now.t / 30) * 30; state.dia1 = now.dom === 1;
+      setNote("Agora em Brasília.");
+    }
+    render();
+  }
+
+  // ---------- fichas ----------
+  var rotPorAgente = {};
+  ROT.forEach(function (r) {
+    var l = rotPorAgente[r.a] = rotPorAgente[r.a] || [];
+    if (!l.some(function (x) { return x.c === r.c; })) l.push(r);
+  });
+  var cards = document.getElementById("cards");
+  var cardEls = {};
+  ORDEM.forEach(function (id) {
+    var a = AG[id];
+    var badges = el("div", { cls: "badges" }, [
+      el("span", { cls: "badge", text: "id: " + id }),
+      el("span", { cls: "badge" + (a.forte ? " strong" : ""), text: a.forte ? "modelo forte" : "modelo rápido" }),
+      a.cliente ? el("span", { cls: "badge client", text: "fala com clientes" }) : null
+    ]);
+    var rot = el("ul", { cls: "routines" });
+    (rotPorAgente[id] || []).forEach(function (r) {
+      var nome = r.n.replace(/ da manhã$/, "").replace(/ no seu celular$/, "");
+      rot.appendChild(el("li", {}, [el("span", { text: nome }), el("code", { text: r.c })]));
+    });
+    var faz = el("ul");
+    a.faz.forEach(function (f) { faz.appendChild(el("li", { text: f })); });
+    var skills = el("div", { cls: "skills" });
+    a.skills.forEach(function (s) { skills.appendChild(el("span", { text: s })); });
+    var card = el("article", { cls: "card", id: "ficha-" + id }, [
+      el("div", { cls: "eyebrow", text: SALAS[a.sala].label }),
+      el("div", { cls: "card-top" }, [avatar(id), el("h3", { text: a.nome }), el("span", { cls: "role", text: a.cargo })]),
+      badges,
+      el("div", {}, [el("h4", { text: "O que faz" }), faz]),
+      el("div", {}, [el("h4", { text: "Rotinas (cron)" }), rot]),
+      el("div", {}, [el("h4", { text: a.fala ? "Conversa com" : "Planilha principal" }), el("p", { cls: a.fala ? "" : "path", text: a.fala || a.pasta, style: "font-size:14.5px" })]),
+      el("div", {}, [el("h4", { text: "Peça assim" }), el("p", { cls: "ask", text: "“" + a.pede + "”" })]),
+      el("div", {}, [el("h4", { text: "Skills" }), skills])
+    ]);
+    cardEls[id] = card;
+    cards.appendChild(card);
+  });
+  function abrirFicha(id) {
+    var c = cardEls[id];
+    var reduz = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    c.scrollIntoView({ behavior: reduz ? "auto" : "smooth", block: "start" });
+    c.classList.add("flash");
+    setTimeout(function () { c.classList.remove("flash"); }, 1600);
+  }
+
+  // ---------- fluxo ----------
+  var HIST = [
+    { who: [], label: "Você, no Telegram", q: "Quero vender 30 planos este mês." },
+    { who: ["diretor"], msg: "Helena divide o pedido em tarefas: campanha para a Bia, conteúdo para a Lua, orçamento para o Otávio e um aviso para o Rafa se preparar." },
+    { who: ["financeiro"], msg: "Otávio confere o caixa e responde quanto dá para investir em anúncios sem apertar o mês." },
+    { who: ["trafego", "criativos"], msg: "Bia monta o plano da campanha e pede os anúncios para a Duda, que entrega 3 variações para teste." },
+    { who: ["trafego"], approve: true, msg: "Bia registra o pedido de aprovação.", q: "R$ 1.500 em Meta Ads por 30 dias. CPA meta: R$ 50." },
+    { who: ["diretor"], approve: true, msg: "Helena te pergunta com a recomendação dela. Você responde “aprovo” e a campanha sobe." },
+    { who: ["vendedor"], msg: "Os leads chegam no WhatsApp. Rafa qualifica, envia a proposta, faz o follow-up e registra tudo no CRM." },
+    { who: ["financeiro", "atendimento"], msg: "Venda fechada: Otávio lança a entrada no caixa e Clara faz o onboarding do cliente." },
+    { who: ["diretor"], msg: "Sexta, 17h: a revisão semanal chega no seu celular com as vendas, o custo por cliente e o caixa." }
+  ];
+  var story = document.getElementById("story");
+  HIST.forEach(function (h, i) {
+    var actors = el("div", { cls: "actors" });
+    if (!h.who.length) actors.appendChild(el("span", { text: h.label }));
+    h.who.forEach(function (id) { actors.appendChild(avatar(id, true)); actors.appendChild(el("span", { text: AG[id].nome })); });
+    var body = el("div", { cls: "body" }, [actors]);
+    if (h.msg) body.appendChild(el("p", { cls: "msg", text: h.msg }));
+    if (h.q) body.appendChild(el("p", { cls: "quote", text: (h.who.length ? "" : "“") + h.q + (h.who.length ? "" : "”") }));
+    story.appendChild(el("li", { cls: h.approve ? "approve" : "" }, [el("span", { cls: "num", text: String(i + 1) }), body]));
+  });
+
+  // ---------- instalação ----------
+  var PASSOS = [
+    { t: "Contrate um servidor", p: "Uma VPS com Ubuntu 24.04, 2 vCPU e 4 GB de RAM, de qualquer provedor. Ela fica ligada 24 horas. Também dá para usar o seu PC, mas os agentes só trabalham enquanto ele estiver ligado.",
+      cmds: [["Conectar na VPS", "ssh root@IP_DA_SUA_VPS"]] },
+    { t: "Instale o OpenClaw", p: "O instalador oficial já traz o Node.js 24, que é obrigatório.",
+      cmds: [["Terminal da VPS", "curl -fsSL https://openclaw.ai/install.sh | bash"]] },
+    { t: "Faça a configuração inicial", p: "Escolha o provedor de IA (por exemplo, Anthropic/Claude), faça login e aceite instalar o serviço automático. O painel OpenClaw Control fica em http://127.0.0.1:18789/ e pede o token do gateway.",
+      cmds: [["Terminal da VPS", "openclaw onboard --install-daemon\nopenclaw gateway status\nopenclaw gateway auth-token --show"],
+             ["No seu computador, para abrir o painel da VPS", "ssh -L 18789:127.0.0.1:18789 root@IP_DA_SUA_VPS"]] },
+    { t: "Instale o time", p: "O script cria os 9 agentes, copia personalidade, cargo e skills, liga a pasta empresa/ e configura a Diretora como coordenadora.",
+      cmds: [["Terminal da VPS", "git clone https://github.com/matheusfleury-1209/nobel.git time-ia\ncd time-ia\n./scripts/instalar-time.sh\nopenclaw agents list --bindings"]],
+      n: "Se o repositório for privado, o git vai pedir login. Use um token de acesso do GitHub como senha." },
+    { t: "Preencha o perfil da empresa", p: "É o passo que mais muda o resultado: produtos, preços, limite de desconto, público, tom de voz, metas, saldo do caixa e o que o time pode fazer sem perguntar.",
+      cmds: [["Terminal da VPS", "nano ~/.openclaw/empresa/PERFIL-DA-EMPRESA.md\nnano ~/.openclaw/empresa/atendimento/faq.md"]],
+      n: "Depois, teste no painel: abra a Diretora e peça “se apresente e me diga quem está no time”." },
+    { t: "Conecte o Telegram e o WhatsApp", p: "No Telegram, crie um bot com o @BotFather e copie o token. Mande uma mensagem ao bot para receber o código de pareamento. No WhatsApp, use um número da empresa e leia o QR code em Aparelhos conectados.",
+      cmds: [["Telegram: você ↔ Diretora", "openclaw channels add --channel telegram --token <TOKEN_DO_BOT>\nopenclaw pairing approve telegram <CÓDIGO>\nopenclaw agents bind --agent diretor --bind telegram"],
+             ["WhatsApp: clientes ↔ Vendedor", "openclaw channels login --channel whatsapp --account comercial\nopenclaw agents bind --agent vendedor --bind whatsapp:comercial\nopenclaw gateway restart\nopenclaw channels status --probe"]],
+      n: "Antes de divulgar o número, converse uns dias com o Vendedor fingindo ser cliente e ajuste o PERFIL e o FAQ." },
+    { t: "Ligue as rotinas", p: "Cria as 16 rotinas da agenda acima. Os resumos da Diretora chegam no seu Telegram. Para economizar, comece com poucas rotinas e remova as outras.",
+      cmds: [["Terminal da VPS", "AVISO_CANAL=telegram AVISO_PARA=<SEU_ID_TELEGRAM> ./scripts/criar-rotinas.sh\nopenclaw automations list"]] },
+    { t: "Abra o escritório 3D", p: "No seu computador, com Node.js 20 ou mais novo. Abra http://localhost:3000, escolha o backend OpenClaw, use a URL ws://localhost:18789 com o túnel do passo 3 aberto e cole o token. Depois vá em /office para ver o time nas mesas e em /office/builder para montar as salas.",
+      cmds: [["Seu computador", "git clone https://github.com/iamlukethedev/Claw3D.git claw3d\ncd claw3d\nnpm install\ncp .env.example .env\nnpm run dev"]],
+      n: "Se pedir aprovação do dispositivo, rode na VPS: openclaw devices approve --latest" }
+  ];
+  var KEY = "escritorio-ia-passos";
+  var feitos = {};
+  try { feitos = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { feitos = {}; }
+  function salvar() { try { localStorage.setItem(KEY, JSON.stringify(feitos)); } catch (e) { /* armazenamento indisponível */ } }
+  var stepsOl = document.getElementById("steps");
+  var stepEls = [];
+  PASSOS.forEach(function (s, i) {
+    var cb = el("input", { type: "checkbox", id: "passo-" + (i + 1) });
+    cb.checked = !!feitos[i];
+    cb.addEventListener("change", function () { feitos[i] = cb.checked; salvar(); progresso(); });
+    var li = el("li", { cls: "step" }, [
+      el("div", { cls: "step-head" }, [
+        el("span", { cls: "num", text: String(i + 1) }),
+        el("h3", { text: s.t }),
+        el("label", { cls: "check", "for": "passo-" + (i + 1) }, [cb, "Feito"])
+      ]),
+      el("p", { text: s.p })
+    ]);
+    s.cmds.forEach(function (c) {
+      var pre = el("pre", {}, [el("code", { text: c[1] })]);
+      var btn = el("button", { type: "button", text: "Copiar" });
+      btn.addEventListener("click", function () { copiar(c[1], pre, btn); });
+      li.appendChild(el("div", { cls: "cmd" }, [el("div", { cls: "cmd-head" }, [el("span", { text: c[0] }), btn]), pre]));
+    });
+    if (s.n) li.appendChild(el("p", { cls: "note", text: s.n }));
+    stepEls.push({ li: li, cb: cb });
+    stepsOl.appendChild(li);
+  });
+  function progresso() {
+    var n = 0;
+    stepEls.forEach(function (s) { s.li.classList.toggle("done", s.cb.checked); if (s.cb.checked) n++; });
+    document.getElementById("prog-txt").textContent = n + " de " + PASSOS.length + " passos feitos";
+    document.getElementById("prog-bar").style.width = (n / PASSOS.length * 100) + "%";
+  }
+  function selecionar(node) {
+    try { var r = document.createRange(); r.selectNodeContents(node); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); } catch (e) { /* ignora */ }
+  }
+  function copiar(texto, pre, btn) {
+    function ok(msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = "Copiar"; }, 1600); }
+    try {
+      navigator.clipboard.writeText(texto).then(function () { ok("Copiado"); }, function () { selecionar(pre); ok("Selecionado"); });
+    } catch (e) { selecionar(pre); ok("Selecionado"); }
+  }
+
+  progresso();
+  irParaAgora();
+})();
+</script>
