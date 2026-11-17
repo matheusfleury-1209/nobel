@@ -141,14 +141,14 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
 </style>
 
 <div id="app">
-  <canvas id="cena" aria-label="Prévia 3D do escritório com os 9 agentes de IA"></canvas>
+  <canvas id="cena" aria-label="Prévia 3D do escritório com os 13 agentes de IA"></canvas>
   <div id="tags"></div>
 
   <div class="hud-top">
     <div class="brand">
       <span class="eyebrow">Prévia simulada</span>
       <h1>Escritório Nobel</h1>
-      <div class="team"><div class="faces" id="faces"></div><span class="count"><b>9</b> agentes de IA</span></div>
+      <div class="team"><div class="faces" id="faces"></div><span class="count"><b>13</b> agentes de IA</span></div>
       <p class="note">Simulação do Claw3D com as rotinas do kit num relógio acelerado. Arraste para girar, use pinça para dar zoom e toque num nome para ver a ficha.</p>
     </div>
     <div class="resumo" aria-live="polite">
@@ -201,7 +201,15 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     { id: "atendimento", nome: "Clara", cargo: "Atendimento e pós-venda", cor: "#2560A3", pele: "#F3D2B5", cabelo: "#5A3825", longo: true, sala: "aberta", corredor: 6.8, cliente: "Atendendo alunas",
       mesa: [-6, 4.6], faz: "Dúvidas de alunas, onboarding, reembolso pela Hotmart e pesquisa de satisfação.", pede: "Alguma aluna com problema hoje?" },
     { id: "prospector", nome: "Theo", cargo: "Prospecção e mercado", cor: "#5E6A12", pele: "#5C3A26", cabelo: "#141414", sala: "aberta", corredor: 6.8,
-      mesa: [-3, 4.6], faz: "Concorrentes de ASB, cidades de Goiás com demanda e clínicas que aceitam estagiárias.", pede: "Lista as clínicas da região de Jaraguá que recebem estagiárias." }
+      mesa: [-3, 4.6], faz: "Concorrentes de ASB, cidades de Goiás com demanda e clínicas que aceitam estagiárias.", pede: "Lista as clínicas da região de Jaraguá que recebem estagiárias." },
+    { id: "inteligencia", nome: "Íris", cargo: "Inteligência de anúncios", cor: "#0F766E", pele: "#D9A27C", cabelo: "#2A1A10", longo: true, sala: "growth",
+      mesa: [3.0, 0.9], faz: "Garimpa a Biblioteca de Anúncios, acha o que está funcionando no mercado de ASB e entrega modelos honestos para a Duda.", pede: "O que os concorrentes estão anunciando que funciona?" },
+    { id: "revisor", nome: "Vera", cargo: "Revisora de qualidade", cor: "#9F1239", pele: "#F0C8A8", cabelo: "#4A2F1E", longo: true, sala: "growth",
+      mesa: [5.2, 0.9], faz: "Confere preço, garantia, promessas, links e políticas antes de qualquer coisa ir para a sua aprovação.", pede: "Revisa os anúncios novos antes de eu aprovar." },
+    { id: "otimizador", nome: "Caio", cargo: "Especialista em melhorias", cor: "#A16207", pele: "#7A4B2E", cabelo: "#121212", sala: "growth",
+      mesa: [7.4, 0.9], faz: "Lê as conversas que não viraram venda, mede o funil e propõe testes A/B.", pede: "Onde estamos perdendo as vendas esta semana?" },
+    { id: "programador", nome: "Léo", cargo: "Programador", cor: "#334155", pele: "#E2B591", cabelo: "#5B3A1E", sala: "growth",
+      mesa: [9.6, 0.9], faz: "Pixel e rastreamento, links da Hotmart, ligação com o CRM Nobel e automações.", pede: "As vendas estão chegando na Meta e no CRM?" }
   ];
   var POR_ID = {}; AG.forEach(function (a) { POR_ID[a.id] = a; });
   var UTEIS = [1, 2, 3, 4, 5];
@@ -219,13 +227,17 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     { a: "social", m: 840, d: UTEIS, n: "Posts de amanhã" },
     { a: "vendedor", m: 900, d: UTEIS, n: "Follow-ups da tarde" },
     { a: "criativos", m: 900, d: UTEIS, n: "Fila de pedidos de criativos" },
-    { a: "diretor", m: 1020, d: [5], n: "Revisão semanal no seu WhatsApp" }
+    { a: "diretor", m: 1020, d: [5], n: "Revisão semanal no seu WhatsApp" },
+    { a: "programador", m: 510, d: [1], n: "Checagem do rastreamento" },
+    { a: "inteligencia", m: 570, d: [1, 4], n: "Garimpo de anúncios" },
+    { a: "revisor", m: 690, d: [1], n: "Auditoria semanal" },
+    { a: "otimizador", m: 1050, d: UTEIS, n: "Funil do dia" }
   ];
-  var LOUNGE = [[3.2, 1.2], [4.6, 6.9], [8.3, 2.2], [9.4, 6.0], [6.1, 1.5], [2.6, 7.2], [10.3, 3.5], [7.5, 6.9], [3.4, 4.0]];
+  var LOUNGE = [[3.0, 3.1], [4.6, 6.9], [8.6, 3.0], [9.3, 6.0], [4.3, 3.0], [2.8, 6.6], [9.0, 3.9], [7.5, 6.9], [3.4, 4.6]];
   var SALAS = [
     { t: "Diretoria", p: [-8.6, -2.4] }, { t: "Financeiro", p: [-4.7, -3.35] }, { t: "Administrativo", p: [1.3, -3.35] },
     { t: "Arquivo empresa/", p: [7.4, -2.45] }, { t: "Marketing", p: [-11.2, 2.5] }, { t: "Comercial", p: [-11.2, 7.5] },
-    { t: "Copa", p: [2.2, -0.2] }
+    { t: "Qualidade e Growth", p: [2.2, -0.2] }, { t: "Copa", p: [8.6, 7.55] }
   ];
 
   // ---------- three.js ----------
@@ -288,7 +300,8 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
   tapete(7, -8, 12, -2, "#DFE4EB");
   tapete(-11.5, -0.4, -0.8, 2.6, "#F5E1D3");
   tapete(-11.5, 3.6, -0.8, 7.6, "#D8EEE2");
-  tapete(1.8, -0.4, 11.6, 7.6, "#F2DDE6");
+  tapete(1.8, 2.6, 11.6, 7.6, "#F2DDE6");
+  tapete(1.8, -0.4, 11.6, 2.6, "#E2E8F6");
 
   // paredes do fundo
   var PAREDE = "#C9D3E1", FRISO = "#9EABC0";
@@ -387,7 +400,7 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
   box(2.7, 0.075, 0.03, "#FFFFFF", 6, 0.762, 4.2);
   box(0.03, 0.16, 1.6, "#F4F7FB", 6, 0.87, 4.2);
   [[-1.2, -0.6], [1.2, -0.6], [-1.2, 0.6], [1.2, 0.6]].forEach(function (p) { box(0.07, 0.73, 0.07, "#3A3F52", 6 + p[0], 0.365, 4.2 + p[1]); });
-  sofa(10.6, 1.0, -Math.PI / 2, "#E07A8F");
+  sofa(10.7, 4.3, -Math.PI / 2, "#E07A8F");
   box(1.7, 0.95, 0.7, "#EEF2F7", 11.1, 0.475, 6.8);
   box(0.42, 0.5, 0.35, "#2B3242", 10.7, 1.2, 6.8);
   box(0.18, 0.12, 0.18, "#FFFFFF", 11.3, 1.01, 6.8);
@@ -471,6 +484,7 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
   function perto(a, p, r) { return Math.hypot(a.pos.x - p[0], a.pos.z - p[1]) < (r || 0.35); }
   function sortear(lista) { return lista[Math.floor(Math.random() * lista.length)]; }
   function rotaPasseio(a) {
+    if (a.sala === "growth") return perto(a, a.assento, 1.0) ? [[a.assento[0], 2.9], sortear(LOUNGE)] : [sortear(LOUNGE)];
     if (a.sala === "aberta") {
       var w = sortear(LOUNGE), naMesa = perto(a, a.assento, 1.0);
       return naMesa ? [[a.assento[0], a.corredor], [0.7, a.corredor], w] : [w];
@@ -479,6 +493,7 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
   }
   function rotaMesa(a) {
     if (perto(a, a.assento, 1.0)) return [a.assento];
+    if (a.sala === "growth") return [[a.assento[0], 2.9], a.assento];
     if (a.sala === "aberta") return [[0.7, a.corredor], [a.assento[0], a.corredor], a.assento];
     return [a.saida, a.assento];
   }
@@ -671,7 +686,7 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
   // começa com cada um no lugar certo para o horário
   AG.forEach(function (a) {
     if (a.status.s !== "idle") sentar(a);
-    else if (a.sala !== "aberta") { var s = a.passeio[0]; a.pos.set(s[0], 0, s[1]); a.estado = "parado"; }
+    else if (a.passeio) { var s = a.passeio[0]; a.pos.set(s[0], 0, s[1]); a.estado = "parado"; }
     else { var w = LOUNGE[AG.indexOf(a) % LOUNGE.length]; a.pos.set(w[0], 0, w[1]); a.estado = "parado"; }
   });
   requestAnimationFrame(quadro);
