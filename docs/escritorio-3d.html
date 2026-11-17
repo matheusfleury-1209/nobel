@@ -146,10 +146,10 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
 
   <div class="hud-top">
     <div class="brand">
-      <span class="eyebrow">Prévia simulada</span>
+      <span class="eyebrow">Prévia simulada · 24 horas</span>
       <h1>Escritório Nobel</h1>
       <div class="team"><div class="faces" id="faces"></div><span class="count"><b>13</b> agentes de IA</span></div>
-      <p class="note">Simulação do Claw3D com as rotinas do kit num relógio acelerado. Arraste para girar, use pinça para dar zoom e toque num nome para ver a ficha.</p>
+      <p class="note">Turno de 24 horas: o time trabalha dia e noite, todos os dias. Simulação do Claw3D com as rotinas do kit num relógio acelerado. Arraste para mover, use + e − ou pinça para o zoom e toque num nome para ver a ficha.</p>
     </div>
     <div class="resumo" aria-live="polite">
       <span><i class="dot busy"></i>Rodando rotina: <b id="n-busy">0</b></span>
@@ -167,9 +167,11 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
       <button type="button" class="play" id="play" aria-label="Pausar"></button>
       <div class="clock">
         <output id="hora-out" for="hora">09:00</output>
-        <input type="range" id="hora" min="420" max="1080" step="1" value="540" aria-label="Hora do dia">
+        <input type="range" id="hora" min="0" max="1439" step="1" value="540" aria-label="Hora do dia">
       </div>
       <button type="button" class="ghost" id="vel">4 min/s</button>
+      <button type="button" class="ghost" id="menos" aria-label="Diminuir zoom">−</button>
+      <button type="button" class="ghost" id="mais" aria-label="Aumentar zoom">+</button>
       <button type="button" class="ghost" id="agora">Agora</button>
     </div>
   </div>
@@ -212,7 +214,7 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
       mesa: [9.6, 0.9], faz: "Pixel e rastreamento, links da Hotmart, ligação com o CRM Nobel e automações.", pede: "As vendas estão chegando na Meta e no CRM?" }
   ];
   var POR_ID = {}; AG.forEach(function (a) { POR_ID[a.id] = a; });
-  var UTEIS = [1, 2, 3, 4, 5];
+  var UTEIS = [1, 2, 3, 4, 5], SEMPRE = [0, 1, 2, 3, 4, 5, 6];
   var ROT = [
     { a: "financeiro", m: 450, d: UTEIS, n: "Caixa do dia" },
     { a: "diretor", m: 480, d: UTEIS, n: "Briefing diário no seu WhatsApp" },
@@ -231,7 +233,26 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     { a: "programador", m: 510, d: [1], n: "Checagem do rastreamento" },
     { a: "inteligencia", m: 570, d: [1, 4], n: "Garimpo de anúncios" },
     { a: "revisor", m: 690, d: [1], n: "Auditoria semanal" },
-    { a: "otimizador", m: 1050, d: UTEIS, n: "Funil do dia" }
+    { a: "otimizador", m: 1050, d: UTEIS, n: "Funil do dia" },
+    // turno de 24 horas (todos os dias), igual ao scripts/criar-rotinas.sh com MODO_24H=1
+    { a: "financeiro", m: 30, d: SEMPRE, n: "Conciliação do dia (noite)" },
+    { a: "inteligencia", m: 90, d: SEMPRE, n: "Garimpo noturno de anúncios" },
+    { a: "programador", m: 120, d: SEMPRE, n: "Checagem técnica noturna" },
+    { a: "criativos", m: 150, d: SEMPRE, n: "Produção noturna de variações" },
+    { a: "revisor", m: 210, d: SEMPRE, n: "Revisão noturna" },
+    { a: "otimizador", m: 270, d: SEMPRE, n: "Análise das conversas do dia" },
+    { a: "social", m: 330, d: SEMPRE, n: "Posts do dia para aprovação" },
+    { a: "prospector", m: 390, d: SEMPRE, n: "Pesquisa de mercado" },
+    { a: "administrativo", m: 420, d: SEMPRE, n: "Agenda do dia" },
+    { a: "vendedor", m: 450, d: SEMPRE, n: "Resumo dos leads da madrugada" },
+    { a: "diretor", m: 750, d: SEMPRE, n: "Resumo do meio-dia" },
+    { a: "diretor", m: 1140, d: SEMPRE, n: "Fechamento do dia" },
+    { a: "trafego", m: 0, d: SEMPRE, n: "Checagem dos anúncios" },
+    { a: "trafego", m: 180, d: SEMPRE, n: "Checagem dos anúncios" },
+    { a: "trafego", m: 360, d: SEMPRE, n: "Checagem dos anúncios" },
+    { a: "trafego", m: 720, d: SEMPRE, n: "Checagem dos anúncios" },
+    { a: "trafego", m: 1080, d: SEMPRE, n: "Checagem dos anúncios" },
+    { a: "trafego", m: 1260, d: SEMPRE, n: "Checagem dos anúncios" }
   ];
   var LOUNGE = [[3.0, 3.1], [4.6, 6.9], [8.6, 3.0], [9.3, 6.0], [4.3, 3.0], [2.8, 6.6], [9.0, 3.9], [7.5, 6.9], [3.4, 4.6]];
   var SALAS = [
@@ -262,12 +283,13 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
   controls.maxPolarAngle = 1.2;
   controls.minAzimuthAngle = 0.08;
   controls.maxAzimuthAngle = 1.5;
-  controls.minZoom = 0.7;
+  controls.minZoom = 0.45;
   controls.maxZoom = 4;
   controls.screenSpacePanning = true;
   controls.update();
 
-  scene.add(new THREE.HemisphereLight(0xFFFFFF, 0xB4BCCB, 0.78));
+  var ceu = new THREE.HemisphereLight(0xFFFFFF, 0xB4BCCB, 0.78);
+  scene.add(ceu);
   var sol = new THREE.DirectionalLight(0xFFFFFF, 0.5);
   sol.position.set(9, 20, 12);
   sol.castShadow = true;
@@ -465,8 +487,8 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
   AG.forEach(function (a) { var s = document.createElement("span"); s.style.background = a.cor; s.textContent = a.nome[0]; s.title = a.nome; faces.appendChild(s); });
 
   // ---------- simulação ----------
-  var DIAS = [["Seg", 1], ["Ter", 2], ["Qua", 3], ["Qui", 4], ["Sex", 5]];
-  var NOME_DIA = { 1: "segunda", 2: "terça", 3: "quarta", 4: "quinta", 5: "sexta" };
+  var DIAS = [["Seg", 1], ["Ter", 2], ["Qua", 3], ["Qui", 4], ["Sex", 5], ["Sáb", 6], ["Dom", 0]];
+  var NOME_DIA = { 0: "domingo", 1: "segunda", 2: "terça", 3: "quarta", 4: "quinta", 5: "sexta", 6: "sábado" };
   var VELS = [[4, "4 min/s"], [12, "12 min/s"], [1, "1 min/s"], [1 / 60, "Tempo real"]];
   var reduz = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var st = { dia: 1, t: 530, play: !reduz, vel: 0 };
@@ -477,7 +499,7 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
       var r = ROT[i];
       if (r.a === a.id && r.d.indexOf(st.dia) !== -1 && st.t >= r.m && st.t < r.m + 60) return { s: "busy", txt: "Rodando: " + r.n };
     }
-    if (a.cliente && st.t >= 480 && st.t < 1080) return { s: "live", txt: a.cliente };
+    if (a.cliente) return { s: "live", txt: a.cliente + " (24h)" };
     return { s: "idle", txt: "Disponível quando chamado" };
   }
 
@@ -557,6 +579,9 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
   playBtn.addEventListener("click", function () { st.play = !st.play; render(); });
   var velBtn = document.getElementById("vel");
   velBtn.addEventListener("click", function () { st.vel = (st.vel + 1) % VELS.length; render(); });
+  function zoom(f) { cam.zoom = Math.max(controls.minZoom, Math.min(controls.maxZoom, cam.zoom * f)); cam.updateProjectionMatrix(); controls.update(); }
+  document.getElementById("mais").addEventListener("click", function () { zoom(1.25); });
+  document.getElementById("menos").addEventListener("click", function () { zoom(0.8); });
   document.getElementById("agora").addEventListener("click", function () { irAgora(); ultimoT = st.t; render(); });
 
   var ICON_PLAY = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>';
@@ -619,7 +644,7 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     if (!rots.length) { var li0 = document.createElement("li"); li0.textContent = "Sem rotina fixa: trabalha quando chamado."; ul.appendChild(li0); }
     rots.forEach(function (r) {
       var li = document.createElement("li"); var t = document.createElement("time"); t.textContent = hhmm(r.m);
-      var dias = r.d.length === 5 ? "seg–sex" : r.d.map(function (x) { return DIAS[x - 1][0].toLowerCase(); }).join(", ");
+      var dias = r.d.length === 7 ? "todo dia" : r.d.length === 5 ? "seg–sex" : r.d.map(function (x) { return NOME_DIA[x].slice(0, 3); }).join(", ");
       li.appendChild(t); li.appendChild(document.createTextNode(r.n + " (" + dias + ")")); ul.appendChild(li);
     });
     bloco("Rotinas", ul);
@@ -633,7 +658,7 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
       var p = {}; parts.forEach(function (x) { p[x.type] = x.value; });
       var wd = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }[p.weekday];
       var mins = (+p.hour) * 60 + (+p.minute);
-      if (wd >= 1 && wd <= 5 && mins >= 420 && mins < 1080) { dia = wd; t = mins; }
+      if (wd >= 0 && wd <= 6) { dia = wd; t = mins; }
     } catch (e) { /* sem Intl: segunda 08:50 */ }
     st.dia = dia; st.t = t;
   }
@@ -645,7 +670,7 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     if (w === largura && h === altura) return;
     largura = w; altura = h;
     renderer.setSize(w, h, false);
-    var asp = w / h, H = asp >= 1.55 ? 20 : (asp >= 1 ? 30 / asp : 26 / asp);
+    var asp = w / h, H = asp >= 1.55 ? 14 : (asp >= 1 ? 21 / asp : 15.5 / asp);
     cam.left = -H * asp / 2; cam.right = H * asp / 2; cam.top = H / 2; cam.bottom = -H / 2;
     cam.updateProjectionMatrix();
   }
@@ -664,13 +689,16 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     ajustar();
     if (st.play) {
       st.t += VELS[st.vel][0] * dt;
-      if (st.t >= 1080) { st.t = 420; st.dia = st.dia === 5 ? 1 : st.dia + 1; ultimoT = 420; evento("Novo dia: " + NOME_DIA[st.dia], 420); }
+      if (st.t >= 1440) { st.t -= 1440; st.dia = (st.dia + 1) % 7; ultimoT = -1; evento("Novo dia: " + NOME_DIA[st.dia], 0); }
       ROT.forEach(function (r) {
         if (r.d.indexOf(st.dia) !== -1 && ultimoT < r.m && st.t >= r.m) evento(POR_ID[r.a].nome + " começou: " + r.n, r.m);
       });
       if (Math.floor(st.t) !== Math.floor(ultimoT)) render();
       ultimoT = st.t;
     }
+    // dia e noite: mais escuro de 20h às 5h, transição suave
+    var hh = st.t / 60, luz = hh < 5 || hh >= 20 ? 0 : hh < 7 ? (hh - 5) / 2 : hh < 18 ? 1 : 1 - (hh - 18) / 2;
+    ceu.intensity = 0.32 + 0.46 * luz; sol.intensity = 0.08 + 0.42 * luz;
     AG.forEach(function (a) { atualizarAgente(a, dt); });
     if (selecionado) { var s = POR_ID[selecionado]; anel.position.set(s.pos.x, 0.03, s.pos.z); }
     controls.update();

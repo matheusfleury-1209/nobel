@@ -116,6 +116,18 @@ Fuso: America/Sao_Paulo. Para mudar, edite `scripts/criar-rotinas.sh`.
 | Sexta 17h | Diretora | Revisão semanal → seu celular |
 | Dia 1, 9h–10h | Financeiro / Prospecção | Fechamento do mês / concorrentes |
 
+### Turno de 24 horas
+Por padrão, o `criar-rotinas.sh` também liga o **turno da noite e do fim de semana**. A Gabi confere os anúncios a cada 3 horas (e pode **pausar**, nunca aumentar). De madrugada:
+- o Otávio concilia o dia
+- a Íris garimpa anúncios
+- a Duda produz variações
+- a Vera revisa tudo
+- o Caio analisa as conversas
+- a Lua deixa os posts prontos
+- o Rafa resume os leads da madrugada
+
+A Helena manda resumos às 8h, 12h30 e 19h. Para desligar: `MODO_24H=0 ./scripts/criar-rotinas.sh`, ou remova as rotinas com `openclaw automations remove <id>`. Cada rotina é uma execução paga da IA, então defina um limite de gasto mensal no provedor.
+
 ## Regras de ouro
 
 - **Nenhum agente movimenta dinheiro.** Pagamentos, orçamento de anúncios, descontos fora da tabela, contratos e publicações passam por `empresa/aprovacoes/pendentes.md`, e a Diretora te pergunta.

@@ -94,6 +94,24 @@ rotina otimizador "0 16 * * 5" "Resultado dos testes" "Use a skill teste-ab para
 # ── Programador ────────────────────────────────────────────────────────────
 rotina programador "30 8 * * 1" "Checagem do rastreamento" "Use a skill pixel-e-rastreamento (passos 1 e 5): confirme que compras e origens estão chegando. Avise a diretora se algo quebrou."
 
+# ── Turno de 24 horas, todos os dias (MODO_24H=1 é o padrão; use MODO_24H=0 para desligar) ──
+# Cada rotina é uma execução paga da IA: defina um limite de gasto mensal no provedor.
+if [[ "${MODO_24H:-1}" == "1" ]]; then
+  rotina financeiro    "30 0 * * *"  "Conciliação do dia"          "Concilie as vendas aprovadas da Hotmart, o gasto em anúncios e o CRM do dia que terminou. Atualize o CPA oficial e registre em empresa/relatorios/."
+  rotina inteligencia  "30 1 * * *"  "Garimpo noturno"             "Use a skill garimpo-anuncios e depois modelagem-anuncio para os 2 melhores conceitos. Entregue para a Duda (criativos)."
+  rotina programador   "0 2 * * *"   "Checagem técnica noturna"    "Use a skill pixel-e-rastreamento (passos 1 e 5) e teste os links de pagamento e de WhatsApp. Avise a diretora se algo quebrou."
+  rotina criativos     "30 2 * * *"  "Produção noturna"            "Transforme os modelos mais recentes da Íris em 3 variações de anúncio fiéis à página e mande para a Vera (revisor) revisar."
+  rotina revisor       "30 3 * * *"  "Revisão noturna"             "Revise tudo o que o time produziu nas últimas 24h e os anúncios ativos com a skill checklist-publicacao. Aponte ofertas vencidas e erros."
+  rotina otimizador    "30 4 * * *"  "Análise das conversas do dia" "Use a skill auditoria-conversas com as conversas das últimas 24h e proponha 1 melhoria para hoje."
+  rotina social        "30 5 * * *"  "Posts do dia para aprovação" "Use a skill conteudo-redes para os posts de hoje, passe pela Vera e deixe tudo pronto para a aprovação do dono."
+  rotina prospector    "30 6 * * *"  "Pesquisa de mercado"         "Atualize concorrentes, preços e clínicas que aceitam estagiárias na região. Registre em empresa/prospeccao/."
+  rotina administrativo "0 7 * * *"  "Agenda do dia"               "Use a skill agenda-obrigacoes para hoje."
+  rotina vendedor      "30 7 * * *"  "Leads da madrugada"          "Resuma em cartões, para a vendedora, os leads que chegaram entre 18h e 7h30 e o próximo passo de cada um."
+  rotina diretor       "30 12 * * *" "Resumo do meio-dia"          "Mande ao dono um resumo curto da manhã: conversas, vendas, gasto e o que precisa da decisão dele." 1
+  rotina diretor       "0 19 * * *"  "Fechamento do dia"           "Mande ao dono o fechamento do dia: conversas, qualificados, vendas, gasto, custo por venda e o plano da noite." 1
+  rotina trafego       "0 */3 * * *" "Checagem dos anúncios"       "Confira gasto, conversas e custo por conversa desde a última checagem. Se um anúncio tiver erro ou estiver gastando sem trazer conversa (regras do plano), PAUSE e avise a diretora. Nunca aumente verba."
+fi
+
 echo
 echo "Pronto. Veja as rotinas com:  openclaw automations list"
 [[ -z "$AVISO_CANAL" ]] && echo "Dica: rode de novo com AVISO_CANAL e AVISO_PARA para receber os resumos da Diretora no seu celular (apague antes as rotinas da Diretora com 'openclaw automations remove <id>')."
