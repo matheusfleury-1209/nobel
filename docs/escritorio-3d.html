@@ -4,19 +4,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
-/* Layout: cena 3D em tela cheia; HUD flutuante no topo (nome + time) e embaixo (relógio da simulação); ficha do agente à direita (computador) ou em folha inferior (celular). Visual único: noite azul em volta de um escritório em tons pastel. */
+/* Layout: sede 3D em tela cheia (9 setores em volta de dois corredores iluminados); HUD flutuante no topo e embaixo; ficha do agente à direita (computador) ou embaixo (celular). Visual único: noite azul-grafite, vidro e luzes neon por setor. */
 :root {
-  --night: #141A29;
-  --panel: #1C2436F2;
-  --line: #34405C;
+  --night: #0D1220;
+  --panel: #141B2DF0;
+  --line: #2C3853;
   --ink: #EEF2FA;
-  --ink-2: #A8B3CA;
-  --accent: #86A6FF;
+  --ink-2: #A3AFC8;
+  --accent: #5EE6FF;
   --busy: #F5B841;
   --live: #4FD18B;
   --idle: #7D889E;
-  --tag-bg: #111726E8;
-  --floor-ink: #4E5A73;
+  --tag-bg: #0B1120EB;
   --f-display: "Bricolage Grotesque", "Space Grotesk", system-ui, sans-serif;
   --f-body: "IBM Plex Sans", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
@@ -38,19 +37,22 @@ button { font: inherit; color: inherit; }
   padding: 3px 8px 3px 4px;
   background: var(--tag-bg); border: 1px solid var(--line); border-radius: 6px;
   font-size: 12.5px; font-weight: 600; white-space: nowrap; line-height: 1.3;
-  pointer-events: auto; cursor: pointer;
-  will-change: transform;
+  pointer-events: auto; cursor: pointer; will-change: transform;
 }
 .tag .sw { width: 14px; height: 14px; border-radius: 3px; display: inline-grid; place-items: center; font: 700 9px var(--f-display); color: #FFFFFF; }
-.tag.sel { border-color: var(--accent); box-shadow: 0 0 0 2px #86A6FF55; }
+.tag.sel { border-color: var(--accent); box-shadow: 0 0 0 2px #5EE6FF55; }
 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--idle); flex: none; }
 .dot.busy { background: var(--busy); box-shadow: 0 0 0 3px #F5B84133; }
 .dot.live { background: var(--live); box-shadow: 0 0 0 3px #4FD18B33; }
-.room {
-  position: absolute; left: 0; top: 0; pointer-events: none;
-  font: 500 10.5px var(--f-mono); letter-spacing: .09em; text-transform: uppercase; color: var(--floor-ink);
-  white-space: nowrap; will-change: transform;
+.setor {
+  position: absolute; left: 0; top: 0; pointer-events: none; will-change: transform;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 4px 10px; border-radius: 4px;
+  background: #0B1120CC; border: 1px solid var(--c);
+  font: 500 11px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink);
+  white-space: nowrap;
 }
+.setor::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--c); box-shadow: 0 0 8px var(--c); }
 
 .hud-top {
   position: absolute; top: 12px;
@@ -59,26 +61,17 @@ button { font: inherit; color: inherit; }
   pointer-events: none;
 }
 .hud-top > * { pointer-events: auto; }
-.brand {
-  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-  padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; max-width: 520px; min-width: 0;
-}
-.eyebrow { font: 500 11px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.brand { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; max-width: 500px; min-width: 0; }
+.eyebrow { font: 500 11px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
 h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); letter-spacing: .01em; text-transform: uppercase; }
 .team { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .faces { display: flex; }
-.faces span {
-  width: 24px; height: 24px; border-radius: 50%; margin-left: -6px; display: grid; place-items: center;
-  font: 700 10.5px var(--f-display); color: #FFFFFF; border: 2px solid #1C2436;
-}
+.faces span { width: 24px; height: 24px; border-radius: 50%; margin-left: -6px; display: grid; place-items: center; font: 700 10.5px var(--f-display); color: #FFFFFF; border: 2px solid #141B2D; }
 .faces span:first-child { margin-left: 0; }
 .count { font-size: 12.5px; color: var(--ink-2); }
 .count b { color: var(--ink); }
-.note { font-size: 12px; color: var(--ink-2); max-width: 46ch; }
-.resumo {
-  background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px;
-  display: flex; flex-direction: column; gap: 4px; font-size: 12.5px;
-}
+.note { font-size: 12px; color: var(--ink-2); max-width: 48ch; margin: 0; }
+.resumo { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; }
 .resumo span { display: inline-flex; align-items: center; gap: 7px; }
 .resumo b { font-variant-numeric: tabular-nums; }
 
@@ -88,36 +81,23 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
   display: flex; flex-direction: column; gap: 8px; pointer-events: none;
 }
 .hud-bottom > * { pointer-events: auto; }
-.ticker {
-  align-self: flex-start; max-width: 100%;
-  background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px;
-  font-size: 12.5px; display: flex; flex-direction: column; gap: 2px; min-width: 0;
-}
+.ticker { align-self: flex-start; max-width: 100%; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 12.5px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .ticker div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ticker time { font-family: var(--f-mono); color: var(--busy); margin-right: 6px; }
 .ticker .vazio { color: var(--ink-2); }
-.bar {
-  background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px;
-  display: flex; align-items: center; gap: 10px 14px; flex-wrap: wrap;
-}
-.days { display: flex; gap: 3px; }
-.chip { border: 1px solid var(--line); background: transparent; padding: 5px 9px; border-radius: 6px; cursor: pointer; font-size: 13px; }
-.chip[aria-pressed="true"] { background: var(--ink); color: #141A29; border-color: var(--ink); }
-.play {
-  width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--accent); background: transparent;
-  display: grid; place-items: center; cursor: pointer; color: var(--accent); flex: none;
-}
-.clock { display: flex; align-items: center; gap: 10px; flex: 1 1 260px; min-width: 0; }
+.bar { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; display: flex; align-items: center; gap: 10px 12px; flex-wrap: wrap; }
+.days { display: flex; gap: 3px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line); background: transparent; padding: 5px 8px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+.chip[aria-pressed="true"] { background: var(--ink); color: #0D1220; border-color: var(--ink); }
+.play { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--accent); background: transparent; display: grid; place-items: center; cursor: pointer; color: var(--accent); flex: none; }
+.clock { display: flex; align-items: center; gap: 10px; flex: 1 1 220px; min-width: 0; }
 .clock output { font: 500 1.35rem var(--f-mono); font-variant-numeric: tabular-nums; min-width: 4ch; }
 .clock input { flex: 1; min-width: 0; accent-color: var(--accent); }
 .ghost { border: 1px solid var(--line); background: transparent; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; white-space: nowrap; }
 .ghost:hover, .chip:hover { border-color: var(--accent); }
 
-.card {
-  position: absolute; top: 108px; right: max(16px, env(safe-area-inset-right, 0px)); width: 320px; max-height: calc(100% - 250px);
-  overflow: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px;
-  display: flex; flex-direction: column; gap: 10px;
-}
+.card[hidden] { display: none; }
+.card { position: absolute; top: 108px; right: max(16px, env(safe-area-inset-right, 0px)); width: 320px; max-height: calc(100% - 250px); overflow: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
 .card header { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 2px 10px; align-items: center; }
 .card .av { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font: 800 16px var(--f-display); color: #FFFFFF; grid-row: span 2; }
 .card h2 { margin: 0; font: 700 1.2rem/1.1 var(--f-display); }
@@ -128,33 +108,33 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
 .card p { margin: 0; font-size: 13.5px; line-height: 1.5; }
 .card ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 3px; font-size: 13px; }
 .card li time { font-family: var(--f-mono); color: var(--ink-2); margin-right: 6px; font-variant-numeric: tabular-nums; }
-.ask { background: #86A6FF1F; border-radius: 6px; padding: 8px 10px; }
+.ask { background: #5EE6FF1A; border-radius: 6px; padding: 8px 10px; }
 
 @media (max-width: 720px) {
   .card { top: auto; bottom: 150px; left: max(16px, env(safe-area-inset-left, 0px)); width: auto; max-height: 46%; }
-  .note { display: none; }
-  .resumo { display: none; }
+  .note, .resumo { display: none; }
   .tag { font-size: 11px; padding: 2px 6px 2px 3px; }
   .tag .sw { width: 12px; height: 12px; }
+  .setor { font-size: 9.5px; padding: 3px 7px; }
 }
 @media (max-width: 420px) { .faces { display: none; } }
 </style>
 
 <div id="app">
-  <canvas id="cena" aria-label="Prévia 3D do escritório com os 13 agentes de IA"></canvas>
+  <canvas id="cena" aria-label="Prévia 3D da sede com os 13 agentes de IA em 9 setores"></canvas>
   <div id="tags"></div>
 
   <div class="hud-top">
     <div class="brand">
-      <span class="eyebrow">Prévia simulada · 24 horas</span>
-      <h1>Escritório Nobel</h1>
+      <span class="eyebrow">Prévia simulada · 24 horas · 9 setores</span>
+      <h1>Sede Nobel</h1>
       <div class="team"><div class="faces" id="faces"></div><span class="count"><b>13</b> agentes de IA</span></div>
-      <p class="note">Turno de 24 horas: o time trabalha dia e noite, todos os dias. Simulação do Claw3D com as rotinas do kit num relógio acelerado. Arraste para mover, use + e − ou pinça para o zoom e toque num nome para ver a ficha.</p>
+      <p class="note">O time trabalha dia e noite, todos os dias, cada um no seu setor. Arraste para mover, use + e − ou pinça para o zoom e toque num nome para ver a ficha.</p>
     </div>
     <div class="resumo" aria-live="polite">
       <span><i class="dot busy"></i>Rodando rotina: <b id="n-busy">0</b></span>
       <span><i class="dot live"></i>Com clientes: <b id="n-live">0</b></span>
-      <span><i class="dot"></i>Disponíveis: <b id="n-idle">0</b></span>
+      <span><i class="dot"></i>Em plantão: <b id="n-idle">0</b></span>
     </div>
   </div>
 
@@ -181,37 +161,60 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
 (function () {
-  // ---------- dados do time (iguais ao kit) ----------
+  // ---------- setores (planta: x de -22 a 22, z de -15 a 15; corredores em x=0 e z=0) ----------
+  var SETORES = {
+    comando: { nome: "Sala de Comando", cor: "#7C9CFF", r: [-22, -15, -12, -1.5], rot: [-17, -2.1] },
+    fin:     { nome: "Financeiro", cor: "#34D399", r: [-12, -15, -1.5, -8.25], rot: [-7, -8.9] },
+    adm:     { nome: "Administrativo e RH", cor: "#F59E0B", r: [-12, -8.25, -1.5, -1.5], rot: [-9.6, -2.1] },
+    qual:    { nome: "Qualidade e Melhorias", cor: "#FB7185", r: [1.5, -15, 12, -8.25], rot: [10.6, -8.9] },
+    intel:   { nome: "Inteligência de Mercado", cor: "#A78BFA", r: [1.5, -8.25, 12, -1.5], rot: [4.4, -2.1] },
+    tec:     { nome: "Tecnologia · Data Center", cor: "#38BDF8", r: [12, -15, 22, -1.5], rot: [17, -2.1] },
+    mkt:     { nome: "Marketing Lab", cor: "#F472B6", r: [-22, 1.5, -1.5, 7.75], rot: [-4.8, 7.2] },
+    atend:   { nome: "Central de Atendimento", cor: "#22D3EE", r: [-22, 7.75, -1.5, 15], rot: [-12, 14.6] },
+    lounge:  { nome: "Lounge e Café", cor: "#FCD34D", r: [1.5, 1.5, 22, 15], rot: [12, 14.6] }
+  };
+
+  // ---------- time ----------
   var AG = [
-    { id: "diretor", nome: "Helena", cargo: "Diretora de Operações", cor: "#3B4FA8", pele: "#E8B48F", cabelo: "#2B1B12", longo: true, sala: "dir",
-      mesa: [-9.4, -5.6], saida: [-8.0, -4.7], passeio: [[-6.6, -6.2], [-10.6, -3.3], [-7.6, -3.1]],
-      faz: "Recebe seus pedidos, distribui o trabalho, cobra o time e te manda um resumo por dia.", pede: "Como estamos hoje?" },
-    { id: "financeiro", nome: "Otávio", cargo: "Financeiro", cor: "#1F7A5A", pele: "#8D5A3B", cabelo: "#151515", sala: "fin",
-      mesa: [-2.2, -6.0], saida: [-3.7, -4.6], passeio: [[-4.0, -7.0], [-0.2, -4.0], [-3.7, -4.0]],
-      faz: "Caixa, contas a pagar e receber, rascunhos de cobrança e o fechamento do mês.", pede: "Vou ter caixa para investir em anúncios este mês?" },
-    { id: "administrativo", nome: "Marcos", cargo: "Administrativo e RH", cor: "#6E4D35", pele: "#C68A5E", cabelo: "#8C8C8C", sala: "adm",
-      mesa: [3.8, -6.0], saida: [5.4, -4.6], passeio: [[5.9, -7.0], [2.2, -4.0], [5.6, -4.0]],
-      faz: "Agenda de vencimentos, rascunhos de contratos e apoio em contratações.", pede: "O que vence esta semana?" },
-    { id: "trafego", nome: "Gabi", cargo: "Gestora de tráfego", cor: "#B9440F", pele: "#F1C9A5", cabelo: "#8B3A1E", longo: true, sala: "aberta", corredor: 3.1,
-      mesa: [-9, 0.9], faz: "Relatórios do Meta Ads, custo por conversa e por venda, propostas de otimização.", pede: "Qual anúncio está trazendo aluna mais barata?" },
-    { id: "social", nome: "Lua", cargo: "Social media", cor: "#A8235B", pele: "#6B4430", cabelo: "#101010", longo: true, sala: "aberta", corredor: 3.1,
-      mesa: [-6, 0.9], faz: "Calendário de posts, legendas e roteiros de Reels mostrando que a escola é real.", pede: "Monta os posts da semana sobre o estágio." },
-    { id: "criativos", nome: "Duda", cargo: "Copy e criativos", cor: "#7340A8", pele: "#E0AC83", cabelo: "#D9B65E", longo: true, sala: "aberta", corredor: 3.1,
-      mesa: [-3, 0.9], faz: "Copies de anúncio em variações A, B e C e briefings de arte e vídeo.", pede: "Faz 3 anúncios contra o medo de curso online." },
-    { id: "vendedor", nome: "Rafa", cargo: "Vendedor (ponte até o CRM)", cor: "#0E6F8A", pele: "#B97A52", cabelo: "#3A2416", sala: "aberta", corredor: 6.8, cliente: "Atendendo leads no WhatsApp",
-      mesa: [-9, 4.6], faz: "Primeiro atendimento dos leads, triagem do estágio e passagem para a Hanielly.", pede: "Quantos leads você passou para a Hanielly hoje?" },
-    { id: "atendimento", nome: "Clara", cargo: "Atendimento e pós-venda", cor: "#2560A3", pele: "#F3D2B5", cabelo: "#5A3825", longo: true, sala: "aberta", corredor: 6.8, cliente: "Atendendo alunas",
-      mesa: [-6, 4.6], faz: "Dúvidas de alunas, onboarding, reembolso pela Hotmart e pesquisa de satisfação.", pede: "Alguma aluna com problema hoje?" },
-    { id: "prospector", nome: "Theo", cargo: "Prospecção e mercado", cor: "#5E6A12", pele: "#5C3A26", cabelo: "#141414", sala: "aberta", corredor: 6.8,
-      mesa: [-3, 4.6], faz: "Concorrentes de ASB, cidades de Goiás com demanda e clínicas que aceitam estagiárias.", pede: "Lista as clínicas da região de Jaraguá que recebem estagiárias." },
-    { id: "inteligencia", nome: "Íris", cargo: "Inteligência de anúncios", cor: "#0F766E", pele: "#D9A27C", cabelo: "#2A1A10", longo: true, sala: "growth",
-      mesa: [3.0, 0.9], faz: "Garimpa a Biblioteca de Anúncios, acha o que está funcionando no mercado de ASB e entrega modelos honestos para a Duda.", pede: "O que os concorrentes estão anunciando que funciona?" },
-    { id: "revisor", nome: "Vera", cargo: "Revisora de qualidade", cor: "#9F1239", pele: "#F0C8A8", cabelo: "#4A2F1E", longo: true, sala: "growth",
-      mesa: [5.2, 0.9], faz: "Confere preço, garantia, promessas, links e políticas antes de qualquer coisa ir para a sua aprovação.", pede: "Revisa os anúncios novos antes de eu aprovar." },
-    { id: "otimizador", nome: "Caio", cargo: "Especialista em melhorias", cor: "#A16207", pele: "#7A4B2E", cabelo: "#121212", sala: "growth",
-      mesa: [7.4, 0.9], faz: "Lê as conversas que não viraram venda, mede o funil e propõe testes A/B.", pede: "Onde estamos perdendo as vendas esta semana?" },
-    { id: "programador", nome: "Léo", cargo: "Programador", cor: "#334155", pele: "#E2B591", cabelo: "#5B3A1E", sala: "growth",
-      mesa: [9.6, 0.9], faz: "Pixel e rastreamento, links da Hotmart, ligação com o CRM Nobel e automações.", pede: "As vendas estão chegando na Meta e no CRM?" }
+    { id: "diretor", nome: "Helena", cargo: "Diretora de Operações", setor: "comando", cor: "#3B4FA8", pele: "#E8B48F", cabelo: "#2B1B12", longo: true,
+      mesa: [-17, -10.5], ida: [[-13.6, -9.6], [-14.5, -2.6], [-14.5, 0]],
+      faz: "Recebe seus pedidos, distribui o trabalho, cobra o time e te manda os resumos do dia.", pede: "Como estamos hoje?" },
+    { id: "financeiro", nome: "Otávio", cargo: "Financeiro", setor: "fin", cor: "#1F7A5A", pele: "#8D5A3B", cabelo: "#151515",
+      mesa: [-7, -13], ida: [[-3, -11.5], [0, -11.5]],
+      faz: "Caixa, conciliação das vendas da Hotmart, custo por venda e fechamento do mês.", pede: "Quanto lucramos esta semana?" },
+    { id: "administrativo", nome: "Marcos", cargo: "Administrativo e RH", setor: "adm", cor: "#6E4D35", pele: "#C68A5E", cabelo: "#8C8C8C",
+      mesa: [-9, -5.8], ida: [[-7, -3.2], [-7, 0]],
+      faz: "Agenda de vencimentos, rascunhos de contratos e termos, apoio em contratações.", pede: "O que vence esta semana?" },
+    { id: "revisor", nome: "Vera", cargo: "Revisora de qualidade", setor: "qual", cor: "#9F1239", pele: "#F0C8A8", cabelo: "#4A2F1E", longo: true,
+      mesa: [5, -13.2], ida: [[5, -10.5], [0, -10.5]],
+      faz: "Confere preço, garantia, promessas, links e políticas antes de qualquer coisa ir para a sua aprovação.", pede: "Revisa os anúncios novos antes de eu aprovar." },
+    { id: "otimizador", nome: "Caio", cargo: "Especialista em melhorias", setor: "qual", cor: "#A16207", pele: "#7A4B2E", cabelo: "#121212",
+      mesa: [8.5, -13.2], ida: [[8.5, -10.5], [0, -10.5]],
+      faz: "Lê as conversas que não viraram venda, mede o funil e propõe testes A/B.", pede: "Onde estamos perdendo vendas esta semana?" },
+    { id: "inteligencia", nome: "Íris", cargo: "Inteligência de anúncios", setor: "intel", cor: "#0F766E", pele: "#D9A27C", cabelo: "#2A1A10", longo: true,
+      mesa: [4.5, -6], ida: [[4.5, -3.0], [7, -3.0], [7, 0]],
+      faz: "Garimpa a Biblioteca de Anúncios e entrega modelos honestos do que funciona no mercado de ASB.", pede: "O que os concorrentes estão anunciando que funciona?" },
+    { id: "prospector", nome: "Theo", cargo: "Prospecção e mercado", setor: "intel", cor: "#5E6A12", pele: "#5C3A26", cabelo: "#141414",
+      mesa: [9, -6], ida: [[9, -3.0], [7, -3.0], [7, 0]],
+      faz: "Concorrentes, cidades de Goiás com demanda e clínicas que aceitam estagiárias.", pede: "Lista as clínicas da região que recebem estagiárias." },
+    { id: "programador", nome: "Léo", cargo: "Programador", setor: "tec", cor: "#334155", pele: "#E2B591", cabelo: "#5B3A1E",
+      mesa: [18, -5.5], ida: [[14.5, -3.0], [14.5, 0]],
+      faz: "Pixel e rastreamento, links da Hotmart, ligação com o CRM Nobel e automações.", pede: "As vendas estão chegando na Meta e no CRM?" },
+    { id: "trafego", nome: "Gabi", cargo: "Gestora de tráfego", setor: "mkt", cor: "#B9440F", pele: "#F1C9A5", cabelo: "#8B3A1E", longo: true,
+      mesa: [-18, 3.6], ida: [[-18, 6.5], [-7, 6.5], [-7, 0]],
+      faz: "Meta Ads: custo por conversa e por venda, checagem a cada 3 horas, propostas de otimização.", pede: "Qual anúncio está trazendo aluna mais barata?" },
+    { id: "social", nome: "Lua", cargo: "Social media", setor: "mkt", cor: "#A8235B", pele: "#6B4430", cabelo: "#101010", longo: true,
+      mesa: [-14, 3.6], ida: [[-14, 6.5], [-7, 6.5], [-7, 0]],
+      faz: "Posts e Reels que provam que a escola é real, prontos para a sua aprovação.", pede: "Monta os posts da semana sobre o estágio." },
+    { id: "criativos", nome: "Duda", cargo: "Copy e criativos", setor: "mkt", cor: "#7340A8", pele: "#E0AC83", cabelo: "#D9B65E", longo: true,
+      mesa: [-10, 3.6], ida: [[-10, 6.5], [-7, 6.5], [-7, 0]],
+      faz: "Variações de anúncio a partir dos modelos da Íris e briefings de arte e vídeo.", pede: "Faz 3 anúncios contra o medo de curso online." },
+    { id: "vendedor", nome: "Rafa", cargo: "Vendedor (ponte até o CRM)", setor: "atend", cor: "#0E6F8A", pele: "#B97A52", cabelo: "#3A2416", cliente: "Atendendo leads no WhatsApp",
+      mesa: [-16, 10.6], ida: [[-16, 13.4], [-3, 13.4], [-3, 11], [0, 11]],
+      faz: "Primeiro atendimento dos leads, triagem do estágio e passagem para a Hanielly.", pede: "Quantos leads você passou para a Hanielly hoje?" },
+    { id: "atendimento", nome: "Clara", cargo: "Atendimento e pós-venda", setor: "atend", cor: "#2560A3", pele: "#F3D2B5", cabelo: "#5A3825", longo: true, cliente: "Atendendo alunas",
+      mesa: [-12, 10.6], ida: [[-12, 13.4], [-3, 13.4], [-3, 11], [0, 11]],
+      faz: "Dúvidas de alunas, boas-vindas, reembolso pela Hotmart e pesquisa de satisfação.", pede: "Alguma aluna com problema hoje?" }
   ];
   var POR_ID = {}; AG.forEach(function (a) { POR_ID[a.id] = a; });
   var UTEIS = [1, 2, 3, 4, 5], SEMPRE = [0, 1, 2, 3, 4, 5, 6];
@@ -234,8 +237,7 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     { a: "inteligencia", m: 570, d: [1, 4], n: "Garimpo de anúncios" },
     { a: "revisor", m: 690, d: [1], n: "Auditoria semanal" },
     { a: "otimizador", m: 1050, d: UTEIS, n: "Funil do dia" },
-    // turno de 24 horas (todos os dias), igual ao scripts/criar-rotinas.sh com MODO_24H=1
-    { a: "financeiro", m: 30, d: SEMPRE, n: "Conciliação do dia (noite)" },
+    { a: "financeiro", m: 30, d: SEMPRE, n: "Conciliação do dia" },
     { a: "inteligencia", m: 90, d: SEMPRE, n: "Garimpo noturno de anúncios" },
     { a: "programador", m: 120, d: SEMPRE, n: "Checagem técnica noturna" },
     { a: "criativos", m: 150, d: SEMPRE, n: "Produção noturna de variações" },
@@ -254,49 +256,34 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     { a: "trafego", m: 1080, d: SEMPRE, n: "Checagem dos anúncios" },
     { a: "trafego", m: 1260, d: SEMPRE, n: "Checagem dos anúncios" }
   ];
-  var LOUNGE = [[3.0, 3.1], [4.6, 6.9], [8.6, 3.0], [9.3, 6.0], [4.3, 3.0], [2.8, 6.6], [9.0, 3.9], [7.5, 6.9], [3.4, 4.6]];
-  var SALAS = [
-    { t: "Diretoria", p: [-8.6, -2.4] }, { t: "Financeiro", p: [-4.7, -3.35] }, { t: "Administrativo", p: [1.3, -3.35] },
-    { t: "Arquivo empresa/", p: [7.4, -2.45] }, { t: "Marketing", p: [-11.2, 2.5] }, { t: "Comercial", p: [-11.2, 7.5] },
-    { t: "Qualidade e Growth", p: [2.2, -0.2] }, { t: "Copa", p: [8.6, 7.55] }
-  ];
+  var LOUNGE = [[4, 4], [7, 6.5], [11, 4], [14, 7], [17.5, 10.5], [12, 9.5], [6, 10], [15, 12.5], [9, 12.8]];
 
   // ---------- three.js ----------
-  var canvas = document.getElementById("cena");
-  var app = document.getElementById("app");
+  var canvas = document.getElementById("cena"), app = document.getElementById("app");
   var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.setClearColor(0x141A29, 1);
+  renderer.setClearColor(0x0D1220, 1);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
   var scene = new THREE.Scene();
-  var cam = new THREE.OrthographicCamera(-10, 10, 10, -10, 0.1, 300);
-  cam.position.set(26, 24, 26);
-  cam.lookAt(0, 0, 0);
-
+  var cam = new THREE.OrthographicCamera(-10, 10, 10, -10, 0.1, 400);
+  cam.position.set(36, 34, 36);
   var controls = new THREE.OrbitControls(cam, canvas);
-  controls.target.set(-0.5, 0, 0.5);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.08;
-  controls.minPolarAngle = 0.55;
-  controls.maxPolarAngle = 1.2;
-  controls.minAzimuthAngle = 0.08;
-  controls.maxAzimuthAngle = 1.5;
-  controls.minZoom = 0.45;
-  controls.maxZoom = 4;
+  controls.target.set(-1, 0, 0.5);
+  controls.enableDamping = true; controls.dampingFactor = 0.08;
+  controls.minPolarAngle = 0.5; controls.maxPolarAngle = 1.2;
+  controls.minAzimuthAngle = 0.08; controls.maxAzimuthAngle = 1.5;
+  controls.minZoom = 0.6; controls.maxZoom = 6;
   controls.screenSpacePanning = true;
   controls.update();
 
-  var ceu = new THREE.HemisphereLight(0xFFFFFF, 0xB4BCCB, 0.78);
+  var ceu = new THREE.HemisphereLight(0xFFFFFF, 0xA8B4C8, 0.85);
   scene.add(ceu);
-  var sol = new THREE.DirectionalLight(0xFFFFFF, 0.5);
-  sol.position.set(9, 20, 12);
-  sol.castShadow = true;
-  sol.shadow.mapSize.set(1024, 1024);
-  sol.shadow.camera.left = -18; sol.shadow.camera.right = 18; sol.shadow.camera.top = 18; sol.shadow.camera.bottom = -18;
-  sol.shadow.camera.near = 1; sol.shadow.camera.far = 60;
-  sol.shadow.bias = -0.0008;
+  var sol = new THREE.DirectionalLight(0xFFFFFF, 0.45);
+  sol.position.set(14, 30, 18); sol.castShadow = true;
+  sol.shadow.mapSize.set(2048, 2048);
+  sol.shadow.camera.left = -32; sol.shadow.camera.right = 32; sol.shadow.camera.top = 32; sol.shadow.camera.bottom = -32;
+  sol.shadow.camera.near = 1; sol.shadow.camera.far = 90; sol.shadow.bias = -0.0008;
   scene.add(sol);
 
   var MATS = {}, GEOS = {};
@@ -305,183 +292,283 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     if (!MATS[k]) MATS[k] = new THREE.MeshLambertMaterial(Object.assign({ color: c }, extra || {}));
     return MATS[k];
   }
+  function neon(c) { var k = "neon" + c; if (!MATS[k]) MATS[k] = new THREE.MeshBasicMaterial({ color: c }); return MATS[k]; }
   function geo(w, h, d) { var k = w + "|" + h + "|" + d; if (!GEOS[k]) GEOS[k] = new THREE.BoxGeometry(w, h, d); return GEOS[k]; }
-  function box(w, h, d, m, x, y, z, pai) {
+  function box(w, h, d, m, x, y, z, pai, semSombra) {
     var me = new THREE.Mesh(geo(w, h, d), typeof m === "string" ? mat(m) : m);
-    me.position.set(x, y, z); me.castShadow = true; me.receiveShadow = true;
+    me.position.set(x, y, z);
+    if (!semSombra) { me.castShadow = true; me.receiveShadow = true; }
     (pai || scene).add(me);
     return me;
   }
 
-  // piso e tapetes das salas
-  box(24, 0.2, 16, "#E6EAEF", 0, -0.1, 0).castShadow = false;
-  function tapete(x1, z1, x2, z2, c) { var t = box(x2 - x1, 0.02, z2 - z1, c, (x1 + x2) / 2, 0.011, (z1 + z2) / 2); t.castShadow = false; }
-  tapete(-12, -8, -5, -2, "#D9E0F5");
-  tapete(-5, -8, 1, -3, "#E5E0F2");
-  tapete(1, -8, 7, -3, "#EFE5DA");
-  tapete(7, -8, 12, -2, "#DFE4EB");
-  tapete(-11.5, -0.4, -0.8, 2.6, "#F5E1D3");
-  tapete(-11.5, 3.6, -0.8, 7.6, "#D8EEE2");
-  tapete(1.8, 2.6, 11.6, 7.6, "#F2DDE6");
-  tapete(1.8, -0.4, 11.6, 2.6, "#E2E8F6");
-
-  // paredes do fundo
-  var PAREDE = "#C9D3E1", FRISO = "#9EABC0";
-  box(0.25, 2.7, 16.25, PAREDE, -12.12, 1.35, -0.12);
-  box(24.25, 2.7, 0.25, PAREDE, -0.12, 1.35, -8.12);
-  box(0.3, 0.1, 16.3, FRISO, -12.12, 2.75, -0.12);
-  box(24.3, 0.1, 0.3, FRISO, -0.12, 2.75, -8.12);
-  [-3.5, 3.5].forEach(function (x) {
-    box(2.6, 1.1, 0.06, "#BCD3EE", x, 1.7, -7.98); box(2.7, 0.08, 0.1, "#F4F7FB", x, 2.27, -7.96); box(2.7, 0.08, 0.1, "#F4F7FB", x, 1.13, -7.96);
+  // ---------- piso, corredores e setores ----------
+  box(44, 0.3, 30, "#C3CBD8", 0, -0.15, 0, null, true).receiveShadow = true;
+  Object.keys(SETORES).forEach(function (k) {
+    var s = SETORES[k], r = s.r, w = r[2] - r[0], d = r[3] - r[1];
+    var piso = k === "lounge" ? "#C8A27A" : "#B3BDCC";
+    var p = box(w - 0.3, 0.02, d - 0.3, piso, (r[0] + r[2]) / 2, 0.012, (r[1] + r[3]) / 2, null, true); p.receiveShadow = true;
+    // contorno neon do setor no piso
+    var c = neon(s.cor), cx = (r[0] + r[2]) / 2, cz = (r[1] + r[3]) / 2;
+    box(w - 0.6, 0.025, 0.07, c, cx, 0.03, r[1] + 0.3, null, true);
+    box(w - 0.6, 0.025, 0.07, c, cx, 0.03, r[3] - 0.3, null, true);
+    box(0.07, 0.025, d - 0.6, c, r[0] + 0.3, 0.03, cz, null, true);
+    box(0.07, 0.025, d - 0.6, c, r[2] - 0.3, 0.03, cz, null, true);
   });
-  // painel de metas na parede da diretoria
-  box(0.06, 0.9, 1.5, "#1F2636", -11.95, 1.6, -5.2);
-  [["#4FD18B", 0.25], ["#F5B841", 0.4], ["#86A6FF", 0.55]].forEach(function (b, i) {
-    box(0.07, b[1], 0.22, b[0], -11.92, 1.25 + b[1] / 2, -5.7 + i * 0.45);
-  });
+  // corredores com faixa de luz no centro
+  box(44, 0.02, 3, "#DCE2EA", 0, 0.014, 0, null, true).receiveShadow = true;
+  box(3, 0.02, 30, "#DCE2EA", 0, 0.014, 0, null, true).receiveShadow = true;
+  for (var gx = -21; gx <= 21; gx += 2) if (Math.abs(gx) > 1.6) box(1.2, 0.025, 0.08, neon("#5EE6FF"), gx, 0.032, 0, null, true);
+  for (var gz = -14; gz <= 14; gz += 2) if (Math.abs(gz) > 1.6) box(0.08, 0.025, 1.2, neon("#5EE6FF"), 0, 0.032, gz, null, true);
+  // logo no cruzamento
+  var anelChao = new THREE.Mesh(new THREE.RingGeometry(0.9, 1.15, 48), neon("#5EE6FF"));
+  anelChao.rotation.x = -Math.PI / 2; anelChao.position.y = 0.04; scene.add(anelChao);
 
-  // divisórias
-  var DIV = "#DCE3EC", DIVT = "#B3BFD0";
-  function divisoria(x1, z1, x2, z2, alt, cor) {
-    var w = Math.abs(x2 - x1) || 0.12, d = Math.abs(z2 - z1) || 0.12;
-    box(w, alt, d, cor || DIV, (x1 + x2) / 2, alt / 2, (z1 + z2) / 2);
-    box(w + (w > 0.12 ? 0 : 0.04), 0.06, d + (d > 0.12 ? 0 : 0.04), DIVT, (x1 + x2) / 2, alt + 0.03, (z1 + z2) / 2);
-  }
-  var VIDRO = mat("#BFD9FF", { transparent: true, opacity: 0.3 });
-  function vidro(x1, z1, x2, z2) {
-    var w = Math.abs(x2 - x1) || 0.06, d = Math.abs(z2 - z1) || 0.06;
-    var v = new THREE.Mesh(geo(w, 2.2, d), VIDRO); v.position.set((x1 + x2) / 2, 1.1, (z1 + z2) / 2); scene.add(v);
-    box(w + 0.02, 0.07, d + 0.02, "#8C9AB3", (x1 + x2) / 2, 2.2, (z1 + z2) / 2);
-    box(w + 0.02, 0.07, d + 0.02, "#8C9AB3", (x1 + x2) / 2, 0.035, (z1 + z2) / 2);
-  }
-  vidro(-5, -8, -5, -2);
-  vidro(-12, -2, -6.7, -2);
-  vidro(-5.4, -2, -5, -2);
-  divisoria(-5, -3, -1.2, -3, 1.1); divisoria(-0.1, -3, 1, -3, 1.1);
-  divisoria(1, -8, 1, -3, 1.1);
-  divisoria(1, -3, 4.9, -3, 1.1); divisoria(6.0, -3, 7, -3, 1.1);
-  divisoria(7, -8, 7, -3, 1.1);
+  // paredes externas do fundo (escuras, com faixa de LED no topo)
+  var PAREDE = "#1E2738";
+  box(0.3, 3.4, 30.3, PAREDE, -22.15, 1.7, -0.15);
+  box(44.3, 3.4, 0.3, PAREDE, -0.15, 1.7, -15.15);
+  box(0.32, 0.08, 30.3, neon("#5EE6FF"), -22.15, 3.38, -0.15, null, true);
+  box(44.3, 0.08, 0.32, neon("#5EE6FF"), -0.15, 3.38, -15.15, null, true);
 
-  // móveis
-  var MADEIRA = "#C99B6C", PERNA = "#5E5148", TELA_OFF = "#2A3248";
-  var telas = {};
-  function mesa(id, x, z) {
-    box(1.5, 0.07, 0.8, MADEIRA, x, 0.76, z);
-    [[-0.68, -0.33], [0.68, -0.33], [-0.68, 0.33], [0.68, 0.33]].forEach(function (p) { box(0.06, 0.73, 0.06, PERNA, x + p[0], 0.365, z + p[1]); });
-    box(0.66, 0.42, 0.05, "#2B3242", x, 1.13, z - 0.22);
-    box(0.08, 0.16, 0.08, "#2B3242", x, 0.87, z - 0.22);
-    var tela = new THREE.Mesh(geo(0.58, 0.34, 0.01), new THREE.MeshBasicMaterial({ color: TELA_OFF }));
-    tela.position.set(x, 1.13, z - 0.193); scene.add(tela);
-    telas[id] = tela;
-    box(0.5, 0.025, 0.16, "#E9EDF3", x, 0.81, z + 0.1);
-    // cadeira
+  // divisórias de vidro com porta, moldura e LED na base
+  var VIDRO = new THREE.MeshLambertMaterial({ color: 0x9FD8FF, transparent: true, opacity: 0.16 });
+  function vidro(x1, z1, x2, z2, cor, portas) {
+    var horizontal = z1 === z2, a = horizontal ? x1 : z1, b = horizontal ? x2 : z2;
+    var cortes = [[a, b]];
+    (portas || []).forEach(function (pt) {
+      var novos = [];
+      cortes.forEach(function (c) {
+        if (pt[1] <= c[0] || pt[0] >= c[1]) { novos.push(c); return; }
+        if (pt[0] > c[0]) novos.push([c[0], pt[0]]);
+        if (pt[1] < c[1]) novos.push([pt[1], c[1]]);
+      });
+      cortes = novos;
+    });
+    cortes.forEach(function (c) {
+      var len = c[1] - c[0], mid = (c[0] + c[1]) / 2;
+      var x = horizontal ? mid : x1, z = horizontal ? z1 : mid;
+      var w = horizontal ? len : 0.06, d = horizontal ? 0.06 : len;
+      var v = new THREE.Mesh(geo(w, 2.5, d), VIDRO); v.position.set(x, 1.25, z); scene.add(v);
+      box(horizontal ? len : 0.1, 0.08, horizontal ? 0.1 : len, "#5B6B85", x, 2.5, z, null, true);
+      box(horizontal ? len : 0.09, 0.06, horizontal ? 0.09 : len, neon(cor), x, 0.06, z, null, true);
+    });
+    (portas || []).forEach(function (pt) {
+      [pt[0], pt[1]].forEach(function (p) {
+        box(0.12, 2.6, 0.12, "#5B6B85", horizontal ? p : x1, 1.3, horizontal ? z1 : p);
+      });
+    });
+  }
+  vidro(-22, -1.5, -12, -1.5, "#7C9CFF", [[-15.5, -13.5]]);
+  vidro(-12, -15, -12, -1.5, "#7C9CFF");
+  vidro(-12, -8.25, -1.5, -8.25, "#34D399");
+  vidro(-1.5, -15, -1.5, -8.25, "#34D399", [[-12.5, -10.5]]);
+  vidro(-1.5, -8.25, -1.5, -1.5, "#F59E0B");
+  vidro(-12, -1.5, -1.5, -1.5, "#F59E0B", [[-8, -6]]);
+  vidro(1.5, -15, 1.5, -8.25, "#FB7185", [[-11.5, -9.5]]);
+  vidro(1.5, -8.25, 12, -8.25, "#FB7185");
+  vidro(1.5, -8.25, 1.5, -1.5, "#A78BFA");
+  vidro(1.5, -1.5, 12, -1.5, "#A78BFA", [[6, 8]]);
+  vidro(12, -15, 12, -1.5, "#38BDF8");
+  vidro(12, -1.5, 22, -1.5, "#38BDF8", [[13.5, 15.5]]);
+  vidro(-22, 1.5, -1.5, 1.5, "#F472B6", [[-8, -6]]);
+  vidro(-1.5, 1.5, -1.5, 7.75, "#F472B6");
+  vidro(-22, 7.75, -1.5, 7.75, "#22D3EE");
+  vidro(-1.5, 7.75, -1.5, 15, "#22D3EE", [[10, 12]]);
+
+  // ---------- telas (canvas) ----------
+  var telasSetor = [];
+  function telaCanvas(w, h, px, x, y, z, rotY, desenho) {
+    var cv = document.createElement("canvas"); cv.width = px; cv.height = Math.round(px * h / w);
+    var tex = new THREE.CanvasTexture(cv);
+    var m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex }));
+    m.position.set(x, y, z); m.rotation.y = rotY || 0; scene.add(m);
+    box(rotY ? 0.08 : w + 0.2, h + 0.2, rotY ? w + 0.2 : 0.08, "#0B0F1A", x - (rotY ? 0.05 : 0), y, z - (rotY ? 0 : 0.05), null, true);
+    var t = { cv: cv, ctx: cv.getContext("2d"), tex: tex, desenhar: desenho };
+    telasSetor.push(t);
+    return t;
+  }
+
+  // ---------- móveis ----------
+  var telasAg = {};
+  function mesa(id, x, z, cor) {
+    box(1.7, 0.07, 0.85, "#EEF2F7", x, 0.76, z);
+    box(1.6, 0.03, 0.04, neon(cor), x, 0.7, z + 0.4, null, true);
+    [[-0.78, -0.36], [0.78, -0.36], [-0.78, 0.36], [0.78, 0.36]].forEach(function (p) { box(0.06, 0.73, 0.06, "#2B3242", x + p[0], 0.365, z + p[1]); });
+    var tela = new THREE.MeshBasicMaterial({ color: "#1E2A44" });
+    [-0.38, 0.38].forEach(function (dx) {
+      box(0.66, 0.42, 0.05, "#141A27", x + dx, 1.14, z - 0.24);
+      var t = new THREE.Mesh(geo(0.6, 0.36, 0.01), tela); t.position.set(x + dx, 1.14, z - 0.212); scene.add(t);
+    });
+    box(0.08, 0.16, 0.08, "#141A27", x, 0.87, z - 0.24);
+    box(0.55, 0.025, 0.16, "#2B3242", x, 0.81, z + 0.1);
+    telasAg[id] = tela;
     var sz = z + 0.9;
-    box(0.55, 0.08, 0.55, "#7568D0", x, 0.46, sz);
-    box(0.55, 0.55, 0.08, "#7568D0", x, 0.78, sz + 0.27);
-    box(0.07, 0.42, 0.07, "#3A3F52", x, 0.21, sz);
-    box(0.45, 0.04, 0.45, "#3A3F52", x, 0.02, sz);
+    box(0.58, 0.09, 0.56, "#2F3A4F", x, 0.46, sz);
+    box(0.58, 0.6, 0.08, "#2F3A4F", x, 0.8, sz + 0.27);
+    box(0.5, 0.05, 0.02, neon(cor), x, 1.05, sz + 0.315, null, true);
+    box(0.07, 0.42, 0.07, "#1A2030", x, 0.21, sz);
+    box(0.46, 0.04, 0.46, "#1A2030", x, 0.02, sz);
   }
-  AG.forEach(function (a) { mesa(a.id, a.mesa[0], a.mesa[1]); });
+  AG.forEach(function (a) { mesa(a.id, a.mesa[0], a.mesa[1], SETORES[a.setor].cor); });
 
   function planta(x, z, s) {
     s = s || 1;
-    box(0.4 * s, 0.4 * s, 0.4 * s, "#B86B4B", x, 0.2 * s, z);
-    var f = new THREE.Mesh(new THREE.IcosahedronGeometry(0.42 * s, 0), mat("#3F9E5B"));
-    f.position.set(x, 0.75 * s, z); f.castShadow = true; scene.add(f);
-    var f2 = new THREE.Mesh(new THREE.IcosahedronGeometry(0.3 * s, 0), mat("#57B872"));
-    f2.position.set(x + 0.12 * s, 1.05 * s, z - 0.05 * s); f2.castShadow = true; scene.add(f2);
+    box(0.45 * s, 0.45 * s, 0.45 * s, "#2B3242", x, 0.225 * s, z);
+    var f = new THREE.Mesh(new THREE.IcosahedronGeometry(0.46 * s, 0), mat("#3F9E5B")); f.position.set(x, 0.82 * s, z); f.castShadow = true; scene.add(f);
+    var f2 = new THREE.Mesh(new THREE.IcosahedronGeometry(0.32 * s, 0), mat("#57B872")); f2.position.set(x + 0.13 * s, 1.15 * s, z - 0.05 * s); f2.castShadow = true; scene.add(f2);
   }
   function sofa(x, z, rot, cor) {
     var g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = rot || 0; scene.add(g);
-    box(2.0, 0.42, 0.85, cor, 0, 0.21, 0, g); box(2.0, 0.55, 0.22, cor, 0, 0.6, -0.32, g);
-    box(0.22, 0.6, 0.85, cor, -1.0, 0.3, 0, g); box(0.22, 0.6, 0.85, cor, 1.0, 0.3, 0, g);
+    box(2.2, 0.42, 0.9, cor, 0, 0.21, 0, g); box(2.2, 0.55, 0.22, cor, 0, 0.6, -0.34, g);
+    box(0.22, 0.6, 0.9, cor, -1.1, 0.3, 0, g); box(0.22, 0.6, 0.9, cor, 1.1, 0.3, 0, g);
   }
-  function estante(x, z, rot) {
-    var g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = rot || 0; scene.add(g);
-    box(1.6, 2.0, 0.42, "#A9845F", 0, 1.0, 0, g);
-    var cores = ["#3B4FA8", "#1F7A5A", "#B9440F", "#7340A8", "#E3C16F", "#2560A3"];
-    [0.45, 1.05, 1.62].forEach(function (y, j) {
-      box(1.5, 0.04, 0.4, "#8C6B4B", 0, y - 0.2, 0.02, g);
-      for (var i = 0; i < 6; i++) box(0.14, 0.34, 0.28, cores[(i + j) % 6], -0.6 + i * 0.2 + (j % 2) * 0.05, y - 0.01, 0.05, g);
-    });
+
+  // Sala de Comando: telão, mesa de reunião com holograma, sofá
+  box(4.2, 0.08, 1.6, "#EEF2F7", -17, 0.76, -5.5);
+  box(3.8, 0.04, 0.05, neon("#7C9CFF"), -17, 0.7, -4.72, null, true);
+  box(0.5, 0.72, 0.5, "#2B3242", -17, 0.36, -5.5);
+  [-18.4, -17, -15.6].forEach(function (cx) { box(0.5, 0.5, 0.5, "#2F3A4F", cx, 0.45, -6.75); box(0.5, 0.5, 0.5, "#2F3A4F", cx, 0.45, -4.25); });
+  var holo = new THREE.Mesh(new THREE.IcosahedronGeometry(0.45, 0), new THREE.MeshBasicMaterial({ color: 0x7C9CFF, wireframe: true }));
+  holo.position.set(-17, 1.55, -5.5); scene.add(holo);
+  var feixe = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.35, 0.7, 16, 1, true), new THREE.MeshBasicMaterial({ color: 0x7C9CFF, transparent: true, opacity: 0.25 }));
+  feixe.position.set(-17, 1.15, -5.5); scene.add(feixe);
+  sofa(-20.6, -3.6, Math.PI / 2, "#3D4F8F");
+  planta(-21.2, -14.2); planta(-12.8, -14.2, 0.8);
+
+  // Financeiro e Administrativo
+  box(2.2, 2.0, 0.45, "#2B3242", -10, 1.0, -14.6);
+  box(2.0, 0.05, 0.02, neon("#34D399"), -10, 1.6, -14.36, null, true);
+  planta(-2.4, -14.2, 0.8);
+  box(0.65, 1.3, 0.6, "#3A4458", -11.2, 0.65, -7.5); box(0.65, 1.3, 0.6, "#3A4458", -10.5, 0.65, -7.5);
+  planta(-2.4, -7.6, 0.8);
+
+  // Qualidade e Inteligência
+  planta(11.2, -14.2, 0.8); planta(11.2, -7.6, 0.8);
+  box(2.6, 1.6, 0.06, "#EEF2F7", 6.8, 1.3, -8.0);
+
+  // Data center: racks com LEDs piscando
+  var leds = [];
+  [[13.6, -13.3], [15.2, -13.3], [16.8, -13.3], [18.4, -13.3], [20, -13.3], [13.6, -10.6], [15.2, -10.6], [16.8, -10.6], [18.4, -10.6], [20, -10.6]].forEach(function (p) {
+    box(1.2, 2.3, 0.9, "#141A27", p[0], 1.15, p[1]);
+    for (var i = 0; i < 6; i++) {
+      var l = box(0.08, 0.05, 0.02, neon(i % 3 === 0 ? "#4FD18B" : "#38BDF8"), p[0] - 0.35 + (i % 3) * 0.35, 0.6 + Math.floor(i / 3) * 0.9, p[1] + 0.46, null, true);
+      leds.push(l);
+    }
+    box(1.0, 0.03, 0.02, neon("#38BDF8"), p[0], 2.15, p[1] + 0.46, null, true);
+  });
+  box(1.6, 2.0, 0.45, "#2B3242", 20.6, 1.0, -7.2);
+  box(1.4, 0.05, 0.02, neon("#FCD34D"), 20.6, 1.4, -6.96, null, true);
+
+  // Marketing e Atendimento
+  planta(-21.2, 6.9, 0.8); planta(-2.4, 2.4, 0.8);
+  box(3.2, 0.08, 1.3, "#EEF2F7", -18.5, 0.76, 13.6); box(0.5, 0.72, 0.5, "#2B3242", -18.5, 0.36, 13.6);
+  planta(-2.4, 14.2, 0.8);
+
+  // Lounge: café, pingue-pongue, sofás, pufes, jardim
+  box(6, 1.0, 0.8, "#1E2738", 17, 0.5, 14.1);
+  box(6, 0.05, 0.82, "#EEF2F7", 17, 1.02, 14.1);
+  box(5.8, 0.04, 0.04, neon("#FCD34D"), 17, 0.95, 13.68, null, true);
+  box(0.6, 0.6, 0.5, "#2B3242", 15.2, 1.35, 14.2); box(0.6, 0.6, 0.5, "#2B3242", 16.2, 1.35, 14.2);
+  box(2.7, 0.07, 1.5, "#2E9C80", 10, 0.76, 12.5);
+  box(0.03, 0.16, 1.6, "#F4F7FB", 10, 0.87, 12.5);
+  [[-1.2, -0.6], [1.2, -0.6], [-1.2, 0.6], [1.2, 0.6]].forEach(function (p) { box(0.07, 0.73, 0.07, "#2B3242", 10 + p[0], 0.365, 12.5 + p[1]); });
+  sofa(20.6, 6.5, -Math.PI / 2, "#E07A8F"); sofa(20.6, 9.5, -Math.PI / 2, "#7C9CFF");
+  [[4.5, 13.2, "#F472B6"], [5.8, 13.8, "#38BDF8"], [7.0, 13.2, "#FCD34D"]].forEach(function (b) {
+    var p = new THREE.Mesh(new THREE.SphereGeometry(0.45, 12, 8), mat(b[2])); p.scale.y = 0.6; p.position.set(b[0], 0.28, b[1]); p.castShadow = true; scene.add(p);
+  });
+  box(0.3, 2.2, 4, "#2E6B47", 21.6, 1.1, 2.8);
+  for (var j = 0; j < 7; j++) planta(21.3, 1.2 + j * 0.55, 0.45);
+  planta(2.4, 14.2); planta(2.4, 2.4, 0.8);
+
+  // ---------- telas dos setores ----------
+  function linhaStatus(ctx, a, x, y) {
+    var c = a.status.s === "busy" ? "#F5B841" : a.status.s === "live" ? "#4FD18B" : "#7D889E";
+    ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x + 8, y - 7, 7, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#EEF2FA"; ctx.font = "600 26px IBM Plex Sans, sans-serif"; ctx.fillText(a.nome, x + 26, y);
+    ctx.fillStyle = "#A3AFC8"; ctx.font = "22px IBM Plex Sans, sans-serif";
+    var t = a.status.txt.replace("Rodando: ", ""); if (t.length > 38) t = t.slice(0, 37) + "…";
+    ctx.fillText(t, x + 150, y);
   }
-  // diretoria
-  sofa(-6.6, -7.25, 0, "#6F86D6");
-  planta(-11.4, -2.6); planta(-5.5, -7.5, 0.8);
-  // financeiro e administrativo
-  estante(-3.9, -7.7, 0);
-  box(0.6, 1.25, 0.55, "#8E9BB1", 6.25, 0.625, -7.6); box(0.6, 1.25, 0.55, "#8E9BB1", 5.55, 0.625, -7.6);
-  planta(0.5, -7.5, 0.7);
-  // arquivo central: as pastas da empresa
-  estante(8.5, -7.7, 0); estante(10.5, -7.7, 0);
-  box(0.6, 0.45, 0.45, "#F5B841", 11.3, 0.225, -4.6);
-  box(0.62, 0.05, 0.47, "#D99A1E", 11.3, 0.47, -4.6);
-  planta(7.6, -2.8, 0.8);
-  // copa: pingue-pongue, sofá, café
-  box(2.7, 0.07, 1.5, "#2E9C80", 6, 0.76, 4.2);
-  box(2.7, 0.075, 0.03, "#FFFFFF", 6, 0.762, 4.2);
-  box(0.03, 0.16, 1.6, "#F4F7FB", 6, 0.87, 4.2);
-  [[-1.2, -0.6], [1.2, -0.6], [-1.2, 0.6], [1.2, 0.6]].forEach(function (p) { box(0.07, 0.73, 0.07, "#3A3F52", 6 + p[0], 0.365, 4.2 + p[1]); });
-  sofa(10.7, 4.3, -Math.PI / 2, "#E07A8F");
-  box(1.7, 0.95, 0.7, "#EEF2F7", 11.1, 0.475, 6.8);
-  box(0.42, 0.5, 0.35, "#2B3242", 10.7, 1.2, 6.8);
-  box(0.18, 0.12, 0.18, "#FFFFFF", 11.3, 1.01, 6.8);
-  box(0.4, 1.1, 0.4, "#A9C8F0", 11.5, 0.55, 5.6);
-  planta(2.3, 7.4); planta(11.4, 7.5, 0.9); planta(-0.3, -0.3, 0.7);
+  function painelSetor(chave) {
+    return function (t) {
+      var s = SETORES[chave], ctx = t.ctx, W = t.cv.width, H = t.cv.height;
+      ctx.fillStyle = "#0B1222"; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = s.cor; ctx.fillRect(0, 0, W, 8);
+      ctx.font = "500 20px IBM Plex Mono, monospace"; ctx.fillStyle = s.cor; ctx.fillText(s.nome.toUpperCase(), 24, 46);
+      ctx.fillStyle = "#A3AFC8"; ctx.fillText(hhmm(st.t), W - 110, 46);
+      AG.filter(function (a) { return a.setor === chave; }).forEach(function (a, i) { linhaStatus(ctx, a, 24, 100 + i * 46); });
+      t.tex.needsUpdate = true;
+    };
+  }
+  // telão da Sala de Comando
+  telaCanvas(7.6, 2.3, 1024, -17, 1.85, -14.93, 0, function (t) {
+    var ctx = t.ctx, W = t.cv.width, H = t.cv.height;
+    ctx.fillStyle = "#0B1222"; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "#7C9CFF"; ctx.fillRect(0, 0, W, 6);
+    ctx.font = "500 22px IBM Plex Mono, monospace"; ctx.fillStyle = "#7C9CFF"; ctx.fillText("SALA DE COMANDO · NOBEL ONLINE", 28, 44);
+    ctx.font = "700 72px IBM Plex Mono, monospace"; ctx.fillStyle = "#EEF2FA"; ctx.fillText(hhmm(st.t), 28, 140);
+    ctx.font = "22px IBM Plex Sans, sans-serif"; ctx.fillStyle = "#A3AFC8"; ctx.fillText(NOME_DIA[st.dia], 32, 176);
+    var n = contagem();
+    ctx.font = "600 30px IBM Plex Sans, sans-serif";
+    ctx.fillStyle = "#F5B841"; ctx.fillText(n.busy + " rodando rotina", 270, 104);
+    ctx.fillStyle = "#4FD18B"; ctx.fillText(n.live + " com clientes", 270, 146);
+    ctx.fillStyle = "#A3AFC8"; ctx.fillText(n.idle + " em plantão", 270, 188);
+    ctx.font = "22px IBM Plex Sans, sans-serif"; ctx.fillStyle = "#EEF2FA";
+    var ativos = AG.filter(function (a) { return a.status.s === "busy"; }).slice(0, 5);
+    if (!ativos.length) { ctx.fillStyle = "#A3AFC8"; ctx.fillText("Nenhuma rotina agora: time em plantão.", 560, 104); }
+    ativos.forEach(function (a, i) { ctx.fillText(a.nome + ": " + a.status.txt.replace("Rodando: ", ""), 560, 104 + i * 34); });
+    t.tex.needsUpdate = true;
+  });
+  telaCanvas(3.4, 1.5, 512, -7, 1.8, -14.93, 0, painelSetor("fin"));
+  telaCanvas(3.4, 1.5, 512, 6.8, 1.8, -14.93, 0, painelSetor("qual"));
+  telaCanvas(3.4, 1.5, 512, -21.93, 1.8, 4.6, Math.PI / 2, painelSetor("mkt"));
+  telaCanvas(3.4, 1.5, 512, -21.93, 1.8, 11.4, Math.PI / 2, painelSetor("atend"));
+  telaCanvas(3.4, 1.5, 512, -21.93, 1.8, -10.5, Math.PI / 2, painelSetor("comando"));
 
   // ---------- bonecos ----------
-  var RAD = Math.PI / 180;
   function boneco(a) {
     var g = new THREE.Group();
-    var roupa = mat(a.cor), pele = mat(a.pele), cab = mat(a.cabelo), calca = mat("#2E3445"), sap = mat("#1B1F2A");
-    function perna(x) {
-      var p = new THREE.Group(); p.position.set(x, 0.7, 0); g.add(p);
-      box(0.22, 0.66, 0.26, calca, 0, -0.33, 0, p); box(0.23, 0.1, 0.32, sap, 0, -0.66, 0.03, p);
-      return p;
-    }
-    function braco(x) {
-      var b = new THREE.Group(); b.position.set(x, 1.3, 0); g.add(b);
-      box(0.17, 0.5, 0.2, roupa, 0, -0.25, 0, b); box(0.15, 0.13, 0.17, pele, 0, -0.56, 0, b);
-      return b;
-    }
+    var roupa = mat(a.cor), pele = mat(a.pele), cab = mat(a.cabelo), calca = mat("#252B3A"), sap = mat("#15192A");
+    function perna(x) { var p = new THREE.Group(); p.position.set(x, 0.7, 0); g.add(p); box(0.22, 0.66, 0.26, calca, 0, -0.33, 0, p); box(0.23, 0.1, 0.32, sap, 0, -0.66, 0.03, p); return p; }
+    function braco(x) { var b = new THREE.Group(); b.position.set(x, 1.3, 0); g.add(b); box(0.17, 0.5, 0.2, roupa, 0, -0.25, 0, b); box(0.15, 0.13, 0.17, pele, 0, -0.56, 0, b); return b; }
     var pE = perna(-0.13), pD = perna(0.13);
     box(0.6, 0.64, 0.34, roupa, 0, 1.02, 0, g);
+    box(0.62, 0.05, 0.36, neon(SETORES[a.setor].cor), 0, 0.72, 0, g, true);
     var bE = braco(-0.39), bD = braco(0.39);
     box(0.46, 0.44, 0.44, pele, 0, 1.57, 0, g);
     box(0.5, 0.14, 0.48, cab, 0, 1.83, -0.01, g);
     box(0.5, 0.32, 0.1, cab, 0, 1.68, -0.23, g);
     if (a.longo) { box(0.5, 0.62, 0.12, cab, 0, 1.45, -0.25, g); box(0.08, 0.36, 0.38, cab, -0.25, 1.6, -0.03, g); box(0.08, 0.36, 0.38, cab, 0.25, 1.6, -0.03, g); }
-    box(0.07, 0.07, 0.02, "#1B1F2A", -0.1, 1.6, 0.225, g); box(0.07, 0.07, 0.02, "#1B1F2A", 0.1, 1.6, 0.225, g);
+    if (a.cliente) { box(0.54, 0.06, 0.08, "#15192A", 0, 1.86, 0.02, g); box(0.08, 0.16, 0.12, neon(SETORES[a.setor].cor), 0.27, 1.6, 0.05, g, true); }
+    box(0.07, 0.07, 0.02, "#15192A", -0.1, 1.6, 0.225, g); box(0.07, 0.07, 0.02, "#15192A", 0.1, 1.6, 0.225, g);
     scene.add(g);
     return { g: g, pE: pE, pD: pD, bE: bE, bD: bD };
   }
-
-  var anel = new THREE.Mesh(new THREE.RingGeometry(0.5, 0.66, 40), new THREE.MeshBasicMaterial({ color: 0x86A6FF, transparent: true, opacity: 0.85 }));
-  anel.rotation.x = -Math.PI / 2; anel.position.y = 0.03; anel.visible = false; scene.add(anel);
+  var anel = new THREE.Mesh(new THREE.RingGeometry(0.5, 0.68, 40), new THREE.MeshBasicMaterial({ color: 0x5EE6FF, transparent: true, opacity: 0.9 }));
+  anel.rotation.x = -Math.PI / 2; anel.position.y = 0.05; anel.visible = false; scene.add(anel);
 
   var tagsBox = document.getElementById("tags");
-  AG.forEach(function (a, i) {
+  AG.forEach(function (a) {
     a.corpo = boneco(a);
     a.assento = [a.mesa[0], a.mesa[1] + 0.9];
     a.pos = new THREE.Vector3(a.assento[0], 0, a.assento[1]);
-    a.rotAlvo = Math.PI;
-    a.estado = "parado"; a.espera = 0.5 + i * 0.3; a.rota = []; a.destino = "passeio"; a.fase = Math.random() * 6;
-    a.status = { s: "idle", txt: "" };
-    a.corpo.g.position.copy(a.pos);
+    a.rotAlvo = Math.PI; a.rota = []; a.destino = "mesa"; a.fase = Math.random() * 6;
+    a.timer = 8 + Math.random() * 30; a.status = { s: "idle", txt: "" };
     var b = document.createElement("button");
     b.type = "button"; b.className = "tag";
     b.setAttribute("aria-label", a.nome + ", " + a.cargo + ". Abrir ficha");
     b.innerHTML = '<span class="sw"></span><span class="nm"></span><i class="dot"></i>';
-    b.querySelector(".sw").style.background = a.cor;
-    b.querySelector(".sw").textContent = a.nome[0];
+    b.querySelector(".sw").style.background = a.cor; b.querySelector(".sw").textContent = a.nome[0];
     b.querySelector(".nm").textContent = a.nome;
     b.addEventListener("click", function () { selecionar(a.id); });
     tagsBox.appendChild(b);
     a.tag = b; a.tagDot = b.querySelector(".dot");
   });
-  var salaEls = SALAS.map(function (s) {
-    var e = document.createElement("span"); e.className = "room"; e.textContent = s.t; tagsBox.appendChild(e);
-    return { e: e, v: new THREE.Vector3(s.p[0], 0.02, s.p[1]) };
+  var setorEls = Object.keys(SETORES).map(function (k) {
+    var s = SETORES[k], e = document.createElement("span");
+    e.className = "setor"; e.style.setProperty("--c", s.cor); e.textContent = s.nome; tagsBox.appendChild(e);
+    return { e: e, v: new THREE.Vector3(s.rot[0], 0.05, s.rot[1]) };
   });
   var faces = document.getElementById("faces");
   AG.forEach(function (a) { var s = document.createElement("span"); s.style.background = a.cor; s.textContent = a.nome[0]; s.title = a.nome; faces.appendChild(s); });
@@ -491,8 +578,7 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
   var NOME_DIA = { 0: "domingo", 1: "segunda", 2: "terça", 3: "quarta", 4: "quinta", 5: "sexta", 6: "sábado" };
   var VELS = [[4, "4 min/s"], [12, "12 min/s"], [1, "1 min/s"], [1 / 60, "Tempo real"]];
   var reduz = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var st = { dia: 1, t: 530, play: !reduz, vel: 0 };
-
+  var st = { dia: 1, t: 540, play: !reduz, vel: 0 };
   function hhmm(m) { m = Math.floor(m); var h = Math.floor(m / 60), mm = m % 60; return (h < 10 ? "0" : "") + h + ":" + (mm < 10 ? "0" : "") + mm; }
   function statusDe(a) {
     for (var i = 0; i < ROT.length; i++) {
@@ -500,25 +586,14 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
       if (r.a === a.id && r.d.indexOf(st.dia) !== -1 && st.t >= r.m && st.t < r.m + 60) return { s: "busy", txt: "Rodando: " + r.n };
     }
     if (a.cliente) return { s: "live", txt: a.cliente + " (24h)" };
-    return { s: "idle", txt: "Disponível quando chamado" };
+    return { s: "idle", txt: "Em plantão: responde na hora quando chamado" };
   }
+  function contagem() { var n = { busy: 0, live: 0, idle: 0 }; AG.forEach(function (a) { n[a.status.s]++; }); return n; }
 
-  function perto(a, p, r) { return Math.hypot(a.pos.x - p[0], a.pos.z - p[1]) < (r || 0.35); }
-  function sortear(lista) { return lista[Math.floor(Math.random() * lista.length)]; }
-  function rotaPasseio(a) {
-    if (a.sala === "growth") return perto(a, a.assento, 1.0) ? [[a.assento[0], 2.9], sortear(LOUNGE)] : [sortear(LOUNGE)];
-    if (a.sala === "aberta") {
-      var w = sortear(LOUNGE), naMesa = perto(a, a.assento, 1.0);
-      return naMesa ? [[a.assento[0], a.corredor], [0.7, a.corredor], w] : [w];
-    }
-    return [a.saida, sortear(a.passeio)];
-  }
-  function rotaMesa(a) {
-    if (perto(a, a.assento, 1.0)) return [a.assento];
-    if (a.sala === "growth") return [[a.assento[0], 2.9], a.assento];
-    if (a.sala === "aberta") return [[0.7, a.corredor], [a.assento[0], a.corredor], a.assento];
-    return [a.saida, a.assento];
-  }
+  // caminhos: mesa ↔ corredor central (0,0) ↔ lounge
+  function emLounge(a) { return a.pos.x > 1.6 && a.pos.z > 1.6; }
+  function rotaParaLounge(a) { return a.ida.concat([[0, 0], LOUNGE[Math.floor(Math.random() * LOUNGE.length)]]); }
+  function rotaParaMesa(a) { return [[0, 0]].concat(a.ida.slice().reverse(), [a.assento]); }
   function sentar(a) {
     a.estado = "sentado"; a.pos.set(a.assento[0], 0, a.assento[1]); a.rotAlvo = Math.PI;
     a.corpo.pE.rotation.x = a.corpo.pD.rotation.x = -Math.PI / 2;
@@ -526,22 +601,30 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
   function levantar(a) { a.corpo.pE.rotation.x = a.corpo.pD.rotation.x = 0; a.corpo.bE.rotation.x = a.corpo.bD.rotation.x = 0; }
 
   function atualizarAgente(a, dt) {
-    var quer = a.status.s === "idle" ? "passeio" : "mesa";
-    if (quer === "mesa") {
-      if (a.estado !== "sentado" && !(a.estado === "andando" && a.destino === "mesa")) {
-        a.rota = rotaMesa(a); a.destino = "mesa"; a.estado = "andando";
+    var trabalho = a.status.s !== "idle", c = a.corpo;
+    if (a.estado === "sentado") {
+      if (!trabalho) {
+        a.timer -= dt;
+        if (a.timer <= 0) {
+          if (Math.random() < 0.5) { levantar(a); a.rota = rotaParaLounge(a); a.destino = "lounge"; a.estado = "andando"; }
+          else a.timer = 15 + Math.random() * 35;
+        }
       }
-    } else {
-      if (a.estado === "sentado") { levantar(a); a.rota = rotaPasseio(a); a.destino = "passeio"; a.estado = "andando"; }
-      else if (a.estado === "andando" && a.destino === "mesa") { a.rota = rotaPasseio(a); a.destino = "passeio"; }
-      else if (a.estado === "parado") { a.espera -= dt; if (a.espera <= 0) { a.rota = rotaPasseio(a); a.destino = "passeio"; a.estado = "andando"; } }
+    } else if (a.estado === "parado") {
+      a.timer -= dt;
+      if (trabalho || a.timer <= 0) {
+        if (!trabalho && Math.random() < 0.4) { a.rota = [LOUNGE[Math.floor(Math.random() * LOUNGE.length)]]; a.destino = "lounge"; }
+        else { a.rota = rotaParaMesa(a); a.destino = "mesa"; }
+        a.estado = "andando";
+      }
     }
-    var c = a.corpo;
     if (a.estado === "andando") {
       var alvo = a.rota[0];
-      if (!alvo) { if (a.destino === "mesa") sentar(a); else { a.estado = "parado"; a.espera = 2 + Math.random() * 4; } }
-      else {
-        var dx = alvo[0] - a.pos.x, dz = alvo[1] - a.pos.z, dist = Math.hypot(dx, dz), passo = 1.7 * dt;
+      if (!alvo) {
+        if (a.destino === "mesa") { sentar(a); a.timer = 20 + Math.random() * 40; }
+        else { a.estado = "parado"; a.timer = 4 + Math.random() * 6; }
+      } else {
+        var dx = alvo[0] - a.pos.x, dz = alvo[1] - a.pos.z, dist = Math.hypot(dx, dz), passo = (trabalho ? 2.6 : 1.8) * dt;
         if (dist <= passo) { a.pos.x = alvo[0]; a.pos.z = alvo[1]; a.rota.shift(); }
         else { a.pos.x += dx / dist * passo; a.pos.z += dz / dist * passo; a.rotAlvo = Math.atan2(dx, dz); }
         a.fase += dt * 9;
@@ -551,19 +634,17 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     } else if (a.estado === "parado") {
       c.pE.rotation.x *= 0.8; c.pD.rotation.x *= 0.8; c.bE.rotation.x *= 0.8; c.bD.rotation.x *= 0.8;
     } else if (a.estado === "sentado") {
-      a.fase += dt * (a.status.s === "busy" ? 16 : 5);
-      var dig = a.status.s === "idle" ? 0 : Math.sin(a.fase) * 0.12;
+      a.fase += dt * (a.status.s === "busy" ? 16 : 4);
+      var dig = a.status.s === "idle" ? Math.sin(a.fase) * 0.03 : Math.sin(a.fase) * 0.12;
       c.bE.rotation.x = -1.15 + dig; c.bD.rotation.x = -1.15 - dig;
     }
-    // giro suave
     var dr = a.rotAlvo - c.g.rotation.y;
     while (dr > Math.PI) dr -= Math.PI * 2;
     while (dr < -Math.PI) dr += Math.PI * 2;
     c.g.rotation.y += dr * Math.min(1, dt * 10);
     c.g.position.set(a.pos.x, a.estado === "sentado" ? -0.24 : 0, a.pos.z);
-    // tela do computador
     var sentado = a.estado === "sentado";
-    telas[a.id].material.color.set(!sentado ? TELA_OFF : a.status.s === "busy" ? "#FFD37A" : a.status.s === "live" ? "#8EF0B8" : "#5C6C92");
+    telasAg[a.id].color.set(!sentado ? "#1E2A44" : a.status.s === "busy" ? "#FFD37A" : a.status.s === "live" ? "#8EF0B8" : "#4F78C9");
   }
 
   // ---------- HUD ----------
@@ -583,7 +664,6 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
   document.getElementById("mais").addEventListener("click", function () { zoom(1.25); });
   document.getElementById("menos").addEventListener("click", function () { zoom(0.8); });
   document.getElementById("agora").addEventListener("click", function () { irAgora(); ultimoT = st.t; render(); });
-
   var ICON_PLAY = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>';
   var ICON_PAUSE = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2.5" y="1.5" width="3.2" height="11" fill="currentColor"/><rect x="8.3" y="1.5" width="3.2" height="11" fill="currentColor"/></svg>';
 
@@ -594,31 +674,26 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     playBtn.innerHTML = st.play ? ICON_PAUSE : ICON_PLAY;
     playBtn.setAttribute("aria-label", st.play ? "Pausar" : "Continuar");
     velBtn.textContent = VELS[st.vel][1];
-    var n = { busy: 0, live: 0, idle: 0 };
-    AG.forEach(function (a) {
-      a.status = statusDe(a);
-      n[a.status.s]++;
-      a.tagDot.className = "dot " + (a.status.s === "idle" ? "" : a.status.s);
-    });
+    AG.forEach(function (a) { a.status = statusDe(a); a.tagDot.className = "dot " + (a.status.s === "idle" ? "" : a.status.s); });
+    var n = contagem();
     document.getElementById("n-busy").textContent = n.busy;
     document.getElementById("n-live").textContent = n.live;
     document.getElementById("n-idle").textContent = n.idle;
+    telasSetor.forEach(function (t) { t.desenhar(t); });
     if (selecionado) preencherFicha(POR_ID[selecionado]);
   }
 
-  var eventos = [];
-  var tickerBox = document.getElementById("ticker");
+  var eventos = [], tickerBox = document.getElementById("ticker");
   function evento(txt, m) {
     eventos.unshift({ txt: txt, m: m }); eventos = eventos.slice(0, 3);
     tickerBox.textContent = "";
     eventos.forEach(function (e) {
-      var d = document.createElement("div"); var t = document.createElement("time"); t.textContent = hhmm(e.m);
+      var d = document.createElement("div"), t = document.createElement("time"); t.textContent = hhmm(e.m);
       d.appendChild(t); d.appendChild(document.createTextNode(e.txt)); tickerBox.appendChild(d);
     });
   }
 
-  var selecionado = null;
-  var card = document.getElementById("card");
+  var selecionado = null, card = document.getElementById("card");
   function selecionar(id) {
     selecionado = selecionado === id ? null : id;
     AG.forEach(function (a) { a.tag.classList.toggle("sel", a.id === selecionado); });
@@ -626,40 +701,38 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     preencherFicha(POR_ID[id]); card.hidden = false; anel.visible = true;
   }
   function preencherFicha(a) {
-    var rots = ROT.filter(function (r) { return r.a === a.id; });
+    var rots = ROT.filter(function (r) { return r.a === a.id; }).sort(function (x, y) { return x.m - y.m; });
     var cls = a.status.s === "idle" ? "" : a.status.s;
     card.innerHTML = "";
     var h = document.createElement("header");
     h.innerHTML = '<span class="av"></span><h2></h2><span class="role"></span><button type="button" class="x" aria-label="Fechar ficha">✕</button>';
     h.querySelector(".av").style.background = a.cor; h.querySelector(".av").textContent = a.nome[0];
-    h.querySelector("h2").textContent = a.nome; h.querySelector(".role").textContent = a.cargo;
+    h.querySelector("h2").textContent = a.nome; h.querySelector(".role").textContent = a.cargo + " · " + SETORES[a.setor].nome;
     h.querySelector(".x").addEventListener("click", function () { selecionar(a.id); });
     card.appendChild(h);
     var pill = document.createElement("span"); pill.className = "pill";
     pill.innerHTML = '<i class="dot ' + cls + '"></i><span></span>'; pill.querySelector("span").textContent = a.status.txt;
     card.appendChild(pill);
-    function bloco(t, el) { var d = document.createElement("div"); var h3 = document.createElement("h3"); h3.textContent = t; d.appendChild(h3); d.appendChild(el); card.appendChild(d); }
+    function bloco(t, el) { var d = document.createElement("div"), h3 = document.createElement("h3"); h3.textContent = t; d.appendChild(h3); d.appendChild(el); card.appendChild(d); }
     var p = document.createElement("p"); p.textContent = a.faz; bloco("O que faz", p);
     var ul = document.createElement("ul");
-    if (!rots.length) { var li0 = document.createElement("li"); li0.textContent = "Sem rotina fixa: trabalha quando chamado."; ul.appendChild(li0); }
     rots.forEach(function (r) {
-      var li = document.createElement("li"); var t = document.createElement("time"); t.textContent = hhmm(r.m);
+      var li = document.createElement("li"), t = document.createElement("time"); t.textContent = hhmm(r.m);
       var dias = r.d.length === 7 ? "todo dia" : r.d.length === 5 ? "seg–sex" : r.d.map(function (x) { return NOME_DIA[x].slice(0, 3); }).join(", ");
       li.appendChild(t); li.appendChild(document.createTextNode(r.n + " (" + dias + ")")); ul.appendChild(li);
     });
-    bloco("Rotinas", ul);
+    bloco("Rotinas (24 horas)", ul);
     var ask = document.createElement("p"); ask.className = "ask"; ask.textContent = "“" + a.pede + "”"; bloco("Peça assim", ask);
   }
 
   function irAgora() {
-    var dia = 1, t = 530;
+    var dia = 1, t = 540;
     try {
       var parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/Sao_Paulo", weekday: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date());
       var p = {}; parts.forEach(function (x) { p[x.type] = x.value; });
       var wd = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }[p.weekday];
-      var mins = (+p.hour) * 60 + (+p.minute);
-      if (wd >= 0 && wd <= 6) { dia = wd; t = mins; }
-    } catch (e) { /* sem Intl: segunda 08:50 */ }
+      if (wd !== undefined) { dia = wd; t = (+p.hour) * 60 + (+p.minute); }
+    } catch (e) { /* sem Intl: segunda 09:00 */ }
     st.dia = dia; st.t = t;
   }
 
@@ -670,53 +743,45 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     if (w === largura && h === altura) return;
     largura = w; altura = h;
     renderer.setSize(w, h, false);
-    var asp = w / h, H = asp >= 1.55 ? 14 : (asp >= 1 ? 21 / asp : 15.5 / asp);
+    var asp = w / h, H = asp >= 1.55 ? 33 : (asp >= 1 ? 51 / asp : 27 / asp);
     cam.left = -H * asp / 2; cam.right = H * asp / 2; cam.top = H / 2; cam.bottom = -H / 2;
     cam.updateProjectionMatrix();
   }
-
   var v = new THREE.Vector3();
-  function projetar(vec, el, dy) {
+  function projetar(vec, el) {
     v.copy(vec).project(cam);
     var x = (v.x * 0.5 + 0.5) * largura, y = (-v.y * 0.5 + 0.5) * altura;
-    el.style.transform = "translate(" + x.toFixed(1) + "px," + (y + (dy || 0)).toFixed(1) + "px) translate(-50%,-100%)";
+    el.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px) translate(-50%,-100%)";
   }
 
   // ---------- laço ----------
-  var ultimo = performance.now(), ultimoT = st.t;
+  var ultimo = performance.now(), ultimoT = st.t, piscar = 0;
   function quadro(agora) {
     var dt = Math.min(0.05, (agora - ultimo) / 1000); ultimo = agora;
     ajustar();
     if (st.play) {
       st.t += VELS[st.vel][0] * dt;
       if (st.t >= 1440) { st.t -= 1440; st.dia = (st.dia + 1) % 7; ultimoT = -1; evento("Novo dia: " + NOME_DIA[st.dia], 0); }
-      ROT.forEach(function (r) {
-        if (r.d.indexOf(st.dia) !== -1 && ultimoT < r.m && st.t >= r.m) evento(POR_ID[r.a].nome + " começou: " + r.n, r.m);
-      });
+      ROT.forEach(function (r) { if (r.d.indexOf(st.dia) !== -1 && ultimoT < r.m && st.t >= r.m) evento(POR_ID[r.a].nome + " começou: " + r.n, r.m); });
       if (Math.floor(st.t) !== Math.floor(ultimoT)) render();
       ultimoT = st.t;
     }
-    // dia e noite: mais escuro de 20h às 5h, transição suave
     var hh = st.t / 60, luz = hh < 5 || hh >= 20 ? 0 : hh < 7 ? (hh - 5) / 2 : hh < 18 ? 1 : 1 - (hh - 18) / 2;
-    ceu.intensity = 0.32 + 0.46 * luz; sol.intensity = 0.08 + 0.42 * luz;
+    ceu.intensity = 0.38 + 0.47 * luz; sol.intensity = 0.1 + 0.35 * luz;
+    holo.rotation.y += dt * 0.8; holo.rotation.x += dt * 0.3;
+    piscar += dt; if (piscar > 0.35) { piscar = 0; leds.forEach(function (l) { l.visible = Math.random() > 0.25; }); }
     AG.forEach(function (a) { atualizarAgente(a, dt); });
-    if (selecionado) { var s = POR_ID[selecionado]; anel.position.set(s.pos.x, 0.03, s.pos.z); }
+    if (selecionado) { var s = POR_ID[selecionado]; anel.position.set(s.pos.x, 0.05, s.pos.z); }
     controls.update();
     renderer.render(scene, cam);
     AG.forEach(function (a) { v.set(a.pos.x, a.estado === "sentado" ? 2.0 : 2.25, a.pos.z); projetar(v, a.tag); });
-    salaEls.forEach(function (s) { projetar(s.v, s.e, 0); });
+    setorEls.forEach(function (s) { projetar(s.v, s.e); });
     requestAnimationFrame(quadro);
   }
 
-  irAgora();
-  ultimoT = st.t;
+  irAgora(); ultimoT = st.t;
+  AG.forEach(function (a) { sentar(a); });
   render();
-  // começa com cada um no lugar certo para o horário
-  AG.forEach(function (a) {
-    if (a.status.s !== "idle") sentar(a);
-    else if (a.passeio) { var s = a.passeio[0]; a.pos.set(s[0], 0, s[1]); a.estado = "parado"; }
-    else { var w = LOUNGE[AG.indexOf(a) % LOUNGE.length]; a.pos.set(w[0], 0, w[1]); a.estado = "parado"; }
-  });
   requestAnimationFrame(quadro);
 })();
 </script>
