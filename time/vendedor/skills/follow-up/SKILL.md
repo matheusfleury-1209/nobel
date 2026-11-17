@@ -6,7 +6,13 @@ description: Faz o follow-up dos leads com próximo passo vencido, com mensagens
 # Follow-up
 
 1. Em `leads.csv`, filtre etapas `novo`, `qualificado`, `proposta`, `negociacao` com `data_proximo_passo` ≤ hoje.
-2. Cadência após proposta: D+2, D+5, D+10, D+20 (última: "vou encerrar por aqui, se mudar algo é só chamar"). Depois disso → `perdido` (motivo: sem resposta).
+2. Cadência (única para o time):
+   - **D0:** até 2h depois, só dentro do horário comercial (senão, às 8h do próximo dia útil)
+   - **D1** e **D3**
+   - **D7:** encerramento ("vou parar de te mandar mensagem pra não incomodar; se quiser, é só responder")
+   - Em ofertas com prazo, 1 lembrete no último dia
+   - Depois disso → `perdido` (motivo: sem resposta)
+   - Quem pediu para parar sai na hora
 3. Mensagem personalizada usando o histórico (`observacoes`): retome o que o cliente disse, traga algo útil (resposta a dúvida, case, condição válida), termine com uma pergunta simples.
 4. Se você está ligado ao WhatsApp e o cliente já conversou com você, envie. Se não, gere a lista de mensagens em `empresa/vendas/followups/AAAA-MM-DD.md` para o dono enviar.
 5. Atualize `proximo_passo` e `data_proximo_passo` de cada lead.

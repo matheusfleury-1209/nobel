@@ -9,6 +9,9 @@ description: Checklist de revisão antes de publicar anúncio, post, página, ca
 - [ ] Preço, parcela, cupom e prazo da oferta **exatamente** iguais aos vigentes
 - [ ] Garantia correta (dias), nº de aulas/módulos/horas corretos
 - [ ] Nada de "100% online" se houver parte presencial; nada de "reconhecido pelo MEC/CRO", "garante registro/emprego/salário"
+- [ ] Nada de "credenciado", "dá direito ao registro", "válido em todo o Brasil", "vaga de estágio garantida", "turma"/"vagas limitadas" em curso gravado, "formalize/regularize", prazo de certificado, nem perguntas sobre situação pessoal/financeira
+- [ ] Depoimento de outro produto (ex.: presencial) traz legenda dizendo isso; profissional de saúde identificado traz nome, nº do conselho e autorização
+- [ ] "De/Por" só se o preço "de" foi praticado antes; preço parcelado sempre com o valor à vista e o total
 - [ ] Urgência e escassez **verdadeiras** (data real de fim; nada de "últimas vagas" falso)
 - [ ] Depoimentos só reais e com autorização escrita; sem "antes e depois"
 - [ ] Português correto, sem erro de digitação; tom de voz do PERFIL
