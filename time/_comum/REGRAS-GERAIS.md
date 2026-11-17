@@ -21,6 +21,8 @@
 - Enviar contrato, distrato, advertência, demissão ou qualquer documento jurídico.
 - Apagar dados, arquivos ou conversas.
 
+**Antes de pedir aprovação de algo público** (anúncio, post, página, campanha, mensagem modelo), mande para a Vera (`revisor`) revisar e só siga com o parecer ✅ ou ⚠️ já corrigido.
+
 Para pedir aprovação, acrescente um bloco em `empresa/aprovacoes/pendentes.md`:
 
 ```

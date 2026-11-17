@@ -20,7 +20,7 @@
         identity: { name: "Helena", emoji: "🧭" },
         // A Diretora pode acionar todo o time como subagentes
         subagents: {
-          allowAgents: ["financeiro", "trafego", "social", "criativos", "vendedor", "atendimento", "prospector", "administrativo"],
+          allowAgents: ["financeiro", "trafego", "social", "criativos", "vendedor", "atendimento", "prospector", "administrativo", "inteligencia", "revisor", "otimizador", "programador"],
           delegationMode: "prefer",
         },
       },
@@ -77,13 +77,37 @@
         model: "anthropic/claude-haiku-5-5",
         identity: { name: "Marcos", emoji: "🗂️" },
       },
+      inteligencia: {
+        name: "Íris — Inteligência de Anúncios",
+        workspace: "~/.openclaw/workspace-inteligencia",
+        model: "anthropic/claude-haiku-5-5",
+        identity: { name: "Íris", emoji: "🔭" },
+      },
+      revisor: {
+        name: "Vera — Revisora de Qualidade",
+        workspace: "~/.openclaw/workspace-revisor",
+        model: "anthropic/claude-sonnet-5-5",
+        identity: { name: "Vera", emoji: "🛡️" },
+      },
+      otimizador: {
+        name: "Caio — Melhorias e Conversão",
+        workspace: "~/.openclaw/workspace-otimizador",
+        model: "anthropic/claude-sonnet-5-5",
+        identity: { name: "Caio", emoji: "🧪" },
+      },
+      programador: {
+        name: "Léo — Programador",
+        workspace: "~/.openclaw/workspace-programador",
+        model: "anthropic/claude-sonnet-5-5",
+        identity: { name: "Léo", emoji: "🛠️" },
+      },
     },
   },
 
   // Agentes podem conversar entre si (sessions_send) — só os do time
   tools: {
     agentToAgent: {
-      allow: ["diretor", "financeiro", "trafego", "social", "criativos", "vendedor", "atendimento", "prospector", "administrativo"],
+      allow: ["diretor", "financeiro", "trafego", "social", "criativos", "vendedor", "atendimento", "prospector", "administrativo", "inteligencia", "revisor", "otimizador", "programador"],
     },
   },
 

@@ -1,11 +1,11 @@
 # Time de IA para gerir a empresa
 
-Kit pronto para montar um **time de 9 funcionários de IA**, igual ao do vídeo (escritório 3D com os agentes trabalhando):
-diretora, financeiro, gestor de tráfego, social media, copywriter, vendedor, atendimento, prospecção e administrativo/RH.
+Kit pronto para montar um **time de 13 funcionários de IA**, igual ao do vídeo (escritório 3D com os agentes trabalhando):
+diretora, financeiro, gestor de tráfego, social media, copywriter, vendedor, atendimento, prospecção, administrativo/RH, inteligência de anúncios, revisora de qualidade, especialista em melhorias e programador.
 
 - **Motor dos agentes:** [OpenClaw](https://github.com/openclaw/openclaw), de código aberto. É a aba "OpenClaw Control" do vídeo.
 - **Escritório 3D:** [Claw3D](https://github.com/iamlukethedev/Claw3D), de código aberto e opcional. É a aba "Claw3D" do vídeo.
-- **Este repositório:** os 9 agentes já configurados (personalidade, cargo, regras e procedimentos), as planilhas da empresa, as rotinas automáticas e o instalador.
+- **Este repositório:** os 13 agentes já configurados (personalidade, cargo, regras e procedimentos), as planilhas da empresa, as rotinas automáticas e o instalador.
 
 ## O time
 
@@ -20,6 +20,10 @@ diretora, financeiro, gestor de tráfego, social media, copywriter, vendedor, at
 | 💬 | **Clara** (`atendimento`) | Atendimento e pós-venda | Suporte, reclamações, onboarding, NPS | Tickets às 11h |
 | 🔎 | **Theo** (`prospector`) | Prospecção e mercado | Listas de clientes ideais (dados públicos), análise de concorrentes | Terça e quinta 10h; concorrentes no dia 1 |
 | 🗂️ | **Marcos** (`administrativo`) | Administrativo e RH | Obrigações e vencimentos, rascunhos de contratos, recrutamento | Segunda 8h |
+| 🔭 | **Íris** (`inteligencia`) | Inteligência de anúncios | Acha na Biblioteca de Anúncios o que está funcionando no nicho e entrega modelos adaptados e honestos | Segunda e quinta 9h30 |
+| 🛡️ | **Vera** (`revisor`) | Revisora de qualidade | Confere erros e riscos de tudo que vai a público, antes da sua aprovação | Auditoria às segundas 11h30 |
+| 🧪 | **Caio** (`otimizador`) | Especialista em melhorias | Audita conversas, mede o funil, propõe e avalia testes A/B | Funil seg–sex 17h30; testes sexta 16h |
+| 🛠️ | **Léo** (`programador`) | Programador | Pixel e rastreamento, integrações (Hotmart, CRM), automações | Checagem do rastreamento segunda 8h30 |
 
 Os nomes são sugestões: troque em `time/<agente>/IDENTITY.md`.
 

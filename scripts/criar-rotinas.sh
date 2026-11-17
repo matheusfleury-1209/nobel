@@ -81,6 +81,19 @@ rotina prospector "0 10 1 * *"   "Concorrentes do mês"      "Use a skill analis
 # ── Administrativo ─────────────────────────────────────────────────────────
 rotina administrativo "0 8 * * 1" "Obrigações da semana" "Use a skill agenda-obrigacoes."
 
+# ── Inteligência de anúncios ───────────────────────────────────────────────
+rotina inteligencia "30 9 * * 1,4" "Garimpo de anúncios" "Use a skill garimpo-anuncios e depois modelagem-anuncio para os 2 melhores conceitos. Entregue para a Duda (criativos)."
+
+# ── Revisão de qualidade ───────────────────────────────────────────────────
+rotina revisor "30 11 * * 1" "Auditoria semanal" "Use a skill auditoria-semanal em tudo o que está no ar."
+
+# ── Melhorias ──────────────────────────────────────────────────────────────
+rotina otimizador "30 17 * * 1-5" "Funil do dia" "Monte o funil do dia (conversas, qualificados, links enviados, vendas), aponte a maior perda e proponha 1 melhoria. Mande para a diretora."
+rotina otimizador "0 16 * * 5" "Resultado dos testes" "Use a skill teste-ab para avaliar os testes da semana."
+
+# ── Programador ────────────────────────────────────────────────────────────
+rotina programador "30 8 * * 1" "Checagem do rastreamento" "Use a skill pixel-e-rastreamento (passos 1 e 5): confirme que compras e origens estão chegando. Avise a diretora se algo quebrou."
+
 echo
 echo "Pronto. Veja as rotinas com:  openclaw automations list"
 [[ -z "$AVISO_CANAL" ]] && echo "Dica: rode de novo com AVISO_CANAL e AVISO_PARA para receber os resumos da Diretora no seu celular (apague antes as rotinas da Diretora com 'openclaw automations remove <id>')."
