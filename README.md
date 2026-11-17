@@ -71,6 +71,8 @@ Passo a passo detalhado, com WhatsApp, Telegram e acesso à VPS: **[docs/02-inst
 
 Versão visual, com a planta do escritório, a agenda de rotinas e a instalação: [docs/escritorio-ia.html](docs/escritorio-ia.html)
 
+Prévia 3D simulada do escritório (antes de instalar o Claw3D): [docs/escritorio-3d.html](docs/escritorio-3d.html)
+
 ## Estrutura do repositório
 
 ```
