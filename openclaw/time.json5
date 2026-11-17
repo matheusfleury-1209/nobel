@@ -90,7 +90,11 @@
   // Quem atende cada canal. Ajuste os nomes de conta (accountId) aos que você criar.
   // Só ative depois de conectar os canais (docs/02-instalacao.md, passo 6).
   bindings: [
-    // Seu Telegram (bot do time) → Diretora
+    // Opção A — você fala com a Diretora pelo WhatsApp, no MESMO número do vendedor:
+    // as mensagens do SEU número pessoal vão para a Diretora (a regra por pessoa vence a regra da conta).
+    // Deixe esta linha ACIMA da regra do vendedor.
+    { agentId: "diretor", match: { channel: "whatsapp", accountId: "comercial", peer: { kind: "direct", id: "+55DDDSEUNUMERO" } } },
+    // Opção B — seu Telegram (bot do time) → Diretora
     { agentId: "diretor", match: { channel: "telegram" } },
     // WhatsApp comercial da empresa → Vendedor
     { agentId: "vendedor", match: { channel: "whatsapp", accountId: "comercial" } },

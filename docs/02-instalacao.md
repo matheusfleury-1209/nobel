@@ -128,6 +128,18 @@ openclaw agents bind --agent vendedor --bind whatsapp:comercial
 ```
 Para um segundo número de suporte: repita com `--account suporte` e `--agent atendimento`.
 
+### Prefere falar com a Diretora pelo WhatsApp (sem Telegram)?
+Dá para usar o **mesmo número do vendedor**. As mensagens que vêm do **seu número pessoal** vão para a Diretora, e as dos clientes vão para o Vendedor. Não precisa de chip extra.
+
+1. Em `~/.openclaw/openclaw.json`, dentro de `bindings`, coloque esta regra **acima** da regra do vendedor (troque pelo seu número com +55 e DDD):
+   ```json5
+   { agentId: "diretor", match: { channel: "whatsapp", accountId: "comercial", peer: { kind: "direct", id: "+5562999999999" } } },
+   ```
+2. Em `channels.whatsapp.accounts.comercial.allowFrom`, inclua o seu número (ou `"*"`, se a conta já for aberta para clientes).
+3. `openclaw gateway restart` e mande um "oi" do seu celular para o número da empresa. Quem deve responder é a Diretora.
+
+A regra por pessoa sempre vence a regra da conta. Mesmo assim, teste antes de divulgar o número.
+
 Para clientes desconhecidos poderem chamar o Vendedor, a conta precisa aceitar mensagens de qualquer pessoa (ver bloco `channels.whatsapp` em [`openclaw/time.json5`](../openclaw/time.json5)). Outra opção é deixar no modo pareamento e aprovar cada contato (`openclaw pairing approve whatsapp <CÓDIGO>`).
 
 > **Antes de ligar para clientes reais:** converse com o Vendedor fingindo ser cliente por alguns dias, ajuste o PERFIL e o FAQ, e só então divulgue o número.
@@ -145,6 +157,8 @@ openclaw channels status --probe
 AVISO_CANAL=telegram AVISO_PARA=<SEU_ID_NUMÉRICO_DO_TELEGRAM> ./scripts/criar-rotinas.sh
 openclaw automations list
 ```
+Diretora no WhatsApp? Use `AVISO_CANAL=whatsapp AVISO_PARA=+5562999999999` (o seu número). Confira com `openclaw automations list` e rode uma rotina na mão para testar a entrega (`openclaw automations run <id>`).
+
 Isso cria o briefing das 8h, o caixa diário, os relatórios de anúncios, o calendário de posts, os follow-ups etc. (lista completa no [README](../README.md#rotinas-automáticas)).
 Os resumos da Diretora chegam no seu Telegram.
 
