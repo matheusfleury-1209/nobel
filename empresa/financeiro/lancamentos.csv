@@ -1,0 +1,4 @@
+data,tipo,categoria,descricao,valor,forma_pagamento,status,vencimento,cliente_fornecedor
+2026-11-03,entrada,Vendas,Exemplo - Plano Básico,497.00,pix,pago,2026-11-03,Cliente Exemplo
+2026-11-05,saida,Anúncios,Exemplo - Meta Ads,300.00,cartao,pago,2026-11-05,Meta
+2026-11-20,saida,Aluguel,Exemplo - Aluguel sala,1500.00,boleto,pendente,2026-11-20,Imobiliária Exemplo

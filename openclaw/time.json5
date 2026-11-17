@@ -1,0 +1,117 @@
+// Modelo de referência: como o time fica dentro de ~/.openclaw/openclaw.json
+//
+// O script scripts/instalar-time.sh já aplica quase tudo isso pela linha de comando.
+// Use este arquivo para CONFERIR ou para configurar à mão (mescle com o que já existe no
+// seu openclaw.json — não substitua o arquivo inteiro, ele tem suas chaves e tokens).
+//
+// Depois de editar:  openclaw config validate && openclaw gateway restart
+{
+  agents: {
+    ownership: "explicit",
+    defaults: {
+      // Quem responde quando nenhuma regra de canal (binding) se aplica
+      systemAgent: { agentId: "diretor" },
+    },
+    entries: {
+      diretor: {
+        name: "Helena — Diretora",
+        workspace: "~/.openclaw/workspace-diretor",
+        model: "anthropic/claude-sonnet-5-5",
+        identity: { name: "Helena", emoji: "🧭" },
+        // A Diretora pode acionar todo o time como subagentes
+        subagents: {
+          allowAgents: ["financeiro", "trafego", "social", "criativos", "vendedor", "atendimento", "prospector", "administrativo"],
+          delegationMode: "prefer",
+        },
+      },
+      financeiro: {
+        name: "Otávio — Financeiro",
+        workspace: "~/.openclaw/workspace-financeiro",
+        model: "anthropic/claude-sonnet-5-5",
+        identity: { name: "Otávio", emoji: "💰" },
+      },
+      trafego: {
+        name: "Bia — Tráfego",
+        workspace: "~/.openclaw/workspace-trafego",
+        model: "anthropic/claude-sonnet-5-5",
+        identity: { name: "Bia", emoji: "📈" },
+      },
+      social: {
+        name: "Lua — Social Media",
+        workspace: "~/.openclaw/workspace-social",
+        model: "anthropic/claude-haiku-5-5",
+        identity: { name: "Lua", emoji: "📱" },
+      },
+      criativos: {
+        name: "Duda — Copy & Criativos",
+        workspace: "~/.openclaw/workspace-criativos",
+        model: "anthropic/claude-haiku-5-5",
+        identity: { name: "Duda", emoji: "✍️" },
+      },
+      vendedor: {
+        name: "Rafa — Vendedor",
+        workspace: "~/.openclaw/workspace-vendedor",
+        model: "anthropic/claude-sonnet-5-5",
+        identity: { name: "Rafa", emoji: "🤝" },
+        // Fala com clientes: sem terminal, navegador nem automações
+        tools: { deny: ["exec", "apply_patch", "browser", "canvas", "nodes", "cron"] },
+        // Para isolamento total (requer Docker), descomente:
+        // sandbox: { mode: "all", scope: "agent" },
+      },
+      atendimento: {
+        name: "Clara — Atendimento",
+        workspace: "~/.openclaw/workspace-atendimento",
+        model: "anthropic/claude-haiku-5-5",
+        identity: { name: "Clara", emoji: "💬" },
+        tools: { deny: ["exec", "apply_patch", "browser", "canvas", "nodes", "cron"] },
+      },
+      prospector: {
+        name: "Theo — Prospecção",
+        workspace: "~/.openclaw/workspace-prospector",
+        model: "anthropic/claude-haiku-5-5",
+        identity: { name: "Theo", emoji: "🔎" },
+      },
+      administrativo: {
+        name: "Marcos — Administrativo/RH",
+        workspace: "~/.openclaw/workspace-administrativo",
+        model: "anthropic/claude-haiku-5-5",
+        identity: { name: "Marcos", emoji: "🗂️" },
+      },
+    },
+  },
+
+  // Agentes podem conversar entre si (sessions_send) — só os do time
+  tools: {
+    agentToAgent: {
+      allow: ["diretor", "financeiro", "trafego", "social", "criativos", "vendedor", "atendimento", "prospector", "administrativo"],
+    },
+  },
+
+  // Quem atende cada canal. Ajuste os nomes de conta (accountId) aos que você criar.
+  // Só ative depois de conectar os canais (docs/02-instalacao.md, passo 6).
+  bindings: [
+    // Seu Telegram (bot do time) → Diretora
+    { agentId: "diretor", match: { channel: "telegram" } },
+    // WhatsApp comercial da empresa → Vendedor
+    { agentId: "vendedor", match: { channel: "whatsapp", accountId: "comercial" } },
+    // WhatsApp de suporte → Atendimento
+    { agentId: "atendimento", match: { channel: "whatsapp", accountId: "suporte" } },
+  ],
+
+  channels: {
+    telegram: {
+      enabled: true,
+      // botToken: "<TOKEN DO @BotFather>",   // ou: openclaw channels add --channel telegram --token <token>
+      dmPolicy: "allowlist",
+      allowFrom: ["<SEU_ID_NUMÉRICO_DO_TELEGRAM>"], // só você fala com a Diretora
+    },
+    whatsapp: {
+      accounts: {
+        // Aberto: qualquer cliente pode chamar. Se a sua versão recusar, use dmPolicy: "pairing"
+        // e aprove cada contato com: openclaw pairing approve whatsapp <CÓDIGO>
+        comercial: { dmPolicy: "open", allowFrom: ["*"] },
+        suporte: { dmPolicy: "open", allowFrom: ["*"] },
+      },
+    },
+  },
+}
