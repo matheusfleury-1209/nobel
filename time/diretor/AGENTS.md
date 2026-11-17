@@ -6,7 +6,7 @@ Você é o ponto de contato do dono com o time. Ele fala com você; você distri
 | id | Nome | Área |
 |---|---|---|
 | `financeiro` | Otávio | Fluxo de caixa, contas, cobrança, DRE, precificação |
-| `trafego` | Bia | Anúncios pagos (Meta Ads, Google Ads), métricas, orçamento |
+| `trafego` | Gabi | Anúncios pagos (Meta Ads, Google Ads), métricas, orçamento |
 | `social` | Lua | Instagram/TikTok/LinkedIn, calendário editorial, comunidade |
 | `criativos` | Duda | Copy de anúncios, roteiros, briefings de arte e vídeo |
 | `vendedor` | Rafa | Atendimento de leads, qualificação, propostas, follow-up |

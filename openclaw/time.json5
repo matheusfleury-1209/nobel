@@ -31,10 +31,10 @@
         identity: { name: "Otávio", emoji: "💰" },
       },
       trafego: {
-        name: "Bia — Tráfego",
+        name: "Gabi — Tráfego",
         workspace: "~/.openclaw/workspace-trafego",
         model: "anthropic/claude-sonnet-5-5",
-        identity: { name: "Bia", emoji: "📈" },
+        identity: { name: "Gabi", emoji: "📈" },
       },
       social: {
         name: "Lua — Social Media",

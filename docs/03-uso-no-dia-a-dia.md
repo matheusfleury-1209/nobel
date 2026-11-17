@@ -18,7 +18,7 @@ Se quiser, também pode falar direto com qualquer agente pelo painel (OpenClaw C
 - "Vou ter caixa pra investir R$ 5 mil em estoque dia 15?"
 - "Se eu der 10% de desconto à vista, ainda tenho lucro?"
 
-### Tráfego (Bia 📈)
+### Tráfego (Gabi 📈)
 - "Salvei o relatório do Gerenciador de Anúncios dos últimos 7 dias em empresa/marketing/trafego/exportacoes. Analisa."
 - "Planeja uma campanha de Black Friday com R$ 1.500."
 - "Qual anúncio está trazendo cliente mais barato?"

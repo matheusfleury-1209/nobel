@@ -7,8 +7,8 @@ Depois, se quiser, dá para automatizar cada fonte. Vá por etapas.
 
 | Dado | De onde exportar | Onde salvar | Quem usa |
 |---|---|---|---|
-| Resultados de anúncios Meta | Gerenciador de Anúncios → Relatórios → Exportar (CSV) | `empresa/marketing/trafego/exportacoes/` | Bia |
-| Resultados Google Ads | Google Ads → Relatórios → Download (CSV) | `empresa/marketing/trafego/exportacoes/` | Bia |
+| Resultados de anúncios Meta | Gerenciador de Anúncios → Relatórios → Exportar (CSV) | `empresa/marketing/trafego/exportacoes/` | Gabi |
+| Resultados Google Ads | Google Ads → Relatórios → Download (CSV) | `empresa/marketing/trafego/exportacoes/` | Gabi |
 | Extrato bancário | App/internet banking → Extrato → CSV ou OFX | `empresa/financeiro/extratos/` | Otávio |
 | Métricas do Instagram | Meta Business Suite → Insights → Exportar | `empresa/marketing/social/` | Lua |
 | Vendas da plataforma (Hotmart, Shopify, Nuvemshop…) | Relatório de vendas (CSV) | `empresa/financeiro/extratos/` | Otávio / Rafa |

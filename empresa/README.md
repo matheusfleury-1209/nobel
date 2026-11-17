@@ -7,7 +7,7 @@ Todos os agentes enxergam esta pasta (o instalador cria um atalho `empresa/` den
 | `PERFIL-DA-EMPRESA.md` | você | Tudo sobre o negócio — **preencha primeiro** |
 | `financeiro/` | Otávio | `lancamentos.csv`, `extratos/`, `cobrancas/` |
 | `vendas/` | Rafa | `leads.csv` (CRM), `propostas/`, `followups/` |
-| `marketing/` | Bia, Lua, Duda | `campanhas.csv`, `calendario-editorial.csv`, `trafego/`, `social/`, `criativos/` |
+| `marketing/` | Gabi, Lua, Duda | `campanhas.csv`, `calendario-editorial.csv`, `trafego/`, `social/`, `criativos/` |
 | `atendimento/` | Clara | `tickets.csv`, `faq.md` |
 | `prospeccao/` | Theo | `lista-alvos.csv`, `concorrentes/` |
 | `admin/` | Marcos | `obrigacoes.csv`, `contratos/`, `rh/` |

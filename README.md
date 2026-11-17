@@ -13,7 +13,7 @@ diretora, financeiro, gestor de tráfego, social media, copywriter, vendedor, at
 |---|---|---|---|---|
 | 🧭 | **Helena** (`diretor`) | Diretora de Operações | Recebe seus pedidos, delega, cobra o time e te manda um resumo | Briefing seg–sex 8h; revisão semanal sexta 17h |
 | 💰 | **Otávio** (`financeiro`) | Financeiro | Caixa, contas a pagar e receber, conciliação, DRE, cobrança, precificação | Caixa 7h30; cobranças 10h; fechamento no dia 1 |
-| 📈 | **Bia** (`trafego`) | Gestora de tráfego | Meta Ads e Google Ads: relatórios, CPL/CPA/ROAS, otimizações, planejamento | Relatório 9h; otimização às segundas |
+| 📈 | **Gabi** (`trafego`) | Gestora de tráfego | Meta Ads e Google Ads: relatórios, CPL/CPA/ROAS, otimizações, planejamento | Relatório 9h; otimização às segundas |
 | 📱 | **Lua** (`social`) | Social media | Calendário editorial, legendas, roteiros de Reels, comentários | Calendário às segundas; posts de amanhã às 14h |
 | ✍️ | **Duda** (`criativos`) | Copy e criativos | Copies de anúncio A/B, briefings de arte e vídeo, prompts de imagem | Fila de pedidos às 15h |
 | 🤝 | **Rafa** (`vendedor`) | Vendedor | Atende leads no WhatsApp, qualifica, faz proposta, contorna objeções e faz follow-up | Follow-ups às 9h e 15h |

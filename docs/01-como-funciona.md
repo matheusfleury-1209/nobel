@@ -21,7 +21,7 @@ Ou seja: **o escritório 3D é a "vitrine"; quem trabalha é o OpenClaw.** Dá p
         └────────┬─────────┘
    ┌──────┬──────┼──────┬──────┬──────┬──────┬──────┐
    ▼      ▼      ▼      ▼      ▼      ▼      ▼      ▼
- 💰Otávio 📈Bia  📱Lua  ✍️Duda 🤝Rafa 💬Clara 🔎Theo 🗂️Marcos
+ 💰Otávio 📈Gabi 📱Lua  ✍️Duda 🤝Rafa 💬Clara 🔎Theo 🗂️Marcos
  financ.  tráfego social criat. vendas atend.  prosp. admin/RH
                                │       │
                                └───┬───┘
