@@ -123,7 +123,7 @@ NPM_BIN="$(command -v npm)"
 "$NPM_BIN" install
 [[ -f .env ]] || cp .env.example .env
 
-TOKEN_GATEWAY="$(openclaw gateway auth-token --show 2>/dev/null | tail -n 1 | tr -d '[:space:]' || true)"
+TOKEN_GATEWAY="$(openclaw gateway auth-token --show 2>/dev/null | grep -oE '[A-Za-z0-9._~+/=-]{24,}' | tail -n 1 || true)"
 if [[ -z "$TOKEN_GATEWAY" ]]; then
   aviso "Não consegui ler o token do gateway automaticamente."
   read -rsp "→ Cole aqui o token (rode 'openclaw gateway auth-token --show' em outro terminal): " TOKEN_GATEWAY; echo
@@ -134,7 +134,7 @@ grava_env() { # grava_env CHAVE VALOR
 }
 grava_env HOST 127.0.0.1
 grava_env PORT "$CLAW3D_PORTA"
-grava_env CLAW3D_GATEWAY_URL ws://localhost:18789
+grava_env CLAW3D_GATEWAY_URL ws://127.0.0.1:18789   # 127.0.0.1 e não "localhost" (o Node pode tentar IPv6 e falhar)
 grava_env CLAW3D_GATEWAY_TOKEN "$TOKEN_GATEWAY"
 grava_env CLAW3D_GATEWAY_ADAPTER_TYPE openclaw
 # Sem senha extra: o escritório só escuta em 127.0.0.1 e só é aberto pelo Tailscale (rede privada sua).
