@@ -31,7 +31,7 @@ Ou seja: **o escritório 3D é a "vitrine"; quem trabalha é o OpenClaw.** Dá p
       Todos leem e escrevem na mesma pasta:  empresa/
       (planilhas CSV de caixa, leads, campanhas, calendário, tickets…)
 
-      Claw3D ──(lê o OpenClaw)──► escritório 3D com os 13 agentes
+      Claw3D ──(lê o OpenClaw)──► escritório 3D com os 16 agentes
 ```
 
 ## As peças, em linguagem simples

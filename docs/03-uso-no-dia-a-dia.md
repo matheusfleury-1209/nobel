@@ -52,6 +52,18 @@ Se quiser, também pode falar direto com qualquer agente pelo painel (OpenClaw C
 - "Faz um rascunho de contrato de prestação de serviço para o cliente X."
 - "Quero contratar um assistente comercial. Monta a vaga."
 
+### Recuperação de vendas (Bia 🔁)
+- "Quem gerou Pix ontem e não pagou?"
+- "Monta a fila de recuperação de hoje para a Hanielly."
+
+### Sucesso da aluna (Nina 🎓)
+- "Quais alunas pararam de assistir?"
+- "Quem já terminou as aulas e precisa de vaga de estágio?"
+
+### Parcerias (Pedro 🔗)
+- "Prepara proposta de parceria para 3 clínicas de Anápolis."
+- "Monta 3 opções de programa de indicação com o custo de cada uma."
+
 ## Rotina sugerida para você (15 min/dia)
 1. **8h** — leia o briefing da Helena no Telegram.
 2. Responda às aprovações ("aprovo 1 e 2").

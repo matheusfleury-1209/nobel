@@ -11,6 +11,9 @@ Todos os agentes enxergam esta pasta (o instalador cria um atalho `empresa/` den
 | `atendimento/` | Clara | `tickets.csv`, `faq.md` |
 | `prospeccao/` | Theo | `lista-alvos.csv`, `concorrentes/` |
 | `admin/` | Marcos | `obrigacoes.csv`, `contratos/`, `rh/` |
+| `vendas/recuperacao/` | Bia | `recuperacao.csv`, filas diárias de recuperação |
+| `alunas/` | Nina | `alunas.csv`, `estagio.csv`, `depoimentos/`, mensagens do dia |
+| `parcerias/` | Pedro | `parceiros.csv`, `propostas/` |
 | `relatorios/` | todos | relatórios diários/semanais/mensais |
 | `aprovacoes/pendentes.md` | todos → você | o que precisa da sua decisão |
 

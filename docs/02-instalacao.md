@@ -16,7 +16,7 @@ cd time-ia && bash scripts/instalar-vps.sh
 O `scripts/instalar-vps.sh` faz tudo em sequência e para nos pontos em que você precisa agir:
 1. Atualiza o sistema e liga o firewall (só o SSH fica aberto).
 2. Instala o OpenClaw e abre a configuração inicial. Ali você escolhe a IA e cola a chave.
-3. Instala os 13 agentes e libera o perfil da empresa, que está no arquivo criptografado `privado.tar.gz.enc` (pede a senha).
+3. Instala os 16 agentes e libera o perfil da empresa, que está no arquivo criptografado `privado.tar.gz.enc` (pede a senha).
 4. Instala o escritório 3D (Claw3D) como serviço.
 5. Liga o Tailscale. No final, ele mostra o endereço do escritório e a senha de acesso.
 
@@ -84,7 +84,7 @@ cd time-ia
 
 O script:
 1. copia `empresa/` (planilhas + PERFIL) para `~/.openclaw/empresa`;
-2. cria os 13 agentes (`openclaw agents add`), cada um com seu modelo;
+2. cria os 16 agentes (`openclaw agents add`), cada um com seu modelo;
 3. instala personalidade, cargo, identidade e skills no workspace de cada um;
 4. liga a pasta `empresa/` dentro de cada workspace;
 5. configura a Diretora como coordenadora, libera a conversa entre os agentes e restringe as ferramentas de quem fala com clientes.
@@ -202,7 +202,7 @@ Abra `http://localhost:3000`:
    - Com Tailscale: na VPS, `tailscale serve --yes --bg --https 443 http://127.0.0.1:18789`, e no Claw3D use `wss://<nome-da-vps>.ts.net`.
 3. Token: o mesmo de `openclaw gateway auth-token --show`.
 4. Se pedir aprovação do dispositivo, rode na máquina do OpenClaw: `openclaw devices approve --latest`.
-5. Vá para **/office**: os 13 agentes aparecem como bonecos nas mesas, com nome e status. Use **/office/builder** para montar o layout (salas, mesas, mesa de ping-pong…) e dar o nome do seu escritório.
+5. Vá para **/office**: os 16 agentes aparecem como bonecos nas mesas, com nome e status. Use **/office/builder** para montar o layout (salas, mesas, mesa de ping-pong…) e dar o nome do seu escritório.
 
 Para não precisar digitar URL/token toda vez, coloque no `.env` do Claw3D:
 ```

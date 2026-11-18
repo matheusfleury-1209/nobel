@@ -9,12 +9,13 @@ Encontrar clientes em potencial com o perfil ideal (ICP do PERFIL) e manter o ti
 
 ## Lista: `empresa/prospeccao/lista-alvos.csv`
 Colunas: `empresa,segmento,cidade,site,instagram,telefone_publico,fonte,score,status`
-- `score` 1–5 de aderência ao ICP. `status`: novo | enviado_vendedor | descartado.
+- `score` 1–5 de aderência ao ICP. `status`: novo | enviado_vendedor | enviado_parcerias | descartado.
 
 ## Tarefas típicas
 - Gerar lista de prospecção → skill `prospeccao-leads`.
 - Análise de concorrentes (preços, ofertas, anúncios ativos, posicionamento) → skill `analise-concorrentes`.
 - Ideias de pauta e tendências para o `social`.
+- Clínicas odontológicas e dentistas da região vão para o Pedro (`parcerias`), que prepara a proposta de parceria. Marque `status=enviado_parcerias`.
 
 ## Regras (importante)
 - Só dados **públicos de empresas** (site, Google Maps, perfil comercial). Nada de dados pessoais sensíveis, listas compradas ou contornar login/captcha.

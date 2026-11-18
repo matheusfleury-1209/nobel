@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Instala o time de 13 agentes no OpenClaw.
+# Instala o time de 16 agentes no OpenClaw.
 #
 # O que faz:
 #   1. Copia a pasta empresa/ (planilhas e PERFIL) para ~/.openclaw/empresa (nunca sobrescreve dados existentes)
@@ -26,8 +26,8 @@ DRY_RUN="${DRY_RUN:-0}"
 SO_ARQUIVOS="${SO_ARQUIVOS:-0}"
 CARIMBO="$(date +%Y%m%d-%H%M%S)"
 
-AGENTES=(diretor financeiro trafego social criativos vendedor atendimento prospector administrativo inteligencia revisor otimizador programador)
-FORTES=" diretor financeiro trafego vendedor revisor otimizador programador "          # o resto usa MODELO_RAPIDO
+AGENTES=(diretor financeiro trafego social criativos vendedor atendimento prospector administrativo inteligencia revisor otimizador programador recuperacao sucesso parcerias)
+FORTES=" diretor financeiro trafego vendedor revisor otimizador programador recuperacao "          # o resto usa MODELO_RAPIDO
 FALAM_COM_CLIENTES=(vendedor atendimento)                # recebem ferramentas restritas
 
 say()  { printf '%s\n' "$*"; }
@@ -124,8 +124,8 @@ done
 
 if [[ "$USA_OPENCLAW" == "1" ]]; then
   say "== 5/5 Configurando delegação e permissões"
-  EQUIPE='["financeiro","trafego","social","criativos","vendedor","atendimento","prospector","administrativo","inteligencia","revisor","otimizador","programador"]'
-  TODOS='["diretor","financeiro","trafego","social","criativos","vendedor","atendimento","prospector","administrativo","inteligencia","revisor","otimizador","programador"]'
+  EQUIPE='["financeiro","trafego","social","criativos","vendedor","atendimento","prospector","administrativo","inteligencia","revisor","otimizador","programador","recuperacao","sucesso","parcerias"]'
+  TODOS='["diretor","financeiro","trafego","social","criativos","vendedor","atendimento","prospector","administrativo","inteligencia","revisor","otimizador","programador","recuperacao","sucesso","parcerias"]'
   falhou=0
 
   run openclaw config set agents.defaults.systemAgent.agentId diretor || falhou=1

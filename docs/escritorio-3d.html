@@ -121,14 +121,14 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
 </style>
 
 <div id="app">
-  <canvas id="cena" aria-label="Prévia 3D da sede com os 13 agentes de IA em 9 setores"></canvas>
+  <canvas id="cena" aria-label="Prévia 3D da sede com os 16 agentes de IA em 9 setores"></canvas>
   <div id="tags"></div>
 
   <div class="hud-top">
     <div class="brand">
       <span class="eyebrow">Prévia simulada · 24 horas · 9 setores</span>
       <h1>Sede Nobel</h1>
-      <div class="team"><div class="faces" id="faces"></div><span class="count"><b>13</b> agentes de IA</span></div>
+      <div class="team"><div class="faces" id="faces"></div><span class="count"><b>16</b> agentes de IA</span></div>
       <p class="note">O time trabalha dia e noite, todos os dias, cada um no seu setor. Arraste para mover, use + e − ou pinça para o zoom e toque num nome para ver a ficha.</p>
     </div>
     <div class="resumo" aria-live="polite">
@@ -165,11 +165,11 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
   var SETORES = {
     comando: { nome: "Sala de Comando", cor: "#7C9CFF", r: [-22, -15, -12, -1.5], rot: [-17, -2.1] },
     fin:     { nome: "Financeiro", cor: "#34D399", r: [-12, -15, -1.5, -8.25], rot: [-7, -8.9] },
-    adm:     { nome: "Administrativo e RH", cor: "#F59E0B", r: [-12, -8.25, -1.5, -1.5], rot: [-9.6, -2.1] },
-    qual:    { nome: "Qualidade e Melhorias", cor: "#FB7185", r: [1.5, -15, 12, -8.25], rot: [10.6, -8.9] },
-    intel:   { nome: "Inteligência de Mercado", cor: "#A78BFA", r: [1.5, -8.25, 12, -1.5], rot: [4.4, -2.1] },
+    adm:     { nome: "Administrativo e RH", cor: "#F59E0B", r: [-12, -8.25, -1.5, -1.5], rot: [-4.2, -2.1] },
+    qual:    { nome: "Qualidade e Melhorias", cor: "#FB7185", r: [1.5, -15, 12, -8.25], rot: [11.6, -12.6] },
+    intel:   { nome: "Mercado e Parcerias", cor: "#A78BFA", r: [1.5, -8.25, 12, -1.5], rot: [4.4, -2.1] },
     tec:     { nome: "Tecnologia · Data Center", cor: "#38BDF8", r: [12, -15, 22, -1.5], rot: [17, -2.1] },
-    mkt:     { nome: "Marketing Lab", cor: "#F472B6", r: [-22, 1.5, -1.5, 7.75], rot: [-4.8, 7.2] },
+    mkt:     { nome: "Marketing Lab", cor: "#F472B6", r: [-22, 1.5, -1.5, 7.75], rot: [-5, 2.1] },
     atend:   { nome: "Central de Atendimento", cor: "#22D3EE", r: [-22, 7.75, -1.5, 15], rot: [-12, 14.6] },
     lounge:  { nome: "Lounge e Café", cor: "#FCD34D", r: [1.5, 1.5, 22, 15], rot: [12, 14.6] }
   };
@@ -192,11 +192,14 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
       mesa: [8.5, -13.2], ida: [[8.5, -10.5], [0, -10.5]],
       faz: "Lê as conversas que não viraram venda, mede o funil e propõe testes A/B.", pede: "Onde estamos perdendo vendas esta semana?" },
     { id: "inteligencia", nome: "Íris", cargo: "Inteligência de anúncios", setor: "intel", cor: "#0F766E", pele: "#D9A27C", cabelo: "#2A1A10", longo: true,
-      mesa: [4.5, -6], ida: [[4.5, -3.0], [7, -3.0], [7, 0]],
+      mesa: [3.5, -6], ida: [[3.5, -3.0], [7, -3.0], [7, 0]],
       faz: "Garimpa a Biblioteca de Anúncios e entrega modelos honestos do que funciona no mercado de ASB.", pede: "O que os concorrentes estão anunciando que funciona?" },
     { id: "prospector", nome: "Theo", cargo: "Prospecção e mercado", setor: "intel", cor: "#5E6A12", pele: "#5C3A26", cabelo: "#141414",
-      mesa: [9, -6], ida: [[9, -3.0], [7, -3.0], [7, 0]],
+      mesa: [6.8, -6], ida: [[6.8, -3.0], [7, -3.0], [7, 0]],
       faz: "Concorrentes, cidades de Goiás com demanda e clínicas que aceitam estagiárias.", pede: "Lista as clínicas da região que recebem estagiárias." },
+    { id: "parcerias", nome: "Pedro", cargo: "Parcerias e indicações", setor: "intel", cor: "#65A30D", pele: "#A86F48", cabelo: "#2A1B10",
+      mesa: [10.1, -6], ida: [[10.1, -3.0], [7, -3.0], [7, 0]],
+      faz: "Clínicas parceiras para o estágio e para indicação, dentistas, afiliados da Hotmart e o “indique uma amiga”.", pede: "Prepara proposta de parceria para 3 clínicas de Anápolis." },
     { id: "programador", nome: "Léo", cargo: "Programador", setor: "tec", cor: "#334155", pele: "#E2B591", cabelo: "#5B3A1E",
       mesa: [18, -5.5], ida: [[14.5, -3.0], [14.5, 0]],
       faz: "Pixel e rastreamento, links da Hotmart, ligação com o CRM Nobel e automações.", pede: "As vendas estão chegando na Meta e no CRM?" },
@@ -214,7 +217,13 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
       faz: "Primeiro atendimento dos leads, triagem do estágio e passagem para a Hanielly.", pede: "Quantos leads você passou para a Hanielly hoje?" },
     { id: "atendimento", nome: "Clara", cargo: "Atendimento e pós-venda", setor: "atend", cor: "#2560A3", pele: "#F3D2B5", cabelo: "#5A3825", longo: true, cliente: "Atendendo alunas",
       mesa: [-12, 10.6], ida: [[-12, 13.4], [-3, 13.4], [-3, 11], [0, 11]],
-      faz: "Dúvidas de alunas, boas-vindas, reembolso pela Hotmart e pesquisa de satisfação.", pede: "Alguma aluna com problema hoje?" }
+      faz: "Dúvidas de alunas, boas-vindas, reembolso pela Hotmart e pesquisa de satisfação.", pede: "Alguma aluna com problema hoje?" },
+    { id: "recuperacao", nome: "Bia", cargo: "Recuperação de vendas", setor: "atend", cor: "#E11D48", pele: "#C88B62", cabelo: "#1C1C1C", longo: true,
+      mesa: [-8, 10.6], ida: [[-8, 13.4], [-3, 13.4], [-3, 11], [0, 11]],
+      faz: "Monta a fila de quem quase comprou (checkout abandonado, Pix pendente, link sem resposta) com a mensagem pronta para a Hanielly.", pede: "Quem gerou Pix ontem e não pagou?" },
+    { id: "sucesso", nome: "Nina", cargo: "Sucesso da aluna e estágio", setor: "atend", cor: "#0891B2", pele: "#F2C6A0", cabelo: "#7A4A2A", longo: true,
+      mesa: [-4.6, 10.6], ida: [[-4.6, 13.4], [-3, 13.4], [-3, 11], [0, 11]],
+      faz: "Acompanha as alunas nas aulas, chama quem parou, organiza o estágio de 60h e o certificado de 300h.", pede: "Quais alunas pararam de assistir?" }
   ];
   var POR_ID = {}; AG.forEach(function (a) { POR_ID[a.id] = a; });
   var UTEIS = [1, 2, 3, 4, 5], SEMPRE = [0, 1, 2, 3, 4, 5, 6];
@@ -237,6 +246,12 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
     { a: "inteligencia", m: 570, d: [1, 4], n: "Garimpo de anúncios" },
     { a: "revisor", m: 690, d: [1], n: "Auditoria semanal" },
     { a: "otimizador", m: 1050, d: UTEIS, n: "Funil do dia" },
+    { a: "recuperacao", m: 630, d: SEMPRE, n: "Fila de recuperação" },
+    { a: "recuperacao", m: 990, d: SEMPRE, n: "Fila de recuperação" },
+    { a: "sucesso", m: 600, d: UTEIS, n: "Jornada das alunas" },
+    { a: "sucesso", m: 840, d: [3], n: "Agenda de estágios" },
+    { a: "parcerias", m: 660, d: [2, 4], n: "Pipeline de parcerias" },
+    { a: "parcerias", m: 660, d: [5], n: "Indicação e afiliados" },
     { a: "financeiro", m: 30, d: SEMPRE, n: "Conciliação do dia" },
     { a: "inteligencia", m: 90, d: SEMPRE, n: "Garimpo noturno de anúncios" },
     { a: "programador", m: 120, d: SEMPRE, n: "Checagem técnica noturna" },
@@ -497,7 +512,7 @@ h1 { margin: 0; font: 800 clamp(1.25rem, 3.2vw, 1.7rem)/1.05 var(--f-display); l
       ctx.fillStyle = s.cor; ctx.fillRect(0, 0, W, 8);
       ctx.font = "500 20px IBM Plex Mono, monospace"; ctx.fillStyle = s.cor; ctx.fillText(s.nome.toUpperCase(), 24, 46);
       ctx.fillStyle = "#A3AFC8"; ctx.fillText(hhmm(st.t), W - 110, 46);
-      AG.filter(function (a) { return a.setor === chave; }).forEach(function (a, i) { linhaStatus(ctx, a, 24, 100 + i * 46); });
+      AG.filter(function (a) { return a.setor === chave; }).forEach(function (a, i) { linhaStatus(ctx, a, 24, 88 + i * 40); });
       t.tex.needsUpdate = true;
     };
   }

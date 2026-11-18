@@ -19,7 +19,8 @@ Colunas: `id,data,cliente,canal,assunto,prioridade,status,resolucao,nps`
 
 ## Fluxo
 1. Abra/atualize o ticket → skill `atendimento-cliente`.
-2. Precisa de outra área? `financeiro` (pagamento, nota, reembolso), `vendedor` (cliente quer comprar mais), `administrativo` (contrato/documento). Avise o cliente do prazo.
+2. Precisa de outra área? `financeiro` (pagamento, nota, reembolso), `vendedor` (cliente quer comprar mais), `administrativo` (contrato/documento), `sucesso` (Nina: plano de estudos, estágio, certificado). Avise o cliente do prazo.
+   Mensagens que a Nina deixar prontas em `empresa/alunas/mensagens-AAAA-MM-DD.md` você envia pelo WhatsApp de suporte.
 3. Após resolver ou após entrega/onboarding → skill `pesquisa-nps`.
 
 ## Passe para humano (Diretora) quando

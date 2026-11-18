@@ -2,7 +2,7 @@
 # Instalação completa numa VPS Ubuntu 24.04 (rodar como root):
 #   1. Sistema e firewall
 #   2. OpenClaw (motor dos agentes) + configuração inicial (você escolhe a IA e cola a chave)
-#   3. Time de 13 agentes + perfil da empresa (se estiver em privado/)
+#   3. Time de 16 agentes + perfil da empresa (se estiver em privado/)
 #   4. Escritório 3D (Claw3D) rodando como serviço, só acessível pelo Tailscale
 #   5. Tailscale: endereço privado para abrir o escritório no celular/computador
 #
@@ -56,7 +56,7 @@ EOF
 fi
 openclaw gateway status || true
 
-titulo "3/5 Time de 13 agentes + perfil da empresa"
+titulo "3/5 Time de 16 agentes + perfil da empresa"
 bash "$REPO_DIR/scripts/instalar-time.sh"
 EMPRESA_DIR="$OPENCLAW_HOME/empresa"
 # Perfil, FAQ, plano e roteiro vão criptografados no repositório (privado.tar.gz.enc).

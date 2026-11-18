@@ -94,6 +94,17 @@ rotina otimizador "0 16 * * 5" "Resultado dos testes" "Use a skill teste-ab para
 # ── Programador ────────────────────────────────────────────────────────────
 rotina programador "30 8 * * 1" "Checagem do rastreamento" "Use a skill pixel-e-rastreamento (passos 1 e 5): confirme que compras e origens estão chegando. Avise a diretora se algo quebrou."
 
+# ── Recuperação de vendas ──────────────────────────────────────────────────
+rotina recuperacao "30 10,16 * * *" "Fila de recuperação" "Use a skill recuperacao-checkout e mande a fila do dia para a diretora repassar à Hanielly."
+
+# ── Sucesso da aluna e estágio ─────────────────────────────────────────────
+rotina sucesso "0 10 * * 1-5" "Jornada das alunas" "Use a skill jornada-aluna e deixe as mensagens do dia prontas para a Clara enviar."
+rotina sucesso "0 14 * * 3"   "Agenda de estágios" "Use a skill estagio-certificado: vagas, horas e certificados da semana."
+
+# ── Parcerias e indicações ─────────────────────────────────────────────────
+rotina parcerias "0 11 * * 2,4" "Pipeline de parcerias" "Use a skill parceria-clinicas: prepare até 5 propostas novas e acompanhe as conversas em andamento."
+rotina parcerias "0 11 * * 5"   "Indicação e afiliados" "Use a skill afiliados-indicacao e mande o resumo da semana para a diretora."
+
 # ── Turno de 24 horas, todos os dias (MODO_24H=1 é o padrão; use MODO_24H=0 para desligar) ──
 # Cada rotina é uma execução paga da IA: defina um limite de gasto mensal no provedor.
 if [[ "${MODO_24H:-1}" == "1" ]]; then

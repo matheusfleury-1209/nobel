@@ -20,7 +20,7 @@
         identity: { name: "Helena", emoji: "🧭" },
         // A Diretora pode acionar todo o time como subagentes
         subagents: {
-          allowAgents: ["financeiro", "trafego", "social", "criativos", "vendedor", "atendimento", "prospector", "administrativo", "inteligencia", "revisor", "otimizador", "programador"],
+          allowAgents: ["financeiro", "trafego", "social", "criativos", "vendedor", "atendimento", "prospector", "administrativo", "inteligencia", "revisor", "otimizador", "programador", "recuperacao", "sucesso", "parcerias"],
           delegationMode: "prefer",
         },
       },
@@ -101,13 +101,31 @@
         model: "anthropic/claude-sonnet-5-5",
         identity: { name: "Léo", emoji: "🛠️" },
       },
+      recuperacao: {
+        name: "Bia — Recuperação de Vendas",
+        workspace: "~/.openclaw/workspace-recuperacao",
+        model: "anthropic/claude-sonnet-5-5",
+        identity: { name: "Bia", emoji: "🔁" },
+      },
+      sucesso: {
+        name: "Nina — Sucesso da Aluna e Estágio",
+        workspace: "~/.openclaw/workspace-sucesso",
+        model: "anthropic/claude-haiku-5-5",
+        identity: { name: "Nina", emoji: "🎓" },
+      },
+      parcerias: {
+        name: "Pedro — Parcerias e Indicações",
+        workspace: "~/.openclaw/workspace-parcerias",
+        model: "anthropic/claude-haiku-5-5",
+        identity: { name: "Pedro", emoji: "🔗" },
+      },
     },
   },
 
   // Agentes podem conversar entre si (sessions_send) — só os do time
   tools: {
     agentToAgent: {
-      allow: ["diretor", "financeiro", "trafego", "social", "criativos", "vendedor", "atendimento", "prospector", "administrativo", "inteligencia", "revisor", "otimizador", "programador"],
+      allow: ["diretor", "financeiro", "trafego", "social", "criativos", "vendedor", "atendimento", "prospector", "administrativo", "inteligencia", "revisor", "otimizador", "programador", "recuperacao", "sucesso", "parcerias"],
     },
   },
 

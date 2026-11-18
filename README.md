@@ -1,11 +1,11 @@
 # Time de IA para gerir a empresa
 
-Kit pronto para montar um **time de 13 funcionários de IA**, igual ao do vídeo (escritório 3D com os agentes trabalhando):
-diretora, financeiro, gestor de tráfego, social media, copywriter, vendedor, atendimento, prospecção, administrativo/RH, inteligência de anúncios, revisora de qualidade, especialista em melhorias e programador.
+Kit pronto para montar um **time de 16 funcionários de IA**, igual ao do vídeo (escritório 3D com os agentes trabalhando):
+diretora, financeiro, gestor de tráfego, social media, copywriter, vendedor, atendimento, prospecção, administrativo/RH, inteligência de anúncios, revisora de qualidade, especialista em melhorias, programador, recuperação de vendas, sucesso da aluna e parcerias.
 
 - **Motor dos agentes:** [OpenClaw](https://github.com/openclaw/openclaw), de código aberto. É a aba "OpenClaw Control" do vídeo.
 - **Escritório 3D:** [Claw3D](https://github.com/iamlukethedev/Claw3D), de código aberto e opcional. É a aba "Claw3D" do vídeo.
-- **Este repositório:** os 13 agentes já configurados (personalidade, cargo, regras e procedimentos), as planilhas da empresa, as rotinas automáticas e o instalador.
+- **Este repositório:** os 16 agentes já configurados (personalidade, cargo, regras e procedimentos), as planilhas da empresa, as rotinas automáticas e o instalador.
 
 ## O time
 
@@ -24,6 +24,9 @@ diretora, financeiro, gestor de tráfego, social media, copywriter, vendedor, at
 | 🛡️ | **Vera** (`revisor`) | Revisora de qualidade | Confere erros e riscos de tudo que vai a público, antes da sua aprovação | Auditoria às segundas 11h30 |
 | 🧪 | **Caio** (`otimizador`) | Especialista em melhorias | Audita conversas, mede o funil, propõe e avalia testes A/B | Funil seg–sex 17h30; testes sexta 16h |
 | 🛠️ | **Léo** (`programador`) | Programador | Pixel e rastreamento, integrações (Hotmart, CRM), automações | Checagem do rastreamento segunda 8h30 |
+| 🔁 | **Bia** (`recuperacao`) | Recuperação de vendas | Checkout abandonado, Pix/boleto pendente e link sem resposta: monta a fila do dia com a mensagem pronta para a vendedora | Todo dia 10h30 e 16h30 |
+| 🎓 | **Nina** (`sucesso`) | Sucesso da aluna e estágio | Acompanha as aulas, chama quem parou, organiza o estágio de 60h e o certificado, coleta depoimentos | Seg–sex 10h; estágios quarta 14h |
+| 🔗 | **Pedro** (`parcerias`) | Parcerias e indicações | Clínicas parceiras (estágio e indicação), dentistas, afiliados da Hotmart, "indique uma amiga" | Terça e quinta 11h; indicação sexta 11h |
 
 Os nomes são sugestões: troque em `time/<agente>/IDENTITY.md`.
 
@@ -114,6 +117,9 @@ Fuso: America/Sao_Paulo. Para mudar, edite `scripts/criar-rotinas.sh`.
 | Seg–sex 14h | Social | Posts de amanhã |
 | Seg–sex 15h | Criativos | Fila de pedidos |
 | Sexta 17h | Diretora | Revisão semanal → seu celular |
+| Todo dia 10h30 e 16h30 | Recuperação | Fila de vendas para recuperar |
+| Seg–sex 10h / quarta 14h | Sucesso da aluna | Jornada das alunas / agenda de estágios |
+| Terça e quinta 11h / sexta 11h | Parcerias | Propostas de parceria / indicação e afiliados |
 | Dia 1, 9h–10h | Financeiro / Prospecção | Fechamento do mês / concorrentes |
 
 ### Turno de 24 horas

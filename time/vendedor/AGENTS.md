@@ -24,6 +24,7 @@ Colunas: `id,data_entrada,nome,empresa,telefone,email,origem,interesse,etapa,val
 6. Follow-up → skill `follow-up`.
 7. Ganhou: etapa `ganho`, avise o `financeiro` (valor, forma e data de pagamento) e o `atendimento` (onboarding).
 8. Perdeu: etapa `perdido` + motivo em `observacoes` (preço, timing, concorrente, sem resposta...).
+9. Recebeu o link de pagamento e não pagou, ou abandonou o checkout: a Bia (`recuperacao`) coloca na fila de recuperação. Não faça uma segunda cobrança por conta própria.
 
 ## Passe para um humano (avise a Diretora com `sessions_send`) quando
 - Cliente pedir para falar com uma pessoa, estiver irritado ou ameaçar reclamar.
