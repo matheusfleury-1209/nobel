@@ -8,10 +8,12 @@ Tempo estimado: 1 a 2 horas na primeira vez. Não precisa saber programar, mas v
 Numa VPS **Ubuntu 24.04** nova, logado como root (pelo terminal do painel da VPS ou por SSH):
 
 ```bash
-apt-get update && apt-get install -y git
+apt-get update && apt-get install -y git tmux
+tmux new -s instalar
 git clone -b claude/ai-team-business-management-1yfh0h https://github.com/matheusfleury-1209/nobel.git time-ia
 cd time-ia && bash scripts/instalar-vps.sh
 ```
+O `tmux` mantém a instalação rodando mesmo se o terminal do navegador cair. Se cair, abra o terminal de novo e digite `tmux attach -t instalar` para voltar onde estava.
 
 O `scripts/instalar-vps.sh` faz tudo em sequência e para nos pontos em que você precisa agir:
 1. Atualiza o sistema e liga o firewall (só o SSH fica aberto).

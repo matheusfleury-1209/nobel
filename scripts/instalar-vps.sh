@@ -37,8 +37,12 @@ ok "firewall ativo (só SSH aberto)"
 titulo "2/5 OpenClaw"
 if ! command -v openclaw >/dev/null 2>&1; then
   curl -fsSL https://openclaw.ai/install.sh | bash
-  hash -r
 fi
+# O instalador pode colocar o openclaw/node numa pasta que só entra no PATH num terminal novo
+for d in "$HOME/.local/bin" "$HOME/.npm-global/bin" "$HOME/.openclaw/bin" /usr/local/bin; do
+  [[ -d "$d" && ":$PATH:" != *":$d:"* ]] && PATH="$d:$PATH"
+done
+export PATH; hash -r
 command -v openclaw >/dev/null 2>&1 || { aviso "openclaw não apareceu no PATH. Feche e abra o terminal e rode este script de novo."; exit 1; }
 ok "OpenClaw instalado: $(openclaw --version 2>/dev/null || echo 'versão desconhecida')"
 
