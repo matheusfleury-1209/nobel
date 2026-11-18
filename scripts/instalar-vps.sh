@@ -123,7 +123,8 @@ NPM_BIN="$(command -v npm)"
 "$NPM_BIN" install
 [[ -f .env ]] || cp .env.example .env
 
-TOKEN_GATEWAY="$(openclaw gateway auth-token --show 2>/dev/null | grep -oE '[A-Za-z0-9._~+/=-]{24,}' | tail -n 1 || true)"
+# O comando só mostra o token num terminal "de verdade": o `script` simula um.
+TOKEN_GATEWAY="$(script -qc 'openclaw gateway auth-token --show' /dev/null 2>/dev/null | grep -oE '[A-Za-z0-9_-]{32,}' | tail -n 1 || true)"
 if [[ -z "$TOKEN_GATEWAY" ]]; then
   aviso "Não consegui ler o token do gateway automaticamente."
   read -rsp "→ Cole aqui o token (rode 'openclaw gateway auth-token --show' em outro terminal): " TOKEN_GATEWAY; echo
