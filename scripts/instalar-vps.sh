@@ -138,6 +138,8 @@ grava_env PORT "$CLAW3D_PORTA"
 grava_env CLAW3D_GATEWAY_URL ws://127.0.0.1:18789   # 127.0.0.1 e não "localhost" (o Node pode tentar IPv6 e falhar)
 grava_env CLAW3D_GATEWAY_TOKEN "$TOKEN_GATEWAY"
 grava_env CLAW3D_GATEWAY_ADAPTER_TYPE openclaw
+# Em produção o Claw3D só conecta em hosts desta lista (vazia = recusa tudo)
+grava_env UPSTREAM_ALLOWLIST 127.0.0.1,localhost
 # Sem senha extra: o escritório só escuta em 127.0.0.1 e só é aberto pelo Tailscale (rede privada sua).
 grava_env STUDIO_ACCESS_TOKEN ""
 chmod 600 .env
