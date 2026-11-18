@@ -184,7 +184,7 @@ cat <<EOF
 
 Escritório 3D:  https://${ENDERECO:-<nome-da-vps>.ts.net}
   • No celular/computador, instale o app Tailscale e entre com a MESMA conta.
-  • Se o escritório pedir aprovação do dispositivo, rode aqui:  openclaw devices approve --latest
+  • Se o escritório pedir aprovação: rode  openclaw devices list  e depois  openclaw devices approve <ID do pedido>
 
 Painel do OpenClaw (opcional): rode 'tailscale serve --yes --bg --https 8443 http://127.0.0.1:18789'
   e abra https://${ENDERECO:-<nome-da-vps>.ts.net}:8443

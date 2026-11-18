@@ -959,7 +959,7 @@ footer ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column
       cmds: [["Terminal da VPS", "AVISO_CANAL=telegram AVISO_PARA=<SEU_ID_TELEGRAM> ./scripts/criar-rotinas.sh\nopenclaw automations list"]] },
     { t: "Abra o escritório 3D", p: "No seu computador, com Node.js 20 ou mais novo. Abra http://localhost:3000, escolha o backend OpenClaw, use a URL ws://localhost:18789 com o túnel do passo 3 aberto e cole o token. Depois vá em /office para ver o time nas mesas e em /office/builder para montar as salas.",
       cmds: [["Seu computador", "git clone https://github.com/iamlukethedev/Claw3D.git claw3d\ncd claw3d\nnpm install\ncp .env.example .env\nnpm run dev"]],
-      n: "Se pedir aprovação do dispositivo, rode na VPS: openclaw devices approve --latest" }
+      n: "Se pedir aprovação do dispositivo, rode na VPS: openclaw devices list e depois openclaw devices approve <ID do pedido>" }
   ];
   var KEY = "escritorio-ia-passos";
   var feitos = {};

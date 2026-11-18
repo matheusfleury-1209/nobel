@@ -203,7 +203,7 @@ Abra `http://localhost:3000`:
    - OpenClaw na VPS? Antes, abra o túnel em outro terminal: `ssh -L 18789:127.0.0.1:18789 root@IP_DA_SUA_VPS`. Assim você também usa `ws://localhost:18789`.
    - Com Tailscale: na VPS, `tailscale serve --yes --bg --https 443 http://127.0.0.1:18789`, e no Claw3D use `wss://<nome-da-vps>.ts.net`.
 3. Token: o mesmo de `openclaw gateway auth-token --show`.
-4. Se pedir aprovação do dispositivo, rode na máquina do OpenClaw: `openclaw devices approve --latest`.
+4. Se pedir aprovação do dispositivo, rode na máquina do OpenClaw `openclaw devices list` para ver o pedido e depois `openclaw devices approve <ID do pedido>`. (O `--latest` só mostra o pedido mais recente, não aprova.)
 5. Vá para **/office**: os 16 agentes aparecem como bonecos nas mesas, com nome e status. Use **/office/builder** para montar o layout (salas, mesas, mesa de ping-pong…) e dar o nome do seu escritório.
 
 Para não precisar digitar URL/token toda vez, coloque no `.env` do Claw3D:
