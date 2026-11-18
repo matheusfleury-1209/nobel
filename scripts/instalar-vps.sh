@@ -24,10 +24,13 @@ if [[ "$(id -u)" != "0" ]]; then
   echo "Rode como root: sudo bash scripts/instalar-vps.sh" >&2; exit 1
 fi
 
+# Sem sessão gráfica, o systemd do usuário precisa disto para o serviço do OpenClaw
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+
 titulo "1/5 Sistema e firewall"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
-apt-get install -y git curl ufw ca-certificates openssl
+apt-get install -y git curl ufw ca-certificates openssl dbus-user-session
 # Só SSH aberto para a internet. O painel do OpenClaw e o escritório 3D ficam fechados
 # e são acessados pelo Tailscale (rede privada).
 ufw allow OpenSSH >/dev/null
@@ -46,17 +49,40 @@ export PATH; hash -r
 command -v openclaw >/dev/null 2>&1 || { aviso "openclaw não apareceu no PATH. Feche e abra o terminal e rode este script de novo."; exit 1; }
 ok "OpenClaw instalado: $(openclaw --version 2>/dev/null || echo 'versão desconhecida')"
 
-if ! openclaw gateway status >/dev/null 2>&1; then
+gateway_ok() { # o gateway responde na porta 18789?
+  local c; c="$(curl -s -o /dev/null -m 3 -w '%{http_code}' http://127.0.0.1:18789/ 2>/dev/null || true)"
+  [[ -n "$c" && "$c" != "000" ]]
+}
+garantir_servico() { # deixa o gateway como serviço que liga sozinho (systemd do usuário + linger)
+  loginctl enable-linger "$(id -un)" >/dev/null 2>&1 || true
+  export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+  for _ in 1 2 3 4 5 6 7 8 9 10; do [[ -d "$XDG_RUNTIME_DIR" ]] && break; sleep 1; done
+  systemctl --user start dbus.socket >/dev/null 2>&1 || true
+  openclaw gateway install || openclaw gateway install --force || true
+  openclaw gateway start >/dev/null 2>&1 || true
+  for _ in $(seq 1 30); do gateway_ok && return 0; sleep 2; done
+  return 1
+}
+
+# Configuração inicial (IA + chave) só se ainda não foi feita.
+# O instalador oficial do OpenClaw às vezes já abre essa configuração sozinho.
+if [[ ! -f "$OPENCLAW_HOME/openclaw.json" ]]; then
   cat <<'EOF'
 
 Agora vem a configuração inicial do OpenClaw (é interativa):
-  • Provedor de IA: escolha Anthropic (Claude) e cole a sua chave de API
-    (crie em console.anthropic.com e defina um LIMITE DE GASTO MENSAL lá).
-  • Canais: pode PULAR por enquanto (WhatsApp entra depois).
-  • Daemon/serviço: ACEITE (assim liga sozinho quando o servidor reinicia).
+  • Escolha "Quick start", depois "One agent".
+  • Provedor de IA: Anthropic → API key → cole a sua chave (workspace ID: deixe em branco).
+  • Memory embeddings: No.   • Rodar em segundo plano (background): Yes.
 EOF
   pausa "Pronto para começar"
-  openclaw onboard --install-daemon
+  openclaw onboard --install-daemon || true
+fi
+
+if gateway_ok; then
+  ok "gateway do OpenClaw rodando"
+else
+  echo "Ligando o gateway do OpenClaw como serviço (para os agentes trabalharem 24h)..."
+  if garantir_servico; then ok "gateway rodando como serviço"; else aviso "o gateway não respondeu. Rode depois: openclaw doctor --fix"; fi
 fi
 openclaw gateway status || true
 
