@@ -20,7 +20,7 @@ O `scripts/instalar-vps.sh` faz tudo em sequência e para nos pontos em que voc�
 2. Instala o OpenClaw e abre a configuração inicial. Ali você escolhe a IA e cola a chave.
 3. Instala os 16 agentes e libera o perfil da empresa, que está no arquivo criptografado `privado.tar.gz.enc` (pede a senha).
 4. Instala o escritório 3D (Claw3D) como serviço.
-5. Liga o Tailscale. No final, ele mostra o endereço do escritório e a senha de acesso.
+5. Liga o Tailscale. No final, ele mostra o endereço do escritório.
 
 Os passos abaixo explicam a mesma coisa, só que feita à mão.
 
@@ -213,7 +213,7 @@ CLAW3D_GATEWAY_TOKEN=<seu token>
 CLAW3D_GATEWAY_ADAPTER_TYPE=openclaw
 ```
 
-> Se for deixar o Claw3D acessível fora do seu computador, defina `STUDIO_ACCESS_TOKEN` no `.env`.
+> Se for deixar o Claw3D acessível fora do seu computador sem Tailscale, defina `STUDIO_ACCESS_TOKEN` no `.env` (o navegador precisa do cookie `studio_access` com esse valor). Com o Tailscale, como no instalador da VPS, não precisa: só os seus aparelhos entram.
 
 ## 9. Atualizar o time depois
 

@@ -3,7 +3,7 @@
 #   1. Sistema e firewall
 #   2. OpenClaw (motor dos agentes) + configuração inicial (você escolhe a IA e cola a chave)
 #   3. Time de 16 agentes + perfil da empresa (se estiver em privado/)
-#   4. Escritório 3D (Claw3D) rodando como serviço, só acessível pelo Tailscale
+#   4. Escritório 3D (Claw3D) rodando como serviço, só acessível pelo Tailscale (sem senha extra)
 #   5. Tailscale: endereço privado para abrir o escritório no celular/computador
 #
 # Uso (dentro da pasta do repositório):  sudo bash scripts/instalar-vps.sh
@@ -128,8 +128,6 @@ if [[ -z "$TOKEN_GATEWAY" ]]; then
   aviso "Não consegui ler o token do gateway automaticamente."
   read -rsp "→ Cole aqui o token (rode 'openclaw gateway auth-token --show' em outro terminal): " TOKEN_GATEWAY; echo
 fi
-TOKEN_ESCRITORIO="$(grep -E '^STUDIO_ACCESS_TOKEN=' .env | cut -d= -f2- || true)"
-[[ -n "$TOKEN_ESCRITORIO" ]] || TOKEN_ESCRITORIO="$(head -c 18 /dev/urandom | base64 | tr -dc 'A-Za-z0-9' | head -c 24)"
 
 grava_env() { # grava_env CHAVE VALOR
   if grep -qE "^$1=" .env; then sed -i "s|^$1=.*|$1=$2|" .env; else printf '%s=%s\n' "$1" "$2" >> .env; fi
@@ -139,7 +137,8 @@ grava_env PORT "$CLAW3D_PORTA"
 grava_env CLAW3D_GATEWAY_URL ws://localhost:18789
 grava_env CLAW3D_GATEWAY_TOKEN "$TOKEN_GATEWAY"
 grava_env CLAW3D_GATEWAY_ADAPTER_TYPE openclaw
-grava_env STUDIO_ACCESS_TOKEN "$TOKEN_ESCRITORIO"
+# Sem senha extra: o escritório só escuta em 127.0.0.1 e só é aberto pelo Tailscale (rede privada sua).
+grava_env STUDIO_ACCESS_TOKEN ""
 chmod 600 .env
 
 "$NPM_BIN" run build
@@ -182,7 +181,6 @@ cat <<EOF
 
 Escritório 3D:  https://${ENDERECO:-<nome-da-vps>.ts.net}
   • No celular/computador, instale o app Tailscale e entre com a MESMA conta.
-  • Senha de acesso do escritório (STUDIO_ACCESS_TOKEN): $TOKEN_ESCRITORIO
   • Se o escritório pedir aprovação do dispositivo, rode aqui:  openclaw devices approve --latest
 
 Painel do OpenClaw (opcional): rode 'tailscale serve --yes --bg --https 8443 http://127.0.0.1:18789'
