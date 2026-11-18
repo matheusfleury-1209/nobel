@@ -122,6 +122,12 @@ NPM_BIN="$(command -v npm)"
 [[ -n "$NPM_BIN" ]] || { aviso "npm não encontrado (o Node vem com o OpenClaw). Instale o Node.js 20+ e rode de novo."; exit 1; }
 "$NPM_BIN" install
 [[ -f .env ]] || cp .env.example .env
+# Compatibilidade Claw3D x OpenClaw 2026.11+: o gateway recusa a "Control UI" sem buildId
+# ("protocol mismatch: Control UI updated"). O proxy do Claw3D passa a se identificar como "dev",
+# que o gateway aceita. Não mexe na assinatura do dispositivo (buildId não entra nela).
+if ! grep -q 'buildId = "dev"' server/gateway-proxy.js 2>/dev/null; then
+  sed -i '/const clientId = typeof client.id === "string"/a\      if (upstreamAdapterType === "openclaw" \&\& clientId === "openclaw-control-ui" \&\& !client.buildId) { client.buildId = "dev"; connectParams.client = client; }' server/gateway-proxy.js || true
+fi
 
 # O comando só mostra o token num terminal "de verdade": o `script` simula um.
 TOKEN_GATEWAY="$(script -qc 'openclaw gateway auth-token --show' /dev/null 2>/dev/null | grep -oE '[A-Za-z0-9_-]{32,}' | tail -n 1 || true)"
