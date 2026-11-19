@@ -7,7 +7,7 @@ description: Conduz a conversa com um lead novo no WhatsApp/Instagram, qualifica
 
 1. Procure o telefone/@ em `leads.csv`. Se não existe, crie a linha (`etapa=novo`, `origem` — pergunte "como nos conheceu?" se não souber).
 2. Abertura curta: cumprimente, se apresente pelo nome (Rafa, da <empresa>), pergunte o que a pessoa procura.
-3. Qualifique com no máximo 1–2 perguntas por mensagem:
+3. Qualifique com **uma pergunta por mensagem**: espere a resposta antes da próxima e siga com o que a pessoa respondeu (a maioria responde só uma pergunta). Use só as perguntas que o PERFIL pedir; as de baixo são o padrão quando o PERFIL não disser nada:
    - **Necessidade**: o que precisa resolver? já tentou algo?
    - **Prazo**: para quando?
    - **Orçamento**: tem uma faixa em mente? (pergunte com leveza)
