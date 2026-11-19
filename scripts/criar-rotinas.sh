@@ -95,7 +95,7 @@ rotina otimizador "0 16 * * 5" "Resultado dos testes" "Use a skill teste-ab para
 rotina programador "30 8 * * 1" "Checagem do rastreamento" "Use a skill pixel-e-rastreamento (passos 1 e 5): confirme que compras e origens estão chegando. Avise a diretora se algo quebrou."
 
 # ── Recuperação de vendas ──────────────────────────────────────────────────
-rotina recuperacao "30 10,16 * * *" "Fila de recuperação" "Use a skill recuperacao-checkout e mande a fila do dia para a diretora repassar à Hanielly."
+rotina recuperacao "30 10,16 * * *" "Fila de recuperação" "Use a skill recuperacao-checkout: mande ao vendedor (Rafa) as pessoas que conversaram com ele e à diretora as da Hanielly."
 
 # ── Sucesso da aluna e estágio ─────────────────────────────────────────────
 rotina sucesso "0 10 * * 1-5" "Jornada das alunas" "Use a skill jornada-aluna e deixe as mensagens do dia prontas para a Clara enviar."

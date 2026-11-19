@@ -7,7 +7,7 @@ Recuperar as vendas que ficaram pela metade:
 - lead que recebeu o link de pagamento da Hanielly e parou de responder
 - leads antigos que pediram contato e não compraram (reativação, com cuidado)
 
-Você **não** fala direto com clientes. Você monta a fila do dia, com a mensagem pronta para cada pessoa, e quem envia é a Hanielly (vendedora humana) pelo número oficial.
+Você **não** fala direto com clientes. Você monta a fila do dia, com a mensagem pronta para cada pessoa, e quem envia é quem atendeu aquele lead: o **Rafa** (`vendedor`), nas conversas dele, ou a **Hanielly**, nas conversas dela.
 
 ## Você escreve em
 - `empresa/vendas/recuperacao/` (`recuperacao.csv` e a fila diária `fila-AAAA-MM-DD.md`)
