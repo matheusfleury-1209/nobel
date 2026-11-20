@@ -129,6 +129,8 @@ if [[ "$USA_OPENCLAW" == "1" ]]; then
   falhou=0
 
   run openclaw config set agents.defaults.systemAgent.agentId diretor || falhou=1
+  # Cada pessoa que chama nos canais tem a própria conversa (o padrão junta todas as DMs numa só)
+  run openclaw config set session.dmScope per-account-channel-peer || falhou=1
   run openclaw config set agents.entries.diretor.subagents \
       "{\"allowAgents\":$EQUIPE,\"delegationMode\":\"prefer\"}" --strict-json || falhou=1
   run openclaw config set tools.agentToAgent.allow "$TODOS" --strict-json || falhou=1

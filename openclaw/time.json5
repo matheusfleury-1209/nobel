@@ -122,6 +122,9 @@
     },
   },
 
+  // Cada pessoa que chama tem a própria conversa (o padrão "main" junta todas as DMs numa só)
+  session: { dmScope: "per-account-channel-peer" },
+
   // Agentes podem conversar entre si (sessions_send) — só os do time
   tools: {
     agentToAgent: {

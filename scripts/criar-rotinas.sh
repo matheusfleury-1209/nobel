@@ -11,6 +11,7 @@ set -euo pipefail
 TZ_EMPRESA="${TZ_EMPRESA:-America/Sao_Paulo}"
 AVISO_CANAL="${AVISO_CANAL:-}"     # canal onde VOCÊ recebe os resumos da Diretora (ex.: telegram, whatsapp)
 AVISO_PARA="${AVISO_PARA:-}"       # seu id/número nesse canal
+AVISO_CONTA="${AVISO_CONTA:-}"     # conta do canal que envia (ex.: comercial, o WhatsApp do Rafa)
 DRY_RUN="${DRY_RUN:-0}"
 
 run() {
@@ -41,6 +42,7 @@ rotina() {
   local extra=()
   if [[ "$avisar" == "1" && -n "$AVISO_CANAL" && -n "$AVISO_PARA" ]]; then
     extra=(--announce --channel "$AVISO_CANAL" --to "$AVISO_PARA")
+    [[ -n "$AVISO_CONTA" ]] && extra+=(--account "$AVISO_CONTA")
   fi
   run openclaw automations create "$cron" "$prompt" \
     --name "$nome" --tz "$TZ_EMPRESA" --session isolated --agent "$agente" \
