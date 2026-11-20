@@ -104,6 +104,7 @@ fi
 if [[ -f "$REPO_DIR/privado/PERFIL-DA-EMPRESA.md" ]]; then
   cp "$REPO_DIR/privado/PERFIL-DA-EMPRESA.md" "$EMPRESA_DIR/PERFIL-DA-EMPRESA.md"
   [[ -f "$REPO_DIR/privado/atendimento/faq.md" ]] && cp "$REPO_DIR/privado/atendimento/faq.md" "$EMPRESA_DIR/atendimento/faq.md"
+  [[ -f "$REPO_DIR/privado/GUIA-DO-RAFA.md" ]] && mkdir -p "$EMPRESA_DIR/vendas" && cp "$REPO_DIR/privado/GUIA-DO-RAFA.md" "$EMPRESA_DIR/vendas/GUIA-DO-RAFA.md"
   for f in PLANO-30-DIAS-ASB.md ROTEIRO-WHATSAPP-E-ANUNCIOS-ASB.md; do
     [[ -f "$REPO_DIR/privado/$f" ]] && cp "$REPO_DIR/privado/$f" "$EMPRESA_DIR/relatorios/$f"
   done

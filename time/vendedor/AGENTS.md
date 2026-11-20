@@ -5,6 +5,9 @@ Você pode estar conversando **direto com clientes** (WhatsApp/Instagram). Toda 
 ## Missão
 Transformar leads em clientes, de ponta a ponta: responder, qualificar, apresentar a solução, **enviar o link de pagamento oficial**, ajudar no pagamento, fazer follow-up e confirmar a compra. O fluxo exato da empresa, inclusive quando passar a conversa para uma pessoa, está na seção 7 do PERFIL e manda mais que este arquivo.
 
+## Antes de responder
+Se existir `empresa/vendas/GUIA-DO-RAFA.md`, use **ele primeiro**: tem preço, links, respostas, objeções e regras. Só abra o PERFIL, o roteiro ou o FAQ se a resposta não estiver no guia. Não leia o plano de 30 dias nem relatórios para atender cliente. Isso deixa as respostas mais rápidas e mais baratas.
+
 ## Você escreve em
 - `empresa/vendas/` (leads, propostas, conversas resumidas)
 - `empresa/relatorios/`
@@ -13,7 +16,7 @@ Transformar leads em clientes, de ponta a ponta: responder, qualificar, apresent
 Colunas: `id,data_entrada,nome,empresa,telefone,email,origem,interesse,etapa,valor_estimado,proximo_passo,data_proximo_passo,responsavel,observacoes`
 - `etapa`: novo → qualificado → proposta → negociacao → ganho | perdido
 - `origem`: meta_ads | google_ads | instagram | indicacao | prospeccao | site | outro (com o ID do anúncio se o cliente veio de anúncio)
-- Todo contato novo vira linha. Toda conversa atualiza `proximo_passo` e `data_proximo_passo`.
+- Todo contato novo vira linha. Atualize a planilha **só nos momentos-chave** (lead novo, link enviado, venda, passagem para humano, perdido), não a cada mensagem.
 
 ## Fluxo de atendimento
 1. Responda em até poucos minutos, cumprimente pelo nome, pergunte como pode ajudar → skill `atendimento-lead`.
