@@ -20,7 +20,6 @@ EMPRESA_DIR="${EMPRESA_DIR:-$OPENCLAW_HOME/empresa}"
 SEG_DIR="$HOME/.config/nobel"
 ENV_FILE="$SEG_DIR/hotmart.env"
 LOG_FILE="$SEG_DIR/hotmart.log"
-CARIMBO="$(date +%Y%m%d-%H%M%S)"
 
 say()   { printf '%s\n' "$*"; }
 aviso() { printf '⚠️  %s\n' "$*"; }
@@ -82,7 +81,6 @@ fi
 say ""
 say "== 3/5 Puxando as vendas (pode levar 1 minuto)"
 mkdir -p "$EMPRESA_DIR/vendas/hotmart"
-cp "$REPO_DIR/empresa/vendas/hotmart/LEIA-ME.md" "$EMPRESA_DIR/vendas/hotmart/LEIA-ME.md"
 "$PY" "$REPO_DIR/scripts/hotmart.py" sincronizar || erro "Falhou ao puxar as vendas (veja a mensagem acima)"
 
 say ""
@@ -98,40 +96,7 @@ say "   ✅ Agendado. Erros, se houver, ficam em $LOG_FILE"
 
 say ""
 say "== 5/5 Atualizando as instruções do time"
-instalar_arquivo() {
-  local origem="$1" destino="$2"
-  if [[ -f "$destino" ]] && ! cmp -s "$origem" "$destino"; then
-    cp "$destino" "$destino.bak-$CARIMBO"
-  fi
-  cp "$origem" "$destino"
-}
-for src in "$REPO_DIR"/time/*/; do
-  id="$(basename "$src")"
-  [[ "$id" == _* ]] && continue
-  ws="$OPENCLAW_HOME/workspace-$id"
-  [[ -d "$ws" ]] || continue
-  tmp="$(mktemp)"
-  cat "$src/AGENTS.md" "$REPO_DIR/time/_comum/REGRAS-GERAIS.md" > "$tmp"
-  chmod 644 "$tmp"
-  instalar_arquivo "$tmp" "$ws/AGENTS.md"
-  rm -f "$tmp"
-  for skill_dir in "$src"/skills/*/; do
-    [[ -f "$skill_dir/SKILL.md" ]] || continue
-    nome="$(basename "$skill_dir")"
-    mkdir -p "$ws/skills/$nome"
-    instalar_arquivo "$skill_dir/SKILL.md" "$ws/skills/$nome/SKILL.md"
-  done
-done
-if [[ -f "$REPO_DIR/privado/GUIA-DO-RAFA.md" ]]; then
-  cp "$REPO_DIR/privado/GUIA-DO-RAFA.md" "$EMPRESA_DIR/vendas/GUIA-DO-RAFA.md"
-  say "   ✅ Guia do Rafa atualizado"
-else
-  aviso "privado/GUIA-DO-RAFA.md não encontrado: o guia do Rafa ficou na versão anterior"
-fi
-if command -v openclaw >/dev/null 2>&1; then
-  export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
-  openclaw gateway restart >/dev/null 2>&1 || aviso "Reinicie o gateway: openclaw gateway restart"
-fi
+bash "$REPO_DIR/scripts/atualizar-instrucoes.sh"
 
 say ""
 say "✅ HOTMART LIGADA"

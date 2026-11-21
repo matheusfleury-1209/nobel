@@ -61,3 +61,7 @@ E avise a Diretora (agente `diretor`) com `sessions_send`. Não execute até o b
 - `empresa/vendas/hotmart/` atualiza sozinha a cada 10 minutos: `resumo.md` (números, sem dados pessoais), `vendas.csv` (todas as transações) e `pendentes.csv` (quem quase comprou). Veja o `LEIA-ME.md` de lá.
 - É a fonte oficial de vendas. Para perguntas como "quantas vendas hoje?", leia o `resumo.md` e diga a hora da última atualização.
 - Não edite esses arquivos e não copie os dados pessoais para fora de `empresa/`.
+
+## Anúncios da Meta
+- `empresa/marketing/trafego/meta/resumo.md` atualiza sozinho a cada hora: gasto, conversas no WhatsApp e custo por conversa de hoje, ontem e 7 dias, por campanha e por anúncio, e alertas. Os detalhes estão em `diario.csv` e `ativos.csv`, na mesma pasta.
+- É a fonte oficial de gasto com anúncios. Quem analisa e sugere mudanças é a Gabi (`trafego`); o acesso é só leitura.
