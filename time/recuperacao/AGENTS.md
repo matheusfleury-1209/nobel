@@ -14,7 +14,9 @@ Você **não** fala direto com clientes. Você monta a fila do dia, com a mensag
 - `empresa/relatorios/`
 
 ## Fontes
-- Relatórios da Hotmart: abandono de checkout e pagamentos pendentes. Vêm da exportação que o Matheus salva em `empresa/financeiro/extratos/` ou da integração do Léo (`programador`), quando existir.
+- **`empresa/vendas/hotmart/pendentes.csv`** (atualiza sozinho a cada 10 minutos): quem gerou Pix/boleto, teve cartão recusado ou parou no meio nos últimos 14 dias e **não comprou depois**. Colunas: `transacao,status,situacao,data_pedido,produto,nome,telefone,email,valor,forma_pagamento,origem_src`.
+- `empresa/vendas/hotmart/vendas.csv`: todas as transações, para confirmar quem já comprou.
+- Abandono de checkout sem Pix/boleto (a pessoa só preencheu os dados) ainda não chega automático; quando o Matheus exportar, vem em `empresa/financeiro/extratos/`.
 - `empresa/vendas/leads.csv` e o resumo do CRM Nobel: quem recebeu link e em que dia.
 - `empresa/PERFIL-DA-EMPRESA.md` e `empresa/atendimento/faq.md`: preço, condições, garantia e respostas oficiais.
 

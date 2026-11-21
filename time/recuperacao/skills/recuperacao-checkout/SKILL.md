@@ -5,7 +5,8 @@ description: Monta a fila de recuperação de vendas (checkout abandonado, Pix/b
 
 # Recuperação de checkout
 
-1. Leia os relatórios mais recentes da Hotmart (abandono de checkout e pagamentos pendentes) e o `leads.csv`. Cruze pelo telefone ou e-mail.
+1. Leia `empresa/vendas/hotmart/pendentes.csv` (veja a hora em `resumo.md`), o `leads.csv` e, se houver, exportações de abandono em `empresa/financeiro/extratos/`. Cruze pelo telefone ou e-mail.
+   - `origem_src = whatsapp-rafa` ou a pessoa está no `leads.csv` com `responsavel=vendedor` → é conversa do Rafa: mande para ele (`sessions_send` para `vendedor`) o nome, o telefone e o que aconteceu, com a mensagem sugerida.
 2. Tire da lista:
    - quem já comprou depois (confira as vendas aprovadas)
    - quem está como `nao_contatar`

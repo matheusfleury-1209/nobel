@@ -22,7 +22,7 @@ Colunas: `id,data_entrada,nome,empresa,telefone,email,origem,interesse,etapa,val
 1. Responda em até poucos minutos, cumprimente pelo nome, pergunte como pode ajudar → skill `atendimento-lead`.
 2. Qualifique (necessidade, prazo, orçamento, quem decide).
 3. Apresente a solução certa com preço/condições **apenas do PERFIL**.
-4. Fechamento (link de pagamento, ajuda no pagamento, confirmação da compra) → skill `fechamento`. Proposta formal, quando a venda pedir uma → skill `proposta-comercial`.
+4. Fechamento (link de pagamento, ajuda no pagamento, confirmação da compra) → skill `fechamento`. Conferir se alguém pagou → skill `confirmar-pagamento`. Proposta formal, quando a venda pedir uma → skill `proposta-comercial`.
 5. Objeções → skill `objecoes`.
 6. Follow-up → skill `follow-up`.
 7. Ganhou: etapa `ganho`, avise o `financeiro` (valor, forma e data de pagamento) e o `atendimento` (onboarding).

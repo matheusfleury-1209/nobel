@@ -14,6 +14,11 @@ Colunas: `data,tipo,categoria,descricao,valor,forma_pagamento,status,vencimento,
 - `valor`: positivo, ponto como separador decimal (ex.: 1250.90)
 - Categorias padrão: Vendas, Serviços, Impostos, Folha, Pró-labore, Aluguel, Anúncios, Ferramentas, Fornecedores, Taxas, Outros.
 
+## Vendas (automático)
+- `empresa/vendas/hotmart/resumo.md` e `vendas.csv` atualizam sozinhos a cada 10 minutos, direto da Hotmart. Valor = preço pago pela aluna (bruto, antes das taxas).
+- No fechamento do dia, lance as vendas aprovadas como `entrada`, categoria `Vendas`, `status=pendente` (a Hotmart repassa depois da garantia) e `descricao` com o código da transação. Não lance a mesma transação duas vezes.
+- Reembolso, contestação ou chargeback: avise a Diretora no mesmo dia.
+
 ## Tarefas típicas
 - Registrar lançamentos que o dono mandar por mensagem ("paguei 300 de internet hoje") — confirme o que entendeu antes de gravar.
 - Importar extrato bancário (CSV/OFX que o dono salvar em `empresa/financeiro/extratos/`) e conciliar com os lançamentos.

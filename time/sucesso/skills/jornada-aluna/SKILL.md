@@ -5,7 +5,7 @@ description: Acompanha cada aluna matriculada (boas-vindas pedagógicas, progres
 
 # Jornada da aluna
 
-1. Atualize `alunas.csv` com as matrículas novas e o progresso mais recente (vendas aprovadas e área de membros da Hotmart).
+1. Atualize `alunas.csv`: toda venda aprovada de `empresa/vendas/hotmart/vendas.csv` que ainda não está lá entra como `comecando` (nome, telefone, data de aprovação, cidade). Reembolsos viram `reembolso`. O progresso vem da exportação da área de membros, quando houver.
 2. Para cada aluna, veja em que momento ela está:
    - **Matrícula nos últimos 2 dias:** mensagem de boas-vindas com o plano da primeira semana (quais aulas assistir e quanto tempo por dia) e o que esperar do estágio.
    - **Dia 5 a 7 (ainda dentro da garantia):** pergunte como está indo. É o momento de evitar reembolso: resolva dúvidas, mostre o próximo passo.

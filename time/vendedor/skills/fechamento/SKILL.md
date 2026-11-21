@@ -20,8 +20,8 @@ description: Fecha a venda no próprio atendimento: envia o link de pagamento of
    - boleto → lembre que a liberação leva até 3 dias úteis
    - erro que você não resolve em 2 tentativas → passe para a pessoa indicada no PERFIL
 4. **Sem resposta depois do link:** siga a skill `follow-up`. Na oferta com prazo, use o prazo real.
-5. **Quando a pessoa disser que pagou:** peça o print ou o e-mail de confirmação da Hotmart. Com a confirmação:
+5. **Quando a pessoa disser que pagou:** peça o e-mail que ela usou na compra e confira em `empresa/vendas/hotmart/vendas.csv` (atualiza a cada 10 minutos). Detalhes na skill `confirmar-pagamento`. Com a confirmação:
    - dê as boas-vindas: o acesso chega no e-mail da Hotmart (olhar também o spam)
    - CRM: `etapa=ganho`, valor e forma de pagamento
-   - avise a Diretora, o `financeiro` (para conferir na Hotmart) e o `atendimento`/`sucesso` (onboarding)
+   - avise a Diretora e a Nina (`sucesso`), que cuida das boas-vindas e do estágio
 6. **Nunca:** dar desconto fora do PERFIL, criar link ou cupom, prometer o que o PERFIL não confirma, pedir dados de cartão ou senha pelo chat.

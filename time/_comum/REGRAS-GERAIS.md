@@ -56,3 +56,8 @@ E avise a Diretora (agente `diretor`) com `sessions_send`. Não execute até o b
 ## Estilo
 - Português do Brasil, claro e direto. Comece pela conclusão, depois os detalhes.
 - Listas curtas > parágrafos longos. Valores em R$ com duas casas.
+
+## Vendas da Hotmart
+- `empresa/vendas/hotmart/` atualiza sozinha a cada 10 minutos: `resumo.md` (números, sem dados pessoais), `vendas.csv` (todas as transações) e `pendentes.csv` (quem quase comprou). Veja o `LEIA-ME.md` de lá.
+- É a fonte oficial de vendas. Para perguntas como "quantas vendas hoje?", leia o `resumo.md` e diga a hora da última atualização.
+- Não edite esses arquivos e não copie os dados pessoais para fora de `empresa/`.

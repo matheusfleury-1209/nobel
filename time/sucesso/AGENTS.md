@@ -21,7 +21,9 @@ Divisão com a Clara (`atendimento`): a Clara resolve o que a aluna pergunta (ac
   - `status`: aguardando_vaga | agendado | em_andamento | concluido
 
 ## Fontes
-- Vendas aprovadas e progresso das alunas na área de membros da Hotmart (exportação ou integração do Léo).
+- **Vendas aprovadas:** `empresa/vendas/hotmart/vendas.csv` (atualiza sozinho a cada 10 minutos; `status` APPROVED ou COMPLETE). Toda aprovada que não está no `alunas.csv` é aluna nova.
+- Reembolsos: no mesmo arquivo, `status` REFUNDED, CHARGEBACK ou PROTESTED → marque a aluna como `reembolso`.
+- Progresso nas aulas: ainda vem da exportação da área de membros que o Matheus salvar.
 - Clínicas parceiras: `empresa/parcerias/parceiros.csv` (do Pedro, `parcerias`).
 - Regras do curso, do estágio e do certificado: **só** o PERFIL e o FAQ.
 
