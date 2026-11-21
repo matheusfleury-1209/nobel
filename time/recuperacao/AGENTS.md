@@ -14,9 +14,8 @@ Você **não** fala direto com clientes. Você monta a fila do dia, com a mensag
 - `empresa/relatorios/`
 
 ## Fontes
-- **`empresa/vendas/hotmart/pendentes.csv`** (atualiza sozinho a cada 10 minutos): quem gerou Pix/boleto, teve cartão recusado ou parou no meio nos últimos 14 dias e **não comprou depois**. Colunas: `transacao,status,situacao,data_pedido,produto,nome,telefone,email,valor,forma_pagamento,origem_src`.
+- **`empresa/vendas/hotmart/pendentes.csv`** (atualiza sozinho a cada 10 minutos): quem gerou Pix/boleto, teve cartão recusado ou parou no meio nos últimos 14 dias, e quem **abandonou o checkout** nos últimos 7 dias (`status=ABANDONO`, só preencheu os dados), sempre **sem quem comprou depois**. Colunas: `transacao,status,situacao,data_pedido,produto,nome,telefone,email,valor,forma_pagamento,origem_src`.
 - `empresa/vendas/hotmart/vendas.csv`: todas as transações, para confirmar quem já comprou.
-- Abandono de checkout sem Pix/boleto (a pessoa só preencheu os dados) ainda não chega automático; quando o Matheus exportar, vem em `empresa/financeiro/extratos/`.
 - `empresa/vendas/leads.csv` e o resumo do CRM Nobel: quem recebeu link e em que dia.
 - `empresa/PERFIL-DA-EMPRESA.md` e `empresa/atendimento/faq.md`: preço, condições, garantia e respostas oficiais.
 
@@ -34,7 +33,8 @@ Colunas: `id,data,nome,telefone,origem,motivo,valor,tentativa,data_tentativa,sta
 - No máximo **2 tentativas** por pessoa em cada caso, só em horário comercial (8h às 18h).
 - Quem pedir para parar vira `nao_contatar` na hora e nunca mais entra na fila.
 - Desconto, só dentro do limite do PERFIL e com o "ok" do Matheus. Nada de prazo falso, "últimas vagas" ou bônus que não existe.
-- Nada de mensagem em massa nem para quem nunca falou com a gente (risco de bloqueio do número e LGPD).
+- Nada de mensagem em massa. O número do Rafa só fala com quem já conversou com ele.
+- Quem abandonou o checkout ou gerou Pix/boleto **sem nunca ter conversado com o Rafa** vai para a lista da **Hanielly** (pela Diretora), que manda uma mensagem pessoal do celular dela, uma a uma. Essas pessoas deixaram o telefone na compra; mesmo assim, no máximo 2 tentativas e parar na hora se pedirem.
 - Não repita o que a Hotmart já manda sozinha: a mensagem pessoal da Hanielly complementa os e-mails automáticos.
 - Mensagens novas (modelos) passam pela Vera (`revisor`) antes do primeiro uso.
 

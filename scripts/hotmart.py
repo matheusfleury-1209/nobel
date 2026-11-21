@@ -13,7 +13,8 @@ scripts/ligar-hotmart.sh, com as linhas:
 
 O que ele grava em <EMPRESA_DIR>/vendas/hotmart/ (padrão ~/.openclaw/empresa/vendas/hotmart/):
   vendas.csv     todas as transações do período, uma linha por transação
-  pendentes.csv  Pix/boleto/cartão que ainda não viraram venda (fila da Bia)
+  pendentes.csv  Pix/boleto/cartão que ainda não viraram venda + quem abandonou o checkout
+                 (abandonos.csv, gravado pelo hotmart_webhook.py), sem quem comprou depois
   resumo.md      números do dia, da semana e do mês, sem dados pessoais
 
 Este programa só CONSULTA a Hotmart. Ele não reembolsa, não cancela e não cria nada.
@@ -239,7 +240,7 @@ def telefone_br(*valores):
 
 
 def gravar_csv(caminho, colunas, linhas):
-    tmp = caminho + ".tmp"
+    tmp = f"{caminho}.{os.getpid()}.tmp"
     antigo = os.umask(0o077)
     try:
         with open(tmp, "w", encoding="utf-8", newline="") as f:
@@ -252,7 +253,7 @@ def gravar_csv(caminho, colunas, linhas):
 
 
 def gravar_texto(caminho, texto):
-    tmp = caminho + ".tmp"
+    tmp = f"{caminho}.{os.getpid()}.tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         f.write(texto)
     os.replace(tmp, caminho)
@@ -338,20 +339,48 @@ def coletar(c, dias):
     return sorted(vendas.values(), key=lambda v: v["_ms"], reverse=True)
 
 
-def montar_pendentes(vendas, dias=14):
+def ler_abandonos(dias=7):
+    """Abandonos de checkout recebidos pelo hotmart_webhook.py (últimos `dias`)."""
+    caminho = os.path.join(SAIDA, "abandonos.csv")
+    if not os.path.isfile(caminho):
+        return []
+    limite = (datetime.now(BRT) - timedelta(days=dias)).strftime("%Y-%m-%d %H:%M")
+    linhas = []
+    with open(caminho, encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if (r.get("data") or "") < limite:
+                continue
+            try:
+                ms = int(datetime.strptime(r["data"], "%Y-%m-%d %H:%M").replace(tzinfo=BRT).timestamp() * 1000)
+            except (KeyError, ValueError):
+                continue
+            linhas.append({
+                "transacao": "", "status": "ABANDONO", "situacao": "abandonou o checkout (só preencheu os dados)",
+                "data_pedido": r["data"], "produto": r.get("produto", ""), "produto_id": r.get("produto_id", ""),
+                "nome": r.get("nome", ""), "telefone": r.get("telefone", ""), "email": (r.get("email") or "").lower(),
+                "valor": "", "forma_pagamento": "", "origem_src": "", "_ms": ms,
+            })
+    return linhas
+
+
+def montar_pendentes(vendas, dias=14, abandonos=()):
     limite = (time.time() - dias * 86400) * 1000
     compraram = set()
     for v in vendas:
         if v["status"] in PAGAS:
-            compraram.add((v["produto_id"], v["email"] or v["telefone"]))
+            for contato in (v["email"], v["telefone"]):
+                if contato:
+                    compraram.add((str(v["produto_id"]), contato))
+    candidatos = [v for v in vendas if v["status"] in QUASE and v["_ms"] >= limite]
+    candidatos += list(abandonos)
+    candidatos.sort(key=lambda v: v["_ms"], reverse=True)  # mais novo primeiro
     vistos, fila = set(), []
-    for v in vendas:  # já está do mais novo para o mais antigo
-        if v["status"] not in QUASE or v["_ms"] < limite:
+    for v in candidatos:
+        contatos = [c for c in (v["email"], v["telefone"]) if c]
+        chaves = {(str(v["produto_id"]), c) for c in contatos}
+        if not chaves or chaves & compraram or chaves & vistos:
             continue
-        chave = (v["produto_id"], v["email"] or v["telefone"])
-        if chave in compraram or chave in vistos:
-            continue
-        vistos.add(chave)
+        vistos |= chaves
         fila.append(v)
     return fila
 
@@ -422,7 +451,7 @@ def montar_resumo(vendas, pendentes, chamadas):
 def cmd_sincronizar(args):
     c = Cliente()
     vendas = coletar(c, args.dias)
-    pendentes = montar_pendentes(vendas)
+    pendentes = montar_pendentes(vendas, abandonos=ler_abandonos())
     os.makedirs(SAIDA, exist_ok=True)
     gravar_csv(os.path.join(SAIDA, "vendas.csv"), COLUNAS_VENDAS, vendas)
     gravar_csv(os.path.join(SAIDA, "pendentes.csv"), COLUNAS_PENDENTES, pendentes)

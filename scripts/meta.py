@@ -191,7 +191,7 @@ def brl(v):
 
 
 def gravar_csv(caminho, colunas, linhas):
-    tmp = caminho + ".tmp"
+    tmp = f"{caminho}.{os.getpid()}.tmp"
     with open(tmp, "w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=colunas, extrasaction="ignore")
         w.writeheader()
@@ -200,7 +200,7 @@ def gravar_csv(caminho, colunas, linhas):
 
 
 def gravar_texto(caminho, texto):
-    tmp = caminho + ".tmp"
+    tmp = f"{caminho}.{os.getpid()}.tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         f.write(texto)
     os.replace(tmp, caminho)

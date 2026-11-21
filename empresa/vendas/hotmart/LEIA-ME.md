@@ -1,4 +1,4 @@
-# Vendas da Hotmart (atualiza sozinho a cada 10 minutos)
+# Vendas da Hotmart (atualiza sozinho a cada 10 minutos e logo depois de cada pagamento)
 
 Estes arquivos são gerados pelo `scripts/hotmart.py` direto da API da Hotmart. **Não edite à mão**: a próxima atualização apaga a mudança. Anote o que precisar no seu próprio CSV (leads, recuperação, alunas, lançamentos).
 
@@ -6,7 +6,9 @@ Estes arquivos são gerados pelo `scripts/hotmart.py` direto da API da Hotmart. 
 |---|---|---|
 | `resumo.md` | vendas de hoje, 7 dias e mês; por origem, produto e forma de pagamento; fila de recuperação; reembolsos. Sem dados pessoais | Helena, Otávio, Gabi, Caio |
 | `vendas.csv` | uma linha por transação dos últimos 45 dias: status, datas, produto, nome, e-mail, telefone, cidade, valor, forma de pagamento, `origem_src` | Rafa, Nina, Otávio |
-| `pendentes.csv` | quem gerou Pix/boleto, teve cartão recusado ou parou no meio nos últimos 14 dias **e não comprou depois** | Bia (e o Rafa, para quem é da conversa dele) |
+| `pendentes.csv` | quem gerou Pix/boleto, teve cartão recusado ou parou no meio nos últimos 14 dias, mais quem **abandonou o checkout** nos últimos 7 dias (`status=ABANDONO`), **sem quem comprou depois** | Bia (e o Rafa, para quem é da conversa dele) |
+| `abandonos.csv` | avisos de abandono de checkout que a Hotmart manda na hora (nome, e-mail, telefone, produto). Já entram no `pendentes.csv` | Bia |
+| `avisos.log` | registro técnico dos avisos recebidos (sem dados pessoais) | Léo |
 
 Status que contam como venda: `APPROVED` e `COMPLETE` (coluna `situacao` = "aprovada"). Datas no horário de Brasília. `origem_src` = o `src` do link (ex.: `whatsapp-rafa`).
 
