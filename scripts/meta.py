@@ -9,7 +9,7 @@ Uso (na VPS):
 Credenciais: arquivo META_ENV (padrão ~/.config/nobel/meta.env), criado por scripts/ligar-meta.sh:
   META_TOKEN=...            token do usuário do sistema (permissão ads_read)
   META_CONTA=act_123...     conta de anúncios
-  META_API_VERSION=         opcional (ex.: v24.0); vazio = versão padrão do app
+  META_API_VERSION=v27.0    versão da API; se a Meta avisar que ficou velha, o programa troca sozinho
 
 O que ele grava em <EMPRESA_DIR>/marketing/trafego/meta/ (padrão ~/.openclaw/empresa/...):
   diario.csv   um dia por anúncio (últimos 30 dias): gasto, impressões, cliques, conversas...
@@ -23,6 +23,7 @@ import argparse
 import csv
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
@@ -32,6 +33,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 
 BRT = timezone(timedelta(hours=-3))
+VERSAO_PADRAO = "v27.0"
 HOME = os.path.expanduser("~")
 ENV_FILE = os.environ.get("META_ENV", os.path.join(HOME, ".config", "nobel", "meta.env"))
 EMPRESA_DIR = os.environ.get(
@@ -87,8 +89,7 @@ def ler_env():
 class Meta:
     def __init__(self, exigir_conta=True):
         self.cfg = ler_env()
-        ver = self.cfg.get("META_API_VERSION", "").strip("/")
-        self.base = "https://graph.facebook.com/" + (ver + "/" if ver else "")
+        self._usar_versao(self.cfg.get("META_API_VERSION", "").strip("/") or VERSAO_PADRAO)
         self.conta = self.cfg.get("META_CONTA", "")
         if self.conta and not self.conta.startswith("act_"):
             self.conta = "act_" + self.conta
@@ -96,9 +97,34 @@ class Meta:
             raise ErroMeta(f"Falta META_CONTA em {ENV_FILE}. Rode: TROCAR=1 bash scripts/ligar-meta.sh")
         self.chamadas = 0
 
+    def _usar_versao(self, ver):
+        self.versao = ver
+        self.base = f"https://graph.facebook.com/{ver}/"
+
+    def _atualizar_versao(self, mensagem, url):
+        """Erro #2635: a Meta diz qual é a versão atual. Passa a usar ela e salva no meta.env."""
+        achou = re.search(r"(v\d+\.\d+)", mensagem.split("latest version", 1)[-1])
+        if not achou or achou.group(1) == self.versao:
+            return None
+        nova = achou.group(1)
+        self._usar_versao(nova)
+        try:
+            with open(ENV_FILE, encoding="utf-8") as f:
+                texto = f.read()
+            if re.search(r"^META_API_VERSION=.*$", texto, flags=re.M):
+                texto = re.sub(r"^META_API_VERSION=.*$", f"META_API_VERSION={nova}", texto, flags=re.M)
+            else:
+                texto = texto.rstrip("\n") + f"\nMETA_API_VERSION={nova}\n"
+            with open(ENV_FILE, "w", encoding="utf-8") as f:
+                f.write(texto)
+        except OSError:
+            pass
+        return re.sub(r"graph\.facebook\.com/(v\d+\.\d+/)?", f"graph.facebook.com/{nova}/", url, count=1)
+
     def _get_url(self, url):
         espera = 5
-        for tentativa in range(5):
+        trocou_versao = False
+        for tentativa in range(6):
             self.chamadas += 1
             req = urllib.request.Request(url, headers={"Authorization": f"Bearer {self.cfg['META_TOKEN']}"})
             try:
@@ -110,6 +136,13 @@ class Meta:
                 except ValueError:
                     err = {}
                 codigo = err.get("code")
+                msg = err.get("message", "")
+                if (codigo == 2635 or "#2635" in msg or "deprecated version" in msg) and not trocou_versao:
+                    nova_url = self._atualizar_versao(msg, url)
+                    if nova_url:
+                        trocou_versao = True
+                        url = nova_url
+                        continue
                 if codigo in (4, 17, 32, 613, 80000, 80004) or e.code >= 500:  # limite de uso / instabilidade
                     if tentativa < 4:
                         time.sleep(espera)

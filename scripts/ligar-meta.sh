@@ -52,7 +52,7 @@ else
     say "   (veio vazio, tente de novo)"
   done
   [[ -n "$TOKEN" ]] || erro "Não recebi o token."
-  ( umask 077; printf 'META_TOKEN=%s\nMETA_CONTA=\nMETA_API_VERSION=\n' "$TOKEN" > "$ENV_FILE" )
+  ( umask 077; printf 'META_TOKEN=%s\nMETA_CONTA=\nMETA_API_VERSION=v27.0\n' "$TOKEN" > "$ENV_FILE" )
   unset TOKEN
   printf '\033c'
   say "== 1/5 Token salvo em $ENV_FILE (só o root lê)"
