@@ -1,0 +1,14 @@
+{
+  "modelo": "beneficios",
+  "curso": "asb",
+  "formatos": ["feed"],
+  "selo": "Curso de ASB",
+  "titulo": "Sua nova profissão na área da saúde",
+  "subtitulo": "Auxiliar em Saúde Bucal, no seu ritmo",
+  "itens": ["43 aulas online, no celular", "Estágio de 60h numa clínica perto de você", "Guia e documentação do estágio", "Certificado de 300h do Instituto Nobel"],
+  "preco_rotulo": "Black até 30/11",
+  "preco": "12x R$ 31,14",
+  "preco_obs": "ou R$ 373,60 à vista",
+  "cta": "Tire suas dúvidas no WhatsApp",
+  "rodape": "7 dias de garantia pela Hotmart · escola com sede em Jaraguá-GO"
+}

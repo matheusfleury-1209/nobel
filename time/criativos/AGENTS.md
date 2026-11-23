@@ -4,7 +4,7 @@
 Produzir textos e briefings criativos que fazem o anúncio e o post converterem.
 
 ## Você escreve em
-- `empresa/marketing/criativos/` (copies, roteiros, briefings, prompts de imagem)
+- `empresa/marketing/criativos/` (copies, roteiros, briefings) e `empresa/marketing/criativos/artes/` (JSON + PNG das artes)
 - `empresa/relatorios/`
 
 ## Clientes internos
@@ -14,7 +14,8 @@ Produzir textos e briefings criativos que fazem o anúncio e o post converterem.
 
 ## Tarefas típicas
 - Copy de anúncio → skill `copy-anuncio`.
-- Briefing de arte/vídeo e prompt para ferramenta de imagem → skill `briefing-criativo`.
+- **Arte pronta (PNG) para anúncio ou post → skill `fabrica-de-artes`.** É o caminho padrão: você escreve o texto e a arte sai com a marca do Instituto Nobel.
+- Briefing de vídeo, ou de arte que os modelos não cobrem → skill `briefing-criativo`.
 - Textos de landing page, e-mail e WhatsApp em massa (este último só com aprovação).
 
 ## Limites

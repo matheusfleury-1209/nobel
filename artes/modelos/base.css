@@ -1,0 +1,48 @@
+@font-face { font-family: "Inter"; font-weight: 400; src: url("../fontes/Inter-Regular.otf"); }
+@font-face { font-family: "Inter"; font-weight: 500; src: url("../fontes/Inter-Medium.otf"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("../fontes/Inter-SemiBold.otf"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("../fontes/Inter-Bold.otf"); }
+@font-face { font-family: "Inter"; font-weight: 800; src: url("../fontes/Inter-ExtraBold.otf"); }
+@font-face { font-family: "Inter"; font-weight: 900; src: url("../fontes/Inter-Black.otf"); }
+
+:root {
+  --ciano: #2DBAEF;      /* "Nobel" da logo */
+  --ciano-claro: #94D9F8;
+  --ciano-medio: #62CCF4;
+  --azul-petroleo: #2793B0;
+  --escuro: #0D363A;     /* "INSTITUTO" da logo */
+  --escuro-2: #173F47;
+  --fundo-escuro: #072327;
+  --claro: #F2FAFE;
+  --branco: #FFFFFF;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: var(--w); height: var(--h); overflow: hidden; }
+body { font-family: "Inter", sans-serif; -webkit-font-smoothing: antialiased; }
+.arte { position: relative; width: var(--w); height: var(--h); overflow: hidden;
+        display: flex; flex-direction: column; padding: var(--pad-y) 80px; gap: 34px; }
+.feed     { --w: 1080px; --h: 1350px; --pad-y: 72px; }
+.story    { --w: 1080px; --h: 1920px; --pad-y: 230px; }   /* respeita a área segura do Stories */
+.quadrado { --w: 1080px; --h: 1080px; --pad-y: 64px; }
+
+/* hexágono "em pé", igual ao da logo */
+.hex { position: absolute; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); z-index: 0; }
+.arte > *:not(.hex):not(.icone-fundo) { position: relative; z-index: 1; }
+.icone-fundo { position: absolute; z-index: 0; pointer-events: none; }
+
+.logo { height: 92px; width: auto; display: block; }
+.selo { display: inline-block; align-self: flex-start; font-weight: 800; font-size: 30px; letter-spacing: .12em;
+        text-transform: uppercase; padding: 12px 26px; border-radius: 999px; }
+h1 { font-weight: 900; line-height: 1.02; letter-spacing: -0.02em; }
+.sub { font-weight: 500; font-size: 40px; line-height: 1.25; }
+.espaco { flex: 1; }
+
+.preco .rotulo { font-weight: 700; font-size: 30px; text-transform: uppercase; letter-spacing: .08em; }
+.preco .valor { font-weight: 900; line-height: 1; letter-spacing: -0.02em; }
+.preco .valor small { font-size: .5em; font-weight: 800; margin-right: 10px; letter-spacing: 0; }
+.preco .obs { font-weight: 600; font-size: 30px; }
+
+.cta { display: inline-flex; align-items: center; gap: 16px; font-weight: 800; font-size: 38px;
+       padding: 22px 40px; border-radius: 999px; }
+.cta svg { width: 44px; height: 44px; flex: none; }
+.rodape { font-weight: 500; font-size: 26px; line-height: 1.35; }
