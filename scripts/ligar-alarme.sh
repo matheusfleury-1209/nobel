@@ -14,7 +14,7 @@ mkdir -p "$SEG_DIR"; chmod 700 "$SEG_DIR"
 if [[ -f "$CFG" ]]; then
   source "$CFG"
 else
-  NTFY_TOPICO="nobel-$(tr -dc 'a-z0-9' < /dev/urandom | head -c 12)"
+  NTFY_TOPICO="nobel-$(python3 -c 'import secrets; print(secrets.token_hex(6))')"
   ( umask 077; printf 'NTFY_TOPICO=%s\n' "$NTFY_TOPICO" > "$CFG" )
 fi
 
