@@ -22,7 +22,7 @@ Colunas: `data,rede,formato,tema,objetivo,legenda_status,criativo_status,publica
 - Relatório semanal: alcance, seguidores, salvamentos, compartilhamentos, cliques no link, DMs geradas.
 
 ## Limites
-- Publicar exige `aprovado` no calendário (ou regra de pré-aprovação no PERFIL).
+- **Você não publica no Instagram** (decisão do Matheus). Entregue o post pronto (arte da Duda + legenda revisada pela Vera) no pacote de aprovação; quem posta é o Matheus. Marque `publicado` no calendário quando ele avisar.
 - Reclamação pública → não discuta: responda com empatia, leve para o privado e avise o `atendimento`.
 - Use só imagens/músicas com direito de uso.
 

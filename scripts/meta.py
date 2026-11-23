@@ -121,12 +121,17 @@ class Meta:
             pass
         return re.sub(r"graph\.facebook\.com/(v\d+\.\d+/)?", f"graph.facebook.com/{nova}/", url, count=1)
 
-    def _get_url(self, url):
+    def _get_url(self, url, dados=None):
+        """GET (dados=None) ou POST (dados=dict). POST não é repetido em erro de servidor/conexão,
+        para não executar a mesma mudança duas vezes."""
         espera = 5
         trocou_versao = False
+        escrita = dados is not None
+        corpo = urllib.parse.urlencode(dados).encode() if escrita else None
         for tentativa in range(6):
             self.chamadas += 1
-            req = urllib.request.Request(url, headers={"Authorization": f"Bearer {self.cfg['META_TOKEN']}"})
+            req = urllib.request.Request(url, data=corpo, method="POST" if escrita else "GET",
+                                         headers={"Authorization": f"Bearer {self.cfg['META_TOKEN']}"})
             try:
                 with urllib.request.urlopen(req, timeout=60) as r:
                     return json.loads(r.read().decode("utf-8"))
@@ -143,7 +148,7 @@ class Meta:
                         trocou_versao = True
                         url = nova_url
                         continue
-                if codigo in (4, 17, 32, 613, 80000, 80004) or e.code >= 500:  # limite de uso / instabilidade
+                if codigo in (4, 17, 32, 613, 80000, 80004) or (e.code >= 500 and not escrita):  # limite / instabilidade
                     if tentativa < 4:
                         time.sleep(espera)
                         espera *= 2
@@ -151,16 +156,20 @@ class Meta:
                 if codigo == 190:
                     raise ErroMeta("O token da Meta foi recusado ou expirou. Gere outro e rode: TROCAR=1 bash scripts/ligar-meta.sh")
                 if codigo in (10, 200, 294) or e.code == 403:
-                    raise ErroMeta("O token não tem permissão para esta conta. Confira se o usuário do sistema "
-                                   "tem a conta de anúncios atribuída e a permissão ads_read.")
+                    raise ErroMeta("O token não tem permissão para isso. Confira se o usuário do sistema tem a conta "
+                                   "de anúncios atribuída e as permissões ads_read" + (" e ads_management (Gerenciar campanhas)."
+                                   if escrita else "."))
                 raise ErroMeta(f"A Meta respondeu erro {e.code}: {err.get('message', 'sem detalhe')}")
             except (urllib.error.URLError, TimeoutError) as e:
-                if tentativa < 4:
+                if tentativa < 4 and not escrita:
                     time.sleep(espera)
                     espera *= 2
                     continue
                 raise ErroMeta(f"Sem conexão com a Meta: {e}")
         raise ErroMeta("A Meta não respondeu depois de várias tentativas")
+
+    def post(self, caminho, dados):
+        return self._get_url(f"{self.base}{caminho}", dados=dict(dados))
 
     def get(self, caminho, params=None):
         q = urllib.parse.urlencode(params or {})

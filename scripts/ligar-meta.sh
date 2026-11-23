@@ -83,6 +83,8 @@ if [[ -z "$CONTA_ATUAL" || "${TROCAR:-0}" == "1" ]]; then
   say "   Conta escolhida: $(cut -f2 <<<"$ESCOLHA") ($CONTA)"
 fi
 "$PY" "$REPO_DIR/scripts/meta.py" testar || erro "Não conectou (veja a mensagem acima)."
+say "   Permissões do token:"
+"$PY" "$REPO_DIR/scripts/meta_acoes.py" permissoes | sed 's/^/     /' || true
 
 say ""
 say "== 3/5 Puxando os números dos anúncios (pode levar 1 minuto)"
