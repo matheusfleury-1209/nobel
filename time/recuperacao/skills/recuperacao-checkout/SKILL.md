@@ -23,5 +23,5 @@ description: Monta a fila de recuperação de vendas (checkout abandonado, Pix/b
    - termine com uma pergunta simples
    - preço e condições **só** do PERFIL; se houver oferta com prazo, use o prazo real
 5. Salve em `empresa/vendas/recuperacao/fila-AAAA-MM-DD.md`, na ordem de prioridade, e atualize o `recuperacao.csv` (`status=na_fila`, `tentativa`).
-6. Separe a fila por quem atendeu: as pessoas que conversaram com o Rafa vão para ele (`sessions_send` ao `vendedor`), e as da Hanielly vão para a Diretora repassar. Avise a Diretora: "Fila de recuperação: N pessoas, R$ X em vendas possíveis. Arquivo: …".
+6. Separe a fila por quem atendeu: as pessoas que conversaram com o Rafa vão para ele (`sessions_send` ao `vendedor`), e as da Hanielly vão direto para ela no WhatsApp (ferramenta de mensagem, canal whatsapp, conta `comercial`, para o número dela que está no `empresa/vendas/GUIA-DO-RAFA.md`). Avise a Diretora: "Fila de recuperação: N pessoas, R$ X em vendas possíveis. Arquivo: …".
 7. No dia seguinte, atualize quem respondeu, comprou ou pediu para parar.

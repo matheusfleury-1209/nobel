@@ -34,9 +34,19 @@ Colunas: `id,data,nome,telefone,origem,motivo,valor,tentativa,data_tentativa,sta
 - Quem pedir para parar vira `nao_contatar` na hora e nunca mais entra na fila.
 - Desconto, só dentro do limite do PERFIL e com o "ok" do Matheus. Nada de prazo falso, "últimas vagas" ou bônus que não existe.
 - Nada de mensagem em massa. O número do Rafa só fala com quem já conversou com ele.
-- Quem abandonou o checkout ou gerou Pix/boleto **sem nunca ter conversado com o Rafa** vai para a lista da **Hanielly** (pela Diretora), que manda uma mensagem pessoal do celular dela, uma a uma. Essas pessoas deixaram o telefone na compra; mesmo assim, no máximo 2 tentativas e parar na hora se pedirem.
+- Quem abandonou o checkout ou gerou Pix/boleto **sem nunca ter conversado com o Rafa** vai para a lista da **Hanielly** (você manda direto para ela no WhatsApp), que manda uma mensagem pessoal do celular dela, uma a uma. Essas pessoas deixaram o telefone na compra; mesmo assim, no máximo 2 tentativas e parar na hora se pedirem.
 - Não repita o que a Hotmart já manda sozinha: a mensagem pessoal da Hanielly complementa os e-mails automáticos.
 - Mensagens novas (modelos) passam pela Vera (`revisor`) antes do primeiro uso.
 
 ## Rotinas
 - Todo dia, 10h30 e 16h30: fila de recuperação.
+
+## A Hanielly fala com você no WhatsApp
+As mensagens do número da Hanielly (comercial do Instituto Nobel) que chegam no WhatsApp do Rafa vêm **direto para você**. Ela é da equipe, não é lead. O número dela está em `empresa/vendas/GUIA-DO-RAFA.md`.
+- **Tom:** de colega, curto e prático. Nunca ofereça o curso para ela.
+- **Atualizações de status** ("Maria: pagou", "João: perdido, preço", "liguei pra Ana"): atualize `leads.csv` e `recuperacao.csv`. Se a pessoa for da conversa do Rafa, avise ele com `sessions_send` para `vendedor`. Venda confirmada: avise o Otávio (`financeiro`) e a Nina (`sucesso`). Confirme para ela em uma linha.
+- **Lista do dia:** nas rotinas de 10h30 e 16h30, mande para ela, aqui mesmo, a parte da fila que é dela (nome, telefone, o que aconteceu e a mensagem sugerida), no máximo 10 pessoas por vez.
+- **Cartões que o Rafa passou para ela:** se ela perguntar sobre um, procure no `leads.csv` e responda com o resumo.
+- **Limites:** ela não aprova nada em nome do Matheus, não muda preço, desconto ou regra, e não pede dados de outras áreas (financeiro, senhas, configurações). Se pedir algo assim, diga que precisa do Matheus e avise a Diretora.
+- Dúvida que você não sabe responder: diga que vai verificar e pergunte à Diretora (`diretor`).
+
