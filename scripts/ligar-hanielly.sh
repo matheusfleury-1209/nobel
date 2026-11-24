@@ -60,23 +60,41 @@ say "   ✅ Regras: Hanielly → Bia · você → Helena · clientes → Rafa"
 
 say ""
 say "== 3/4 Tirando a Hanielly da lista de leads do Rafa"
+bash "$REPO_DIR/scripts/backup-empresa.sh" || true
 H9="$H9" HS="$HS" python3 - "$EMPRESA_DIR/vendas/leads.csv" <<'PY'
-import csv, os, sys
+import csv, io, os, shutil, sys, time
 arq = sys.argv[1]
 if not os.path.isfile(arq):
     print("   (sem leads.csv)"); sys.exit(0)
 alvos = {"".join(c for c in os.environ[k] if c.isdigit()) for k in ("H9", "HS")}
 with open(arq, encoding="utf-8", newline="") as f:
-    r = csv.DictReader(f); campos = r.fieldnames; linhas = list(r)
+    linhas = f.read().splitlines(keepends=True)
+cab = next(csv.reader([linhas[0]]))
+idx = {c: i for i, c in enumerate(cab)}
 n = 0
-for l in linhas:
-    tel = "".join(c for c in (l.get("telefone") or "") if c.isdigit())
-    if tel and (tel in alvos or ("55" + tel) in alvos):
-        l["etapa"] = "perdido"; l["proximo_passo"] = ""; l["data_proximo_passo"] = ""
-        l["responsavel"] = "equipe"; l["observacoes"] = "NÃO É LEAD: Hanielly, da equipe comercial"
-        n += 1
-with open(arq, "w", encoding="utf-8", newline="") as f:
-    w = csv.DictWriter(f, fieldnames=campos); w.writeheader(); w.writerows(linhas)
+for k in range(1, len(linhas)):
+    try:
+        campos = next(csv.reader([linhas[k]]))
+    except StopIteration:
+        continue
+    if "telefone" not in idx or len(campos) <= idx["telefone"]:
+        continue
+    tel = "".join(c for c in campos[idx["telefone"]] if c.isdigit())
+    if not tel or not (tel in alvos or ("55" + tel) in alvos):
+        continue
+    for campo, valor in (("etapa", "perdido"), ("proximo_passo", ""), ("data_proximo_passo", ""),
+                         ("responsavel", "equipe"), ("observacoes", "NÃO É LEAD: Hanielly, da equipe comercial")):
+        if campo in idx and idx[campo] < len(campos):
+            campos[idx[campo]] = valor
+    buf = io.StringIO(); csv.writer(buf, lineterminator="\n").writerow(campos)
+    linhas[k] = buf.getvalue()  # só esta linha muda; as outras ficam exatamente como estavam
+    n += 1
+if n:
+    shutil.copy2(arq, f"{arq}.bak-{time.strftime('%Y%m%d-%H%M%S')}")
+    tmp = arq + ".tmp"
+    with open(tmp, "w", encoding="utf-8", newline="") as f:
+        f.writelines(linhas)
+    os.replace(tmp, arq)
 print(f"   ✅ {n} linha(s) da Hanielly marcadas como 'não é lead' (o Rafa não faz follow-up)")
 PY
 
@@ -85,6 +103,12 @@ say "== 4/4 Instruções da Bia e do Rafa (reinicia o sistema por alguns segundo
 bash "$REPO_DIR/scripts/atualizar-instrucoes.sh"
 sleep 20
 openclaw channels status 2>&1 | grep -i 'whatsapp comercial' || true
+
+say ""
+say "== Cópia de segurança diária das planilhas (3h15, guarda 14 dias em ~/backups)"
+LINHA="15 3 * * * bash $REPO_DIR/scripts/backup-empresa.sh # nobel-backup"
+( crontab -l 2>/dev/null | grep -v '# nobel-backup' || true; echo "$LINHA" ) | crontab -
+bash "$REPO_DIR/scripts/backup-empresa.sh" && say "   ✅ Primeira cópia feita em ~/backups"
 
 say ""
 say "✅ HANIELLY LIGADA À BIA"
