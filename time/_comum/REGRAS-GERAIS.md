@@ -65,3 +65,8 @@ E avise a Diretora (agente `diretor`) com `sessions_send`. Não execute até o b
 ## Anúncios da Meta
 - `empresa/marketing/trafego/meta/resumo.md` atualiza sozinho a cada hora: gasto, conversas no WhatsApp e custo por conversa de hoje, ontem e 7 dias, por campanha e por anúncio, e alertas. Os detalhes estão em `diario.csv` e `ativos.csv`, na mesma pasta.
 - É a fonte oficial de gasto com anúncios. Quem analisa e sugere mudanças é a Gabi (`trafego`); o acesso é só leitura.
+
+## Conversas do Rafa (automático)
+- `empresa/vendas/conversas-resumo.md` e `conversas.csv` atualizam sozinhos a cada 5 minutos, direto do WhatsApp do Rafa: quem conversou, quando, se está esperando resposta, se recebeu o link de pagamento e se já comprou (cruzando com a Hotmart).
+- É a fonte oficial de "quantas pessoas conversaram". O `leads.csv` continua para anotações do Rafa, mas pode estar incompleto.
+

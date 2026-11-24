@@ -92,6 +92,16 @@ print("falha" if achou else "ok")
     "Os erros de crédito da Anthropic pararam."
 fi
 
+# 3b) Clientes esperando resposta do Rafa (também atualiza empresa/vendas/conversas.csv)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ "$GW" == ok && "${WA:-ok}" == ok && -f "$OPENCLAW_HOME/agents/vendedor/agent/openclaw-agent.sqlite" ]]; then
+  read -r NESP MAXESP <<<"$(timeout 60 python3 "$SCRIPT_DIR/conversas.py" --vigia 2>/dev/null || echo '0 0')"
+  if [[ "${NESP:-0}" =~ ^[0-9]+$ && "${NESP:-0}" -gt 0 ]]; then CL=falha; else CL=ok; fi
+  checar clientes "$CL" 5 "Cliente sem resposta" \
+    "${NESP:-?} cliente(s) esperando resposta do Rafa há mais de 15 min (o mais antigo: ${MAXESP:-?} min). Confira o WhatsApp do Rafa e responda à mão se precisar (pode ser só um 'obrigado' que não pedia resposta)." \
+    "Os clientes voltaram a ser respondidos."
+fi
+
 # 4) Vendas da Hotmart atualizando (sincroniza a cada 10 min)
 if [[ -f "$SEG_DIR/hotmart.env" ]]; then
   I="$(idade_min "$EMPRESA_DIR/vendas/hotmart/resumo.md")"

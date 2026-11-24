@@ -6,7 +6,7 @@ description: Monta o resumo diário da empresa para o dono (vendas, anúncios, c
 # Briefing diário
 
 1. Leia (se existirem) os relatórios de hoje e de ontem em `empresa/relatorios/`.
-2. Vendas: `empresa/vendas/hotmart/resumo.md` (vendas de ontem e do mês, quantas vieram do `whatsapp-rafa`, fila de recuperação, reembolsos) e `empresa/vendas/leads.csv` (conversas novas de ontem, links enviados, passagens para a Hanielly).
+2. Vendas: `empresa/vendas/hotmart/resumo.md` (vendas de ontem e do mês, quantas vieram do `whatsapp-rafa`, fila de recuperação, reembolsos) e `empresa/vendas/conversas-resumo.md` (conversas novas de ontem, quantos receberam o link, quantos compraram). Passagens para a Hanielly: `leads.csv`.
 3. Anúncios: `empresa/marketing/trafego/meta/resumo.md` (ontem: gasto, conversas, custo por conversa; alertas). Custo por venda = gasto de ontem ÷ vendas de ontem com origem `whatsapp-rafa`, quando houver venda.
 4. Caixa: em `empresa/financeiro/lancamentos.csv`, contas a pagar e a receber dos próximos 7 dias e atrasadas.
 5. Atendimento: tickets abertos e urgentes em `empresa/atendimento/tickets.csv`.
