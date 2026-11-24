@@ -83,7 +83,17 @@ def extrair(no, achados):
 
 def coletar():
     ops = []
-    arquivos = glob.glob(os.path.join(OPENCLAW, "agents", "*", "sessions", "*.jsonl*"))
+    arquivos = []
+    for raiz, pastas, nomes in os.walk(OPENCLAW):
+        pastas[:] = [p for p in pastas if p not in ("empresa", "node_modules", ".git", "browser", "media")]
+        for n in nomes:
+            if ".jsonl" in n or n.endswith(".json") or n.endswith(".log"):
+                caminho = os.path.join(raiz, n)
+                try:
+                    if os.path.getsize(caminho) < 200 * 1024 * 1024:
+                        arquivos.append(caminho)
+                except OSError:
+                    pass
     for arq in arquivos:
         base_t = os.path.getmtime(arq)
         try:
@@ -119,7 +129,7 @@ def main():
     atual = open(ARQ, encoding="utf-8").read() if os.path.isfile(ARQ) else ""
     ops, n_arq = coletar()
     completos = [i for i, o in enumerate(ops) if o[3] == "completo"]
-    print(f"Históricos lidos: {n_arq} · versões completas achadas: {len(completos)} · "
+    print(f"Arquivos lidos: {n_arq} · versões completas achadas: {len(completos)} · "
           f"edições achadas: {sum(1 for o in ops if o[3] == 'edicao')}")
     if not completos:
         print("❌ Não achei nenhuma versão completa da planilha nos históricos. Me mande este print.")
