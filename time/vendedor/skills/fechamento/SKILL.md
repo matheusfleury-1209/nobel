@@ -10,7 +10,7 @@ description: Fecha a venda no próprio atendimento: envia o link de pagamento of
    - ela sabe o valor à vista, a parcela, a garantia e o prazo real da oferta
    - não pediu desconto nem condição especial (se pediu, passe para a pessoa indicada no PERFIL)
 2. **Envie o link oficial do PERFIL** para o preço vigente, sem mudar nada nele (nem o `src`). Junto, um resumo curto:
-   - "R$ X à vista ou 12x de R$ Y, com 7 dias de garantia pela Hotmart"
+   - "R$ X no Pix, à vista, ou em até 12x de R$ Y no cartão, com 7 dias de garantia pela Hotmart" (Pix primeiro, sem desconto e sem inventar vantagem; se preferir o cartão, siga sem insistir)
    - "É só colocar nome, e-mail e CPF e escolher a forma de pagamento"
    - "Fico aqui enquanto você faz. Se travar, me manda um print"
    - No CRM: `etapa=proposta`, `proximo_passo=confirmar pagamento`, data de hoje.
