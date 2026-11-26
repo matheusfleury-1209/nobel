@@ -30,6 +30,9 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from collections import defaultdict
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from projeto import campanha_do_projeto, carregar as carregar_projeto  # noqa: E402
 from datetime import datetime, timedelta, timezone
 
 BRT = timezone(timedelta(hours=-3))
@@ -288,7 +291,7 @@ def coletar_diario(m, dias):
 def coletar_ativos(m):
     ads = m.listar(f"{m.conta}/ads", {
         "fields": ("id,name,effective_status,issues_info,ad_review_feedback,"
-                   "campaign{name,effective_status,daily_budget},adset{name,effective_status,daily_budget}"),
+                   "campaign{id,name,effective_status,daily_budget},adset{name,effective_status,daily_budget}"),
         "effective_status": json.dumps(VER_STATUS),
         "limit": 200,
     })
@@ -312,6 +315,7 @@ def coletar_ativos(m):
             "status_conjunto": STATUS_PT.get(cj.get("effective_status"), cj.get("effective_status", "")),
             "orcamento_conjunto_dia": round(num(cj.get("daily_budget")) / 100, 2) if cj.get("daily_budget") else "",
             "problemas": " | ".join(x for x in problemas if x)[:500],
+            "_campanha_id": camp.get("id", ""),
         })
     linhas.sort(key=lambda l: (l["campanha"], l["anuncio"]))
     return linhas
@@ -410,8 +414,14 @@ def montar_resumo(conta, diario, ativos, chamadas):
 def cmd_sincronizar(args):
     m = Meta()
     conta = m.get(m.conta, {"fields": "name,currency"})
-    diario = coletar_diario(m, args.dias)
-    ativos = coletar_ativos(m)
+    projeto = carregar_projeto()
+    diario = [l for l in coletar_diario(m, args.dias)
+              if campanha_do_projeto(projeto, l["campanha_id"], l["campanha"])]
+    ids_projeto = {l["campanha_id"] for l in diario}
+    ativos = [a for a in coletar_ativos(m)
+              if campanha_do_projeto(projeto, a.get("_campanha_id", ""), a["campanha"]) or a.get("_campanha_id") in ids_projeto]
+    if projeto:
+        conta = dict(conta, name=f"{conta.get('name', '')} — só o projeto {projeto.get('nome', '')}")
     os.makedirs(SAIDA, exist_ok=True)
     gravar_csv(os.path.join(SAIDA, "diario.csv"), COLUNAS_DIARIO, diario)
     gravar_csv(os.path.join(SAIDA, "ativos.csv"), COLUNAS_ATIVOS, ativos)

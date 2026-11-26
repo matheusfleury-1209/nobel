@@ -32,6 +32,9 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from collections import Counter, defaultdict
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from projeto import carregar as carregar_projeto, produto_do_projeto  # noqa: E402
 from datetime import datetime, timedelta, timezone
 
 TOKEN_URL = "https://api-sec-vlc.hotmart.com/security/oauth/token"
@@ -450,8 +453,14 @@ def montar_resumo(vendas, pendentes, chamadas):
 
 def cmd_sincronizar(args):
     c = Cliente()
-    vendas = coletar(c, args.dias)
-    pendentes = montar_pendentes(vendas, abandonos=ler_abandonos())
+    projeto = carregar_projeto()
+    todas = coletar(c, args.dias)
+    vendas = [v for v in todas if produto_do_projeto(projeto, v["produto"])]
+    if getattr(args, "produtos", False):
+        nomes = Counter(v["produto"] for v in todas)
+        for nome, n in nomes.most_common():
+            print(f"   {'✅ conta' if produto_do_projeto(projeto, nome) else '⛔ fora '}  {nome}  ({n} transações)")
+    pendentes = montar_pendentes(vendas, abandonos=[a for a in ler_abandonos() if produto_do_projeto(projeto, a["produto"])])
     os.makedirs(SAIDA, exist_ok=True)
     gravar_csv(os.path.join(SAIDA, "vendas.csv"), COLUNAS_VENDAS, vendas)
     gravar_csv(os.path.join(SAIDA, "pendentes.csv"), COLUNAS_PENDENTES, pendentes)
@@ -470,6 +479,7 @@ def main():
     s = sub.add_parser("sincronizar", help="atualiza vendas.csv, pendentes.csv e resumo.md")
     s.add_argument("--dias", type=int, default=45, help="quantos dias para trás (padrão 45)")
     s.add_argument("--quieto", action="store_true", help="não imprime nada quando dá certo (para o agendamento)")
+    s.add_argument("--produtos", action="store_true", help="mostra quais produtos contam para o projeto")
     args = ap.parse_args()
     try:
         {"testar": cmd_testar, "sincronizar": cmd_sincronizar}[args.cmd](args)

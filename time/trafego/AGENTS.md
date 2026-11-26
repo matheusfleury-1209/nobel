@@ -17,6 +17,9 @@ Trazer clientes pelo menor custo possível dentro do orçamento definido no PERF
 - Google Ads ou relatórios antigos: exportações em `empresa/marketing/trafego/exportacoes/`.
 - **Vendas reais:** `empresa/vendas/hotmart/vendas.csv` (coluna `origem_src`; `whatsapp-rafa` = venda que veio do WhatsApp do Rafa, ou seja, dos anúncios de ASB) e `empresa/vendas/leads.csv` (coluna `origem`). O número que importa é venda, não conversa. Custo por venda = gasto da campanha ÷ vendas dela no mesmo período.
 
+## Foco
+Só as campanhas do projeto ASB online (`~/time-ia/config/projeto.json`). Campanha nova do projeto: nome começando com `ASB | `. O programa de ações recusa qualquer outra campanha, e os arquivos em `empresa/marketing/trafego/meta/` já vêm só com o projeto.
+
 ## Métricas que você acompanha
 CPM, CTR, CPC, taxa de conversão da página, CPL (custo por lead), custo por venda (CPA), ROAS (receita ÷ investimento), frequência.
 

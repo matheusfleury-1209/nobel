@@ -1,0 +1,8 @@
+{
+  "nome": "ASB online",
+  "descricao": "Curso de Auxiliar em Saúde Bucal online do Instituto Nobel, vendido na Hotmart pelo WhatsApp do Rafa",
+  "comentario": "O time só enxerga e só mexe no que está listado aqui. Campanha nova do projeto: o nome começa com 'ASB | ' (com espaço e barra).",
+  "meta_campanhas": ["120255586877240712"],
+  "meta_prefixo_nome": "ASB | ",
+  "hotmart_produto_contem": ["saúde bucal", "saude bucal", "asb"]
+}

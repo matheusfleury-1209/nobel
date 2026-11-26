@@ -31,6 +31,7 @@ from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from meta import BRT, EMPRESA_DIR, ENV_FILE, ErroMeta, Meta  # noqa: E402
+from projeto import campanha_do_projeto, carregar as carregar_projeto  # noqa: E402
 
 HOME = os.path.expanduser("~")
 LOG = os.path.join(HOME, ".config", "nobel", "meta-acoes.log")
@@ -133,6 +134,15 @@ def tipo_de(m, obj_id):
     raise ErroMeta(f"Não achei o ID {obj_id} nesta conta.")
 
 
+def garantir_projeto(m, campanha_id):
+    """O time só mexe nas campanhas do projeto ASB online (config/projeto.json)."""
+    projeto = carregar_projeto()
+    c = m.get(campanha_id, {"fields": "name"})
+    if not campanha_do_projeto(projeto, campanha_id, c.get("name", "")):
+        raise ErroMeta(f"A campanha {campanha_id} (\"{c.get('name', '')}\") não é do projeto "
+                       f"{projeto.get('nome', 'ASB')}. O time não mexe em outras campanhas.")
+
+
 def verba_da_campanha(m, campanha_id, conjunto=None):
     """Maior verba diária que pode ser gasta (campanha ou conjunto), em reais."""
     c = m.get(campanha_id, {"fields": "daily_budget,lifetime_budget"})
@@ -168,7 +178,10 @@ def cmd_listar(m, _a):
     filtro = json.dumps(["ACTIVE", "PAUSED", "IN_PROCESS", "WITH_ISSUES", "DISAPPROVED", "PENDING_REVIEW"])
     camps = m.listar(f"{m.conta}/campaigns", {"fields": "id,name,effective_status,daily_budget", "limit": 100,
                                                "effective_status": json.dumps(["ACTIVE"])})
+    projeto = carregar_projeto()
     for c in camps:
+        if not campanha_do_projeto(projeto, c["id"], c.get("name", "")):
+            continue
         verba = f"R$ {int(c['daily_budget']) / 100:.2f}/dia" if c.get("daily_budget") else "verba no conjunto"
         print(f"CAMPANHA {c['id']}  {c['name']}  [{c['effective_status']}, {verba}]")
         for cj in m.listar(f"{c['id']}/adsets", {"fields": "id,name,effective_status,daily_budget", "limit": 100,
@@ -181,6 +194,7 @@ def cmd_listar(m, _a):
 
 def cmd_ativar(m, a):
     tipo, d = tipo_de(m, a.id)
+    garantir_projeto(m, a.id if tipo == "campanha" else d["campaign_id"])
     aprov = achar_aprovacao(a.id, "ativar")
     camp_id = a.id if tipo == "campanha" else d["campaign_id"]
     conjunto = d if tipo == "conjunto" else (m.get(d["adset_id"], {"fields": "daily_budget,lifetime_budget"}) if tipo == "anúncio" else None)
@@ -193,6 +207,7 @@ def cmd_ativar(m, a):
 
 def cmd_pausar(m, a):
     tipo, d = tipo_de(m, a.id)
+    garantir_projeto(m, a.id if tipo == "campanha" else d["campaign_id"])
     aprov = achar_aprovacao(a.id, "pausar")
     m.post(a.id, {"status": "PAUSED"})
     registrar("pausou", f"{tipo} {a.id} ({d.get('name', '')}) pausado", aprov)
@@ -202,6 +217,7 @@ def cmd_verba(m, a):
     tipo, d = tipo_de(m, a.id)
     if tipo == "anúncio":
         raise ErroMeta("Verba fica na campanha ou no conjunto, não no anúncio.")
+    garantir_projeto(m, a.id if tipo == "campanha" else d["campaign_id"])
     if a.reais <= 0 or a.reais > limite_diario():
         raise ErroMeta(f"Valor fora do limite: o máximo é R$ {limite_diario():.2f} por dia.")
     if d.get("lifetime_budget"):
@@ -219,6 +235,7 @@ def cmd_novo_anuncio(m, a):
     cj = m.get(a.conjunto, {"fields": "name,account_id,campaign_id,destination_type"})
     if f"act_{cj.get('account_id', '')}" != m.conta:
         raise ErroMeta("Esse conjunto não é desta conta.")
+    garantir_projeto(m, cj["campaign_id"])
     # Página e Instagram iguais aos anúncios que já estão no conjunto
     modelo = None
     for ad in m.listar(f"{a.conjunto}/ads", {"fields": "creative{object_story_spec}", "limit": 25}):

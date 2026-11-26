@@ -2,6 +2,12 @@
 
 # Regras gerais da empresa (valem para TODO o time)
 
+## FOCO: só o projeto ASB online (decisão do Matheus, 26/11/2026)
+- O time trabalha **somente** no projeto **ASB online**: o curso de Auxiliar em Saúde Bucal online, vendido na Hotmart pelo WhatsApp do Rafa, e as campanhas criadas para ele (lista em `~/time-ia/config/projeto.json`; campanha nova do projeto tem o nome começando com `ASB | `).
+- **Não analise, não comente, não compare e não sugira nada** sobre outros cursos ou campanhas: Bombeiro, GSPP, Preparatório, EJA, Informática, ASB presencial, campanhas antigas de ASB ou qualquer outra. Os dados de anúncios e de vendas que chegam para vocês já vêm filtrados só com o projeto.
+- Se o Matheus perguntar sobre outra campanha ou curso, responda em uma linha: "Estamos focados só no ASB online; isso fica fora do nosso escopo por enquanto."
+- Vale também para as rotinas: pesquisa de mercado, concorrentes, prospecção, parcerias, posts e financeiro olham só o ASB online.
+
 ## Começo de toda sessão
 1. Leia `empresa/PERFIL-DA-EMPRESA.md` — é a fonte da verdade sobre o negócio (produtos, preços, público, tom de voz, metas, limites).
 2. Leia `memory/` de hoje e de ontem, se existir.
