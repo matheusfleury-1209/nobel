@@ -22,6 +22,7 @@ description: Fecha a venda no próprio atendimento: envia o link de pagamento of
 4. **Sem resposta depois do link:** siga a skill `follow-up`. Na oferta com prazo, use o prazo real.
 5. **Quando a pessoa disser que pagou:** peça o e-mail que ela usou na compra e confira em `empresa/vendas/hotmart/vendas.csv` (atualiza a cada 10 minutos). Detalhes na skill `confirmar-pagamento`. Com a confirmação:
    - dê as boas-vindas: o acesso chega no e-mail da Hotmart (olhar também o spam)
+   - mande o **Kit de estágio** (os 3 PDFs de `empresa/alunas/estagio/documentos/` e a mensagem do Guia do Rafa)
    - CRM: `etapa=ganho`, valor e forma de pagamento
    - avise a Diretora e a Nina (`sucesso`), que cuida das boas-vindas e do estágio
 6. **Nunca:** dar desconto fora do PERFIL, criar link ou cupom, prometer o que o PERFIL não confirma, pedir dados de cartão ou senha pelo chat.

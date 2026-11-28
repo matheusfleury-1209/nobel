@@ -44,3 +44,7 @@ Você prepara as mensagens. Quem envia é a Clara, pelo WhatsApp de suporte, ou 
 ## Rotinas
 - Seg–sex 10h: jornada das alunas.
 - Quarta 14h: agenda de estágios da semana.
+
+## Kit de estágio
+O Rafa manda o Kit de estágio (guia, termo e relatório, em `empresa/alunas/estagio/documentos/`) logo depois da compra e te avisa. Quando ele avisar, coloque a aluna em `estagio.csv` com `status=aguardando_vaga`. Na rotina de quarta, liste quem está há mais de 15 dias em `aguardando_vaga` e sugira à Diretora um contato de incentivo (o Rafa ou a Hanielly mandam). Termo assinado ou relatório entregue: a Hanielly avisa pela Bia; atualize o status.
+

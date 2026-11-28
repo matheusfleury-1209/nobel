@@ -46,6 +46,12 @@ for leia in "$REPO_DIR"/empresa/*/*/LEIA-ME.md "$REPO_DIR"/empresa/*/*/*/LEIA-ME
   cp "$leia" "$EMPRESA_DIR/$rel"
 done
 
+if [[ -d "$REPO_DIR/privado/estagio" ]]; then
+  mkdir -p "$EMPRESA_DIR/alunas/estagio/documentos"
+  cp "$REPO_DIR"/privado/estagio/* "$EMPRESA_DIR/alunas/estagio/documentos/"
+  echo "   ✅ Kit de estágio no lugar ($(ls "$EMPRESA_DIR/alunas/estagio/documentos" | wc -l) arquivos)"
+fi
+
 if [[ -f "$REPO_DIR/privado/GUIA-DO-RAFA.md" ]]; then
   cp "$REPO_DIR/privado/GUIA-DO-RAFA.md" "$EMPRESA_DIR/vendas/GUIA-DO-RAFA.md"
   echo "   ✅ Guia do Rafa atualizado"
